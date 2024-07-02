@@ -36,13 +36,11 @@ export function Appbar() {
           <Button onClick={() => signOut()}>Logout</Button>
         </div>
       )}
-
       {!isLoading && !session?.user && (
         <div className="flex items-center gap-4">
         <ModeToggle />
         <Button onClick={() => signIn()}>Sign in</Button>
         </div>
-      
       )}
 
       {isLoading && <div className="flex items-center gap-4"></div>}
