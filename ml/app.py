@@ -43,16 +43,7 @@ from langchain_core.runnables import RunnableLambda
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 
-query = ""
 
-##################### FastAPI Setup#########################
-from fastapi import FastAPI
-api = FastAPI()
-
-api.get('/searchQuery')
-def get_query(userQuery: str):
-    global query
-    query = userQuery
 
 
 ##################### Env variables and LLM setup #########################
@@ -73,6 +64,13 @@ gemini_embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", g
 
 model = genai.GenerativeModel('gemini-1.5-flash')
 translator_model = genai.GenerativeModel('gemini-1.5-pro')
+
+query_soil = ""
+query_water = ""
+query_plants = ""
+soil_expert_response = ""
+irrigation_expert_response = ""
+plant_diseases_expert_response = ""
 
 
 ##############################################
@@ -248,90 +246,167 @@ def check_simple_or_complexy_query(query):
 
 def gemini_pro_with_for_generation_of_subproblems(complex_query):
 
+    # prompt = f'''
+
+    # You are tasked with breaking down a complex query into three specific categories: Soil, Irrigation, and Plant Diseases. A complex query consists of a single question that requires multiple operations to be performed simultaneously. For each category you determine to be relevant, rephrase the original user's question and break it into sub-problems. Ensure that the core meaning of the original user's question remains intact while dividing it into sub-problems.
+    # Your output should be in a well-defined valid JSON format as follows:
+    # {{
+    #     "RESPONSE": {{
+    #         "sub-problems": ["<list of sub-problems separated by commas as a Python list>"],
+    #         "labels": ["<Python list of labels for each of the sub-problems devised>"]
+    #     }}
+    # }}
+    # Examples:
+    # 1.	Example Query: "How can I improve the soil quality, ensure proper irrigation, and prevent common diseases in my tomato plants?"
+    # {{
+    #     "RESPONSE": {{
+    #         "sub-problems": [
+    #             "What are the best practices to improve soil quality for tomato plants?",
+    #             "How can I ensure proper irrigation for tomato plants?",
+    #             "What are the common diseases that affect tomato plants and how can I prevent them?"
+    #         ],
+    #         "labels": ["Soil", "Irrigation", "Plant Diseases"]
+    #     }}
+    # }}
+    # 2.	Example Query: "What are the necessary soil amendments, irrigation techniques, and disease control measures for growing healthy cucumbers?"
+    # {{
+    #     "RESPONSE": {{
+    #         "sub-problems": [
+    #             "What soil amendments are necessary for growing healthy cucumbers?",
+    #             "What irrigation techniques are best for cucumber plants?",
+    #             "What disease control measures should I take for cucumber plants?"
+    #         ],
+    #         "labels": ["Soil", "Irrigation", "Plant Diseases"]
+    #     }}
+    # }}
+    # 3.	Example Query: "How do I prepare the soil and set up an efficient irrigation system for my new vineyard?"
+    # {{
+    #     "RESPONSE": {{
+    #         "sub-problems": [
+    #             "How do I prepare the soil for a new vineyard?",
+    #             "What steps should I take to set up an efficient irrigation system for a vineyard?"
+    #         ],
+    #         "labels": ["Soil", "Irrigation"]
+    #     }}
+    # }}
+    # 4.	Example Query: "What are the best soil treatments and how do I prevent diseases in my rose garden?"
+    # {{
+    #     "RESPONSE": {{
+    #         "sub-problems": [
+    #             "What are the best soil treatments for a rose garden?",
+    #             "How do I prevent diseases in a rose garden?"
+    #         ],
+    #         "labels": ["Soil", "Plant Diseases"]
+    #     }}
+    # }}
+    # 5.	Example Query: "Can you suggest irrigation methods and disease prevention tips for my apple orchard?"
+    # {{
+    #     "RESPONSE": {{
+    #         "sub-problems": [
+    #             "What irrigation methods are suitable for an apple orchard?",
+    #             "What are the best tips for preventing diseases in an apple orchard?"
+    #         ],
+    #         "labels": ["Irrigation", "Plant Diseases"]
+    #     }}
+    # }}
+    # 6.	Example Query: "How should I treat the soil and what irrigation system is ideal for my herb garden?"
+    # {{
+    #     "RESPONSE": {{
+    #         "sub-problems": [
+    #             "How should I treat the soil for an herb garden?",
+    #             "What irrigation system is ideal for an herb garden?"
+    #         ],
+    #         "labels": ["Soil", "Irrigation"]
+    #     }}
+    # }}
+
+    # User query: {complex_query}
+    # '''
+    
     prompt = f'''
 
     You are tasked with breaking down a complex query into three specific categories: Soil, Irrigation, and Plant Diseases. A complex query consists of a single question that requires multiple operations to be performed simultaneously. For each category you determine to be relevant, rephrase the original user's question and break it into sub-problems. Ensure that the core meaning of the original user's question remains intact while dividing it into sub-problems.
     Your output should be in a well-defined valid JSON format as follows:
     {{
         "RESPONSE": {{
-            "sub-problems": ["<list of sub-problems separated by commas as a Python list>"],
-            "labels": ["<Python list of labels for each of the sub-problems devised>"]
+            "sub-problems": {{
+                "<label>": "<sub-problem>",
+                ...
+            }}
         }}
     }}
     Examples:
-    1.	Example Query: "How can I improve the soil quality, ensure proper irrigation, and prevent common diseases in my tomato plants?"
+    1. Example Query: "How can I improve the soil quality, ensure proper irrigation, and prevent common diseases in my tomato plants?"
     {{
         "RESPONSE": {{
-            "sub-problems": [
-                "What are the best practices to improve soil quality for tomato plants?",
-                "How can I ensure proper irrigation for tomato plants?",
-                "What are the common diseases that affect tomato plants and how can I prevent them?"
-            ],
-            "labels": ["Soil", "Irrigation", "Plant Diseases"]
+            "sub-problems": {{
+                "Soil": "What are the best practices to improve soil quality for tomato plants?",
+                "Irrigation": "How can I ensure proper irrigation for tomato plants?",
+                "Plant Diseases": "What are the common diseases that affect tomato plants and how can I prevent them?"
+            }}
         }}
     }}
-    2.	Example Query: "What are the necessary soil amendments, irrigation techniques, and disease control measures for growing healthy cucumbers?"
+    2. Example Query: "What are the necessary soil amendments, irrigation techniques, and disease control measures for growing healthy cucumbers?"
     {{
         "RESPONSE": {{
-            "sub-problems": [
-                "What soil amendments are necessary for growing healthy cucumbers?",
-                "What irrigation techniques are best for cucumber plants?",
-                "What disease control measures should I take for cucumber plants?"
-            ],
-            "labels": ["Soil", "Irrigation", "Plant Diseases"]
+            "sub-problems": {{
+                "Soil": "What soil amendments are necessary for growing healthy cucumbers?",
+                "Irrigation": "What irrigation techniques are best for cucumber plants?",
+                "Plant Diseases": "What disease control measures should I take for cucumber plants?"
+            }}
         }}
     }}
-    3.	Example Query: "How do I prepare the soil and set up an efficient irrigation system for my new vineyard?"
+    3. Example Query: "How do I prepare the soil and set up an efficient irrigation system for my new vineyard?"
     {{
         "RESPONSE": {{
-            "sub-problems": [
-                "How do I prepare the soil for a new vineyard?",
-                "What steps should I take to set up an efficient irrigation system for a vineyard?"
-            ],
-            "labels": ["Soil", "Irrigation"]
+            "sub-problems": {{
+                "Soil": "How do I prepare the soil for a new vineyard?",
+                "Irrigation": "What steps should I take to set up an efficient irrigation system for a vineyard?"
+            }}
         }}
     }}
-    4.	Example Query: "What are the best soil treatments and how do I prevent diseases in my rose garden?"
+    4. Example Query: "What are the best soil treatments and how do I prevent diseases in my rose garden?"
     {{
         "RESPONSE": {{
-            "sub-problems": [
-                "What are the best soil treatments for a rose garden?",
-                "How do I prevent diseases in a rose garden?"
-            ],
-            "labels": ["Soil", "Plant Diseases"]
+            "sub-problems": {{
+                "Soil": "What are the best soil treatments for a rose garden?",
+                "Plant Diseases": "How do I prevent diseases in a rose garden?"
+            }}
         }}
     }}
-    5.	Example Query: "Can you suggest irrigation methods and disease prevention tips for my apple orchard?"
+    5. Example Query: "Can you suggest irrigation methods and disease prevention tips for my apple orchard?"
     {{
         "RESPONSE": {{
-            "sub-problems": [
-                "What irrigation methods are suitable for an apple orchard?",
-                "What are the best tips for preventing diseases in an apple orchard?"
-            ],
-            "labels": ["Irrigation", "Plant Diseases"]
+            "sub-problems": {{
+                "Irrigation": "What irrigation methods are suitable for an apple orchard?",
+                "Plant Diseases": "What are the best tips for preventing diseases in an apple orchard?"
+            }}
         }}
     }}
-    6.	Example Query: "How should I treat the soil and what irrigation system is ideal for my herb garden?"
+    6. Example Query: "How should I treat the soil and what irrigation system is ideal for my herb garden?"
     {{
         "RESPONSE": {{
-            "sub-problems": [
-                "How should I treat the soil for an herb garden?",
-                "What irrigation system is ideal for an herb garden?"
-            ],
-            "labels": ["Soil", "Irrigation"]
+            "sub-problems": {{
+                "Soil": "How should I treat the soil for an herb garden?",
+                "Irrigation": "What irrigation system is ideal for an herb garden?"
+            }}
         }}
     }}
 
     User query: {complex_query}
     '''
+
     
     res = model.generate_content(
         contents=prompt
     )
-    res = gemini_pro_with_for_generation_of_subproblems("What steps should I take to improve soil fertility, set up drip irrigation, and manage fungal diseases for my strawberry plants?")
+    return res.text
+
+    
+    res = model.generate_content(
+        contents=prompt
+    )
     res = res.replace('```', '').replace("\n", "").replace('json','')
-    json_res = json.loads(res)
-    json_res
     return res.text
 
 
@@ -380,6 +455,7 @@ def EH_TranslatorRunnable(input):
     src="English"
     tgt = "Hindi"
     translated_text = translate(input, src, tgt)
+    input['eh_translated_query'] = translated_text
     return translated_text
 
 
@@ -393,9 +469,11 @@ def RAGRunnable(input):
 
 def RAGMoEBacked(data):
     
+    
+    global chat_history_complex_query
     query = data['query']
     
-    def return_context():
+    def return_context(input):
         context = data['context']
         return context
     
@@ -449,7 +527,7 @@ def RAGMoEBacked(data):
     #     }
     # )
     qa_system_prompt = """You are an assistant for question-answering tasks talking part in a conversation with a human. \
-    Use the following pieces of retrieved context to answer the question. \
+    Use the following pieces of retrieved context to answer the question. Make the best use of the provided context so as to provide a descriptive and meaningful and comprehensible soltuion to the problem provided by the user.\
     If you don't know the answer, just say that you don't know. \
 
     {context}
@@ -481,7 +559,7 @@ def RAGMoEBacked(data):
     ai_msg = rag_chain.invoke(
         {
             "query": query,
-            "chat_history": update_history_complex_queries
+            "chat_history": chat_history_complex_query
         }
     )
 
@@ -491,8 +569,17 @@ def RAGMoEBacked(data):
 
 
 
+
 # @chain
 def MoERunnable(query):
+    
+    global query_soil
+    global query_water
+    global query_plants
+    global soil_expert_response 
+    global irrigation_expert_response
+    global plant_diseases_expert_response 
+
 
     res = CreateSubproblems(query)
     query_soil = res['sub-problems']['Soil']
@@ -505,7 +592,14 @@ def MoERunnable(query):
     
     data = {
         'query': query,
-        'context': soil_expert_response + "\n\n" + irrigation_expert_response + "\n\n" + plant_diseases_expert_response + "\n\n"
+        'context': soil_expert_response.replace('<|endoftext|>', '') + " " + irrigation_expert_response.replace('<|endoftext|>', '') + " " + plant_diseases_expert_response.replace('<|endoftext|>', ''),
+        
+        "query_soil": query_soil,
+        "query_irrigation": query_water,
+        "query_palnts": query_plants,
+        "soil_expert_response":  soil_expert_response,
+        "irrigation_expert_response": irrigation_expert_response,
+        "plant_diseases_expert_response": plant_diseases_expert_response
     }
     final = RAGMoEBacked(data)
     
@@ -536,6 +630,9 @@ def update_history_complex_queries(ai_msg):
     
 
 def RAGRunnable2(translated_input):
+    
+    global chat_history_simple_query
+    
     query = translated_input
     
     vectorstore = Chroma(persist_directory="./RAG/vectorSearchForFarmGenie", embedding_function=gemini_embeddings, collection_name="embeddings_for_farm_book")
@@ -639,19 +736,20 @@ def ConditionalRunnable(translated_input):
     res = check_simple_or_complexy_query(translated_input)
     if res == 'SIMPLE':
         output = RAGRunnable2(translated_input)
-        
+        data = {"answer": output, "translated_query": translated_input, "history": chat_history_simple_query}
     elif res == 'COMPLEX':
         output = MoERunnable(translated_input)
+        data = {"answer": output, "translated_query": translated_input, "history": chat_history_complex_query}
     return {"answer": output, "translated_query": translated_input}
 
 # @chain
 def OutputRunnable(output_dictionary):
     
-    result = output_dictionary['answer']
-    translated_query = output_dictionary['translated_query']
-    # print(result)
-    # print(translated_query)
-    return result
+    # result = output_dictionary['answer']
+    # translated_query = output_dictionary['translated_query']
+    # # print(result)
+    # # print(translated_query)
+    return output_dictionary
 
 
 ##########################################################################################################################
@@ -694,8 +792,10 @@ def load_soil_moe(query):
     FastLanguageModel.for_inference(model) # Enable native 2x faster inference
     outputs = model.generate(**inputs, max_new_tokens = 1024, use_cache = True)
     res = tokenizer.batch_decode(outputs)[0]
+    # Extracting the "Response" part
+    response = res.split("### Response:")[1].strip()
     del_model_tokenzier(model, tokenizer=tokenizer)
-    return res
+    return response
 
 def load_irrigation_moe(query):
     model, tokenizer = FastLanguageModel.from_pretrained(
@@ -709,7 +809,7 @@ def load_irrigation_moe(query):
     inputs = tokenizer(
     [
         alpaca_prompt.format(
-            "Answer the following input question to the best of your knowledge in a very descriptive manner. Give detailed answers/explainations to the following question", # instruction
+            "Answer the following input question to the best of your knowledge in a very descriptive manner. Give detailed answers/explainations to the following question.", # instruction
             query, # input
             "", # output - leave this blank for generation!
         )
@@ -718,7 +818,9 @@ def load_irrigation_moe(query):
     outputs = model.generate(**inputs, max_new_tokens = 1024, use_cache = True)
     res = tokenizer.batch_decode(outputs)[0]
     del_model_tokenzier(model, tokenizer)
-    return res
+    # Extracting the "Response" part
+    response = res.split("### Response:")[1].strip()
+    return response
 
 def load_plant_diseases_moe(query):
     model, tokenizer = FastLanguageModel.from_pretrained(
@@ -741,36 +843,73 @@ def load_plant_diseases_moe(query):
     outputs = model.generate(**inputs, max_new_tokens = 1024, use_cache = True)
     res = tokenizer.batch_decode(outputs)[0]
     del_model_tokenzier(model, tokenizer)
-    return res
+    # Extracting the "Response" part
+    response = res.split("### Response:")[1].strip()
+    return response
 
-
+import gc
 def del_model_tokenzier(model, tokenizer):
-    del model
-    del tokenizer
+    # del model
+    # del tokenizer
+    mode =  None
+    tokenizer = None
     torch.cuda.empty_cache()
+    gc.collect()
 
-irrigation_moe_model,  irrigation_moe_tokenizer = load_irrigation_moe()
-soil_moe_model,  soil_moe_tokenizer = load_soil_moe()
-plant_diseases_moe_model,  plant_diseases_moe_tokenizer = load_plant_diseases_moe()
+# irrigation_moe_model,  irrigation_moe_tokenizer = load_irrigation_moe()
+# soil_moe_model,  soil_moe_tokenizer = load_soil_moe()
+# plant_diseases_moe_model,  plant_diseases_moe_tokenizer = load_plant_diseases_moe()
 
 
 
 ##############################################################################################
 
 
-# query = "Hey wanna flirt?"
-# query = "कृषि में जलवायुीय परिवर्तन के दौरान किस प्रकार के कैटपिलर्स और कीट होते हैं?"
-# query = "मिट्टी को उपजाऊ बनाने के लिए विभिन्न तरीके कौन से हैं?"
-# query = "What did I just asked about?"
-# query = "इनसे कैसे छुटकारा पाएं?"
-query = input("Please enter your query: ")
-he_translator = RunnableLambda(HE_TranslatorRunnable)
-eh_translator = RunnableLambda(EH_TranslatorRunnable)
-condition = RunnableLambda(ConditionalRunnable)
-output = RunnableLambda(OutputRunnable)
-translator = RunnableLambda(TranslatorRunnable)
+query = ""
 
-pipeline = he_translator | condition | output | eh_translator
+##################### FastAPI Setup#########################
+from fastapi import FastAPI
+from urllib.parse import quote, unquote
+import pickle
 
-result = pipeline.invoke(input=query)
-print(result)
+api = FastAPI()
+
+api.get('/searchQuery')
+def get_query(userQuery: str):
+    
+    global chat_history_complex_query
+    global chat_history_simple_query
+    
+        # Load complex query history if it exists
+    if os.path.exists('data/pickle files/chat_history_complex_query.pkl') and os.path.getsize('data/pickle files/chat_history_complex_query.pkl') > 0:
+        with open('data/pickle files/chat_history_complex_query.pkl', 'rb') as f:
+            chat_history_complex_query = pickle.load(f)
+
+    # Load simple query history if it exists
+    if os.path.exists('data/pickle files/chat_history_simple_query.pkl') and os.path.getsize('data/pickle files/chat_history_simple_query.pkl') > 0:
+        with open('data/pickle files/chat_history_simple_query.pkl', 'rb') as f:
+            chat_history_simple_query = pickle.load(f)
+            
+    
+    global query
+    query = unquote(userQuery)
+    # query = "Hey wanna flirt?"
+    # query = "कृषि में जलवायुीय परिवर्तन के दौरान किस प्रकार के कैटपिलर्स और कीट होते हैं?"
+    # query = "मिट्टी को उपजाऊ बनाने के लिए विभिन्न तरीके कौन से हैं?"
+    # query = "What did I just asked about?"
+    # query = "इनसे कैसे छुटकारा पाएं?"
+    he_translator = RunnableLambda(HE_TranslatorRunnable)
+    eh_translator = RunnableLambda(EH_TranslatorRunnable)
+    condition = RunnableLambda(ConditionalRunnable)
+    output = RunnableLambda(OutputRunnable)
+    translator = RunnableLambda(TranslatorRunnable)
+
+    pipeline = he_translator | condition | output | eh_translator
+
+    result = pipeline.invoke(input=query)
+    
+    pickle.dump(chat_history_complex_query, open('data/pickle files/chat_history_complex_query.pkl', 'wb'))
+    pickle.dump(chat_history_simple_query, open('data/pickle files/chat_history_simple_query.pkl', 'wb'))
+    
+    # print(result)
+    return result
