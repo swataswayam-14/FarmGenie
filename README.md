@@ -41,7 +41,7 @@ The Express server is responsible for the following tasks:
 3.	**Node.js Processes**: Multiple Node.js processes are set up to consume the requests from the Redis queue. These processes then pass the requests to the ML backend for processing.
 4.	**ML Backend Integration**: The Node.js processes communicate with the ML backend, which is responsible for handling the various ML tasks, such as query classification, subproblem generation, and retrieval-augmented generation (RAG).
 5.	**Database Integration**: The website uses a single PostgreSQL database, provided by Neon DB, as the single source of truth. This database stores all the user, farmer, and retailer data, as well as the content for the website.
-6.	**User Management**: The Next.js frontend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database.
+6.	**User Management**: The Next.js frontend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon.tech).
 7.	**Scalability**: The use of a Redis queue and multiple Node.js processes ensures the application can scale to handle a large number of concurrent user requests without overloading the ML backend.
 8.	**Deployment**: The entire application, including the frontend, backend, and ML components, is packaged and deployed using Docker containers, ensuring consistent and reliable deployment across different environments.
 9.	Monitoring and Logging: The application includes comprehensive monitoring and logging solutions to track performance, errors, and user activity, enabling the team to quickly identify and resolve issues.
