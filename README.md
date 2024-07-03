@@ -1,7 +1,5 @@
 # FarmGenie 
 
-### Deployed Links
-#### [Deployed server](https://singular-muskox-certainly.ngrok-free.app/docs)
 
 --- 
 [NOTE] **Our project only supports conversation (input/output) in Hindi for now**. \
