@@ -3,45 +3,46 @@ import torch
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
-import re
-import chromadb
+# import re
+# import chromadb
 from chromadb import Documents, EmbeddingFunction, Embeddings
-from chromadb.config import Settings
+# from chromadb.config import Settings
 from tqdm import tqdm
-import requests
+# import requests
 import json
-import pandas as pd
+# import pandas as pd
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import chromadb
-from langchain.chains.combine_documents import create_stuff_documents_chain     
-from langchain.chains import create_history_aware_retriever
+# from langchain.chains.combine_documents import create_stuff_documents_chain     
+# from langchain.chains import create_history_aware_retriever
 from langchain_core.messages import AIMessage, HumanMessage
-from langchain.schema import format_document
-from langchain.chains import create_retrieval_chain
-from langchain.vectorstores import FAISS
+# from langchain.schema import format_document
+# from langchain.chains import create_retrieval_chain
+# from langchain.vectorstores import FAISS
 
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain.chains.conversation.memory import ConversationBufferMemory
-from langchain.chains import ConversationChain
-from langchain.memory import ChatMessageHistory
-from langchain_core.messages import get_buffer_string
+# from langchain_huggingface import HuggingFaceEmbeddings
+# from langchain.chains.conversation.memory import ConversationBufferMemory
+# from langchain.chains import ConversationChain
+# from langchain.memory import ChatMessageHistory
+# from langchain_core.messages import get_buffer_string
 from langchain_core.runnables import RunnableLambda, RunnablePassthrough
-from langchain.memory import ConversationBufferMemory
-from langchain.prompts.prompt import PromptTemplate
+# from langchain.memory import ConversationBufferMemory
+# from langchain.prompts.prompt import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 # from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_core.runnables.history import RunnableWithMessageHistory
+# from langchain_core.chat_history import BaseChatMessageHistory
+# from langchain_core.runnables.history import RunnableWithMessageHistory
 from chromadb import Documents, EmbeddingFunction, Embeddings
 from langchain_core.output_parsers import StrOutputParser
 # from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 # Load environment variables from .en
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.runnables import Runnable
+# from langchain_core.runnables import Runnable
 from langchain_core.runnables import RunnableLambda
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
-
+import textwrap
+import gc
 
 
 
@@ -72,7 +73,7 @@ soil_expert_response = ""
 irrigation_expert_response = ""
 plant_diseases_expert_response = ""
 
-
+chat_history = []
 ##############################################
 
 class GeminiEmbeddingFunction(EmbeddingFunction):
@@ -454,9 +455,13 @@ def EH_TranslatorRunnable(input):
     
     src="English"
     tgt = "Hindi"
-    translated_text = translate(input, src, tgt)
-    input['eh_translated_query'] = translated_text
-    return translated_text
+    query = input['answer']
+    formatted_text = query.replace('\n', ' ').replace('**', '').replace('*\n', '').replace(' *', '')
+    formatted_text = textwrap.fill(formatted_text, width=80)
+    translated_text = translate(formatted_text, src, tgt)
+    input['answer'] = formatted_text.replace('\n', ' ').replace('**', '').replace('*\n', '').replace(' *', '').replace('**\n\n*','').replace('**', '').replace('\n*', '')
+    input['eh_translated_query'] = translated_text.replace('\n', ' ').replace('**', '').replace('*\n', '').replace(' *', '').replace('**\n\n*','').replace('**', '').replace('\n*', '')
+    return input
 
 
 # @chain
@@ -470,7 +475,8 @@ def RAGRunnable(input):
 def RAGMoEBacked(data):
     
     
-    global chat_history_complex_query
+    # global chat_history_complex_query
+    global chat_history
     query = data['query']
     
     def return_context(input):
@@ -559,7 +565,7 @@ def RAGMoEBacked(data):
     ai_msg = rag_chain.invoke(
         {
             "query": query,
-            "chat_history": chat_history_complex_query
+            "chat_history": chat_history
         }
     )
 
@@ -584,7 +590,7 @@ def MoERunnable(query):
     res = CreateSubproblems(query)
     query_soil = res['sub-problems']['Soil']
     query_water = res['sub-problems']['Irrigation']
-    query_plants = res['sub-problems']['Plant-Diseases']
+    query_plants = res['sub-problems']['Plant Diseases']
 
     soil_expert_response = load_soil_moe(query_soil)  
     irrigation_expert_response = load_irrigation_moe(query_water) 
@@ -610,7 +616,7 @@ def MoERunnable(query):
 chat_history_simple_query = []
 def update_history_simple_queries(ai_msg):
     
-    chat_history_simple_query.extend(
+    chat_history.extend(
         [
             HumanMessage(content=query), ai_msg.content
         ]
@@ -622,7 +628,7 @@ def update_history_simple_queries(ai_msg):
 chat_history_complex_query = []
 def update_history_complex_queries(ai_msg):
     
-    chat_history_complex_query.extend(
+    chat_history.extend(
         [
             HumanMessage(content=query), ai_msg.content
         ]
@@ -631,7 +637,8 @@ def update_history_complex_queries(ai_msg):
 
 def RAGRunnable2(translated_input):
     
-    global chat_history_simple_query
+    # global chat_history_simple_query
+    global chat_history
     
     query = translated_input
     
@@ -689,7 +696,7 @@ def RAGRunnable2(translated_input):
     #     }
     # )
     qa_system_prompt = """You are an assistant for question-answering tasks talking part in a conversation with a human. \
-    Use the following pieces of retrieved context to answer the question. \
+    Use the following pieces of retrieved context to answer the question. Make the best use of the provided context so as to provide a descriptive and meaningful and comprehensible soltuion to the problem provided by the user.\
     If you don't know the answer, just say that you don't know. \
 
     {context}
@@ -721,7 +728,7 @@ def RAGRunnable2(translated_input):
     ai_msg = rag_chain.invoke(
         {
             "query": query,
-            "chat_history": chat_history_simple_query
+            "chat_history": chat_history
         }
     )
 
@@ -736,11 +743,11 @@ def ConditionalRunnable(translated_input):
     res = check_simple_or_complexy_query(translated_input)
     if res == 'SIMPLE':
         output = RAGRunnable2(translated_input)
-        data = {"answer": output, "translated_query": translated_input, "history": chat_history_simple_query}
+        data = {"answer": output, "translated_query": translated_input, "history": chat_history, "tag": "simple"}
     elif res == 'COMPLEX':
         output = MoERunnable(translated_input)
-        data = {"answer": output, "translated_query": translated_input, "history": chat_history_complex_query}
-    return {"answer": output, "translated_query": translated_input}
+        data = {"answer": output, "translated_query": translated_input, "history": chat_history, "tag": "complex"}
+    return data
 
 # @chain
 def OutputRunnable(output_dictionary):
@@ -778,6 +785,7 @@ def load_soil_moe(query):
         dtype = dtype,
         load_in_4bit = load_in_4bit,
         # token = "hf_...", # use one if using gated models like meta-llama/Llama-2-7b-hf
+        device_map="cuda"
         
     )
 
@@ -794,7 +802,11 @@ def load_soil_moe(query):
     res = tokenizer.batch_decode(outputs)[0]
     # Extracting the "Response" part
     response = res.split("### Response:")[1].strip()
-    del_model_tokenzier(model, tokenizer=tokenizer)
+    # del_model_tokenzier(model, tokenizer=tokenizer)
+    model =  None
+    tokenizer = None
+    torch.cuda.empty_cache()
+    gc.collect()
     return response
 
 def load_irrigation_moe(query):
@@ -803,6 +815,7 @@ def load_irrigation_moe(query):
         max_seq_length = max_seq_length,
         dtype = dtype,
         load_in_4bit = load_in_4bit,
+        device_map="cuda"
         # token = "hf_...", # use one if using gated models like meta-llama/Llama-2-7b-hf
     )
     FastLanguageModel.for_inference(model) # Enable native 2x faster inference
@@ -817,9 +830,13 @@ def load_irrigation_moe(query):
 
     outputs = model.generate(**inputs, max_new_tokens = 1024, use_cache = True)
     res = tokenizer.batch_decode(outputs)[0]
-    del_model_tokenzier(model, tokenizer)
+    # del_model_tokenzier(model, tokenizer)
     # Extracting the "Response" part
     response = res.split("### Response:")[1].strip()
+    model =  None
+    tokenizer = None
+    torch.cuda.empty_cache()
+    gc.collect()
     return response
 
 def load_plant_diseases_moe(query):
@@ -828,6 +845,7 @@ def load_plant_diseases_moe(query):
         max_seq_length = max_seq_length,
         dtype = dtype,
         load_in_4bit = load_in_4bit,
+        device_map="cuda"
         # token = "hf_...", # use one if using gated models like meta-llama/Llama-2-7b-hf
     )
     FastLanguageModel.for_inference(model) # Enable native 2x faster inference
@@ -842,12 +860,17 @@ def load_plant_diseases_moe(query):
 
     outputs = model.generate(**inputs, max_new_tokens = 1024, use_cache = True)
     res = tokenizer.batch_decode(outputs)[0]
-    del_model_tokenzier(model, tokenizer)
+    # del_model_tokenzier(model, tokenizer)
     # Extracting the "Response" part
+    
     response = res.split("### Response:")[1].strip()
+    model =  None
+    tokenizer = None
+    torch.cuda.empty_cache()
+    gc.collect()
     return response
 
-import gc
+
 def del_model_tokenzier(model, tokenizer):
     # del model
     # del tokenizer
@@ -874,21 +897,26 @@ import pickle
 
 api = FastAPI()
 
-api.get('/searchQuery')
+@api.get('/')
+def index():
+    return 'Running'
+
+@api.get('/searchQuery')
 def get_query(userQuery: str):
     
-    global chat_history_complex_query
-    global chat_history_simple_query
+    # global chat_history_complex_query
+    # global chat_history_simple_query
+    global chat_history
     
         # Load complex query history if it exists
-    if os.path.exists('data/pickle files/chat_history_complex_query.pkl') and os.path.getsize('data/pickle files/chat_history_complex_query.pkl') > 0:
-        with open('data/pickle files/chat_history_complex_query.pkl', 'rb') as f:
-            chat_history_complex_query = pickle.load(f)
+    if os.path.exists('data/pickle files/chat_history.pkl') and os.path.getsize('data/pickle files/chat_history.pkl') > 0:
+        with open('data/pickle files/chat_history.pkl', 'rb') as f:
+            chat_history = pickle.load(f)
 
     # Load simple query history if it exists
-    if os.path.exists('data/pickle files/chat_history_simple_query.pkl') and os.path.getsize('data/pickle files/chat_history_simple_query.pkl') > 0:
-        with open('data/pickle files/chat_history_simple_query.pkl', 'rb') as f:
-            chat_history_simple_query = pickle.load(f)
+    # if os.path.exists('data/pickle files/chat_history_simple_query.pkl') and os.path.getsize('data/pickle files/chat_history_simple_query.pkl') > 0:
+    #     with open('data/pickle files/chat_history_simple_query.pkl', 'rb') as f:
+    #         chat_history_simple_query = pickle.load(f)
             
     
     global query
@@ -908,8 +936,10 @@ def get_query(userQuery: str):
 
     result = pipeline.invoke(input=query)
     
-    pickle.dump(chat_history_complex_query, open('data/pickle files/chat_history_complex_query.pkl', 'wb'))
-    pickle.dump(chat_history_simple_query, open('data/pickle files/chat_history_simple_query.pkl', 'wb'))
-    
+    pickle.dump(chat_history, open('data/pickle files/chat_history.pkl', 'wb'))
+    # pickle.dump(chat_history_simple_query, open('data/pickle files/chat_history_simple_query.pkl', 'wb'))
+    # print(chat_history_complex_query)
+    # print(chat_history_simple_query)
     # print(result)
+    print(chat_history)
     return result
