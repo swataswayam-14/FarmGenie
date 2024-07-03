@@ -3,42 +3,16 @@ import torch
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
-# import re
-# import chromadb
 from chromadb import Documents, EmbeddingFunction, Embeddings
-# from chromadb.config import Settings
-from tqdm import tqdm
-# import requests
 import json
-# import pandas as pd
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-import chromadb
-# from langchain.chains.combine_documents import create_stuff_documents_chain     
-# from langchain.chains import create_history_aware_retriever
 from langchain_core.messages import AIMessage, HumanMessage
-# from langchain.schema import format_document
-# from langchain.chains import create_retrieval_chain
-# from langchain.vectorstores import FAISS
-
-# from langchain_huggingface import HuggingFaceEmbeddings
-# from langchain.chains.conversation.memory import ConversationBufferMemory
-# from langchain.chains import ConversationChain
-# from langchain.memory import ChatMessageHistory
-# from langchain_core.messages import get_buffer_string
 from langchain_core.runnables import RunnableLambda, RunnablePassthrough
-# from langchain.memory import ConversationBufferMemory
-# from langchain.prompts.prompt import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-# from langchain_community.chat_message_histories import ChatMessageHistory
-# from langchain_core.chat_history import BaseChatMessageHistory
-# from langchain_core.runnables.history import RunnableWithMessageHistory
 from chromadb import Documents, EmbeddingFunction, Embeddings
 from langchain_core.output_parsers import StrOutputParser
-# from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
-# Load environment variables from .en
 from langchain_google_genai import ChatGoogleGenerativeAI
-# from langchain_core.runnables import Runnable
 from langchain_core.runnables import RunnableLambda
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import textwrap
@@ -192,14 +166,8 @@ def gemini_pro_with_for_multi_label_classification(user_query):
     return res.text
 
 def load_chromadb(collection_name):
-    # client = chromadb.PersistentClient(path="RAG/vectorSearchForFarmGenie")
-    # chroma_db = client.get_collection(collection_name)
-    # return chroma_db 
-    # load from disk
-    # query = "What kind of bookworms and catepillars appear due to climate change?"
     db = Chroma(persist_directory="RAG/vectorSearchForFarmGenie", embedding_function=gemini_embeddings, collection_name=collection_name)
-    # docs = db.similarity_search(query)  
-    # print(docs)
+
     return db
 
 def CreateEmbeddings(query):
@@ -215,11 +183,6 @@ def rag_setup(query):
     
     collection_name = 'embeddings_for_farm_book'
     db = load_chromadb(collection_name=collection_name)
-    # query = "What kind of bookworms and catepillars appear due to climate change?"
-    # query_embeddings = CreateEmbeddings(query)a
-    # query_embeddings = query_embeddings['embedding']
-    # query_embeddings = create_embeddings(query)
-    # result = db.query(query_embeddings=query_embeddings, n_results=1).get('documents')[0][0]
     result = db.similarity_search(query, k=2)
     return result
 
@@ -247,82 +210,7 @@ def check_simple_or_complexy_query(query):
 
 def gemini_pro_with_for_generation_of_subproblems(complex_query):
 
-    # prompt = f'''
 
-    # You are tasked with breaking down a complex query into three specific categories: Soil, Irrigation, and Plant Diseases. A complex query consists of a single question that requires multiple operations to be performed simultaneously. For each category you determine to be relevant, rephrase the original user's question and break it into sub-problems. Ensure that the core meaning of the original user's question remains intact while dividing it into sub-problems.
-    # Your output should be in a well-defined valid JSON format as follows:
-    # {{
-    #     "RESPONSE": {{
-    #         "sub-problems": ["<list of sub-problems separated by commas as a Python list>"],
-    #         "labels": ["<Python list of labels for each of the sub-problems devised>"]
-    #     }}
-    # }}
-    # Examples:
-    # 1.	Example Query: "How can I improve the soil quality, ensure proper irrigation, and prevent common diseases in my tomato plants?"
-    # {{
-    #     "RESPONSE": {{
-    #         "sub-problems": [
-    #             "What are the best practices to improve soil quality for tomato plants?",
-    #             "How can I ensure proper irrigation for tomato plants?",
-    #             "What are the common diseases that affect tomato plants and how can I prevent them?"
-    #         ],
-    #         "labels": ["Soil", "Irrigation", "Plant Diseases"]
-    #     }}
-    # }}
-    # 2.	Example Query: "What are the necessary soil amendments, irrigation techniques, and disease control measures for growing healthy cucumbers?"
-    # {{
-    #     "RESPONSE": {{
-    #         "sub-problems": [
-    #             "What soil amendments are necessary for growing healthy cucumbers?",
-    #             "What irrigation techniques are best for cucumber plants?",
-    #             "What disease control measures should I take for cucumber plants?"
-    #         ],
-    #         "labels": ["Soil", "Irrigation", "Plant Diseases"]
-    #     }}
-    # }}
-    # 3.	Example Query: "How do I prepare the soil and set up an efficient irrigation system for my new vineyard?"
-    # {{
-    #     "RESPONSE": {{
-    #         "sub-problems": [
-    #             "How do I prepare the soil for a new vineyard?",
-    #             "What steps should I take to set up an efficient irrigation system for a vineyard?"
-    #         ],
-    #         "labels": ["Soil", "Irrigation"]
-    #     }}
-    # }}
-    # 4.	Example Query: "What are the best soil treatments and how do I prevent diseases in my rose garden?"
-    # {{
-    #     "RESPONSE": {{
-    #         "sub-problems": [
-    #             "What are the best soil treatments for a rose garden?",
-    #             "How do I prevent diseases in a rose garden?"
-    #         ],
-    #         "labels": ["Soil", "Plant Diseases"]
-    #     }}
-    # }}
-    # 5.	Example Query: "Can you suggest irrigation methods and disease prevention tips for my apple orchard?"
-    # {{
-    #     "RESPONSE": {{
-    #         "sub-problems": [
-    #             "What irrigation methods are suitable for an apple orchard?",
-    #             "What are the best tips for preventing diseases in an apple orchard?"
-    #         ],
-    #         "labels": ["Irrigation", "Plant Diseases"]
-    #     }}
-    # }}
-    # 6.	Example Query: "How should I treat the soil and what irrigation system is ideal for my herb garden?"
-    # {{
-    #     "RESPONSE": {{
-    #         "sub-problems": [
-    #             "How should I treat the soil for an herb garden?",
-    #             "What irrigation system is ideal for an herb garden?"
-    #         ],
-    #         "labels": ["Soil", "Irrigation"]
-    #     }}
-    # }}
-
-    # User query: {complex_query}
-    # '''
     
     prompt = f'''
 
@@ -403,12 +291,7 @@ def gemini_pro_with_for_generation_of_subproblems(complex_query):
     )
     return res.text
 
-    
-    res = model.generate_content(
-        contents=prompt
-    )
-    res = res.replace('```', '').replace("\n", "").replace('json','')
-    return res.text
+
 
 
 
@@ -523,15 +406,7 @@ def RAGMoEBacked(data):
     )
 
     contextualize_q_chain = contextualize_q_prompt | standalone_query_generation_llm | StrOutputParser()
-    # contextualize_q_chain.invoke(
-    #     {
-    #         "chat_history":[
-    #             HumanMessage(content="What does LLM stand for?"),
-    #             AIMessage(content="Large language model"),
-    #         ],
-    #         "question": "What is meant by large?",
-    #     }
-    # )
+
     qa_system_prompt = """You are an assistant for question-answering tasks talking part in a conversation with a human. \
     Use the following pieces of retrieved context to answer the question. Make the best use of the provided context so as to provide a descriptive and meaningful and comprehensible soltuion to the problem provided by the user.\
     If you don't know the answer, just say that you don't know. \
@@ -568,8 +443,6 @@ def RAGMoEBacked(data):
             "chat_history": chat_history
         }
     )
-
-    # print(ai_msg.content)
     update_history_complex_queries(ai_msg=ai_msg) #Update chat history everytime
     return ai_msg.content
 
@@ -637,16 +510,13 @@ def update_history_complex_queries(ai_msg):
 
 def RAGRunnable2(translated_input):
     
-    # global chat_history_simple_query
     global chat_history
     
     query = translated_input
     
     vectorstore = Chroma(persist_directory="./RAG/vectorSearchForFarmGenie", embedding_function=gemini_embeddings, collection_name="embeddings_for_farm_book")
     retriever = vectorstore.as_retriever(k=2)
-    # retriever.get_relevant_documents(query)
 
-    #Get the recent message in rference to the history if applicable
     contextualize_q_system_prompt = """
 
     Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language, that can be used to query a FAISS index. This query will be used to retrieve documents with additional context. 
@@ -686,15 +556,7 @@ def RAGRunnable2(translated_input):
     )
 
     contextualize_q_chain = contextualize_q_prompt | standalone_query_generation_llm | StrOutputParser()
-    # contextualize_q_chain.invoke(
-    #     {
-    #         "chat_history":[
-    #             HumanMessage(content="What does LLM stand for?"),
-    #             AIMessage(content="Large language model"),
-    #         ],
-    #         "question": "What is meant by large?",
-    #     }
-    # )
+
     qa_system_prompt = """You are an assistant for question-answering tasks talking part in a conversation with a human. \
     Use the following pieces of retrieved context to answer the question. Make the best use of the provided context so as to provide a descriptive and meaningful and comprehensible soltuion to the problem provided by the user.\
     If you don't know the answer, just say that you don't know. \
@@ -732,7 +594,6 @@ def RAGRunnable2(translated_input):
         }
     )
 
-    # print(ai_msg.content)
     update_history_simple_queries(ai_msg=ai_msg) #Update chat history everytime
     return ai_msg.content
 
@@ -752,10 +613,7 @@ def ConditionalRunnable(translated_input):
 # @chain
 def OutputRunnable(output_dictionary):
     
-    # result = output_dictionary['answer']
-    # translated_query = output_dictionary['translated_query']
-    # # print(result)
-    # # print(translated_query)
+
     return output_dictionary
 
 
@@ -774,8 +632,8 @@ alpaca_prompt = """Below is an instruction that describes a task, paired with an
 {}"""
 
 
-max_seq_length = 2048 # Choose any! We auto support RoPE Scaling internally!
-dtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
+max_seq_length = 2048 
+dtype = None 
 load_in_4bit = True # Use 4bit quantization to reduce memory usage. Can be False.
 
 def load_soil_moe(query):
@@ -797,7 +655,7 @@ def load_soil_moe(query):
             "", # output - leave this blank for generation!
         )
     ], return_tensors = "pt").to("cuda")
-    FastLanguageModel.for_inference(model) # Enable native 2x faster inference
+    FastLanguageModel.for_inference(model) 
     outputs = model.generate(**inputs, max_new_tokens = 1024, use_cache = True)
     res = tokenizer.batch_decode(outputs)[0]
     # Extracting the "Response" part
@@ -811,14 +669,14 @@ def load_soil_moe(query):
 
 def load_irrigation_moe(query):
     model, tokenizer = FastLanguageModel.from_pretrained(
-        model_name = "YuvrajSingh9886/phi3-mini-fine-tuned-agricultural-irrigation-QnA", # Choose ANY! eg teknium/OpenHermes-2.5-Mistral-7B
+        model_name = "YuvrajSingh9886/phi3-mini-fine-tuned-agricultural-irrigation-QnA", 
         max_seq_length = max_seq_length,
         dtype = dtype,
         load_in_4bit = load_in_4bit,
         device_map="cuda"
         # token = "hf_...", # use one if using gated models like meta-llama/Llama-2-7b-hf
     )
-    FastLanguageModel.for_inference(model) # Enable native 2x faster inference
+    FastLanguageModel.for_inference(model) 
     inputs = tokenizer(
     [
         alpaca_prompt.format(
@@ -860,8 +718,7 @@ def load_plant_diseases_moe(query):
 
     outputs = model.generate(**inputs, max_new_tokens = 1024, use_cache = True)
     res = tokenizer.batch_decode(outputs)[0]
-    # del_model_tokenzier(model, tokenizer)
-    # Extracting the "Response" part
+
     
     response = res.split("### Response:")[1].strip()
     model =  None
@@ -878,10 +735,6 @@ def del_model_tokenzier(model, tokenizer):
     tokenizer = None
     torch.cuda.empty_cache()
     gc.collect()
-
-# irrigation_moe_model,  irrigation_moe_tokenizer = load_irrigation_moe()
-# soil_moe_model,  soil_moe_tokenizer = load_soil_moe()
-# plant_diseases_moe_model,  plant_diseases_moe_tokenizer = load_plant_diseases_moe()
 
 
 
@@ -913,8 +766,6 @@ api.add_middleware(
 
 
 port = 8000
-# Open a ngrok tunnel to the dev server
-# public_url = ngrok.connect(port).public_url
 
 
 
@@ -925,28 +776,15 @@ def index():
 @api.get('/searchQuery')
 def get_query(userQuery: str):
     
-    # global chat_history_complex_query
-    # global chat_history_simple_query
     global chat_history
     
-        # Load complex query history if it exists
     if os.path.exists('data/pickle files/chat_history.pkl') and os.path.getsize('data/pickle files/chat_history.pkl') > 0:
         with open('data/pickle files/chat_history.pkl', 'rb') as f:
             chat_history = pickle.load(f)
 
-    # Load simple query history if it exists
-    # if os.path.exists('data/pickle files/chat_history_simple_query.pkl') and os.path.getsize('data/pickle files/chat_history_simple_query.pkl') > 0:
-    #     with open('data/pickle files/chat_history_simple_query.pkl', 'rb') as f:
-    #         chat_history_simple_query = pickle.load(f)
-            
     
     global query
     query = unquote(userQuery)
-    # query = "Hey wanna flirt?"
-    # query = "कृषि में जलवायुीय परिवर्तन के दौरान किस प्रकार के कैटपिलर्स और कीट होते हैं?"
-    # query = "मिट्टी को उपजाऊ बनाने के लिए विभिन्न तरीके कौन से हैं?"
-    # query = "What did I just asked about?"
-    # query = "इनसे कैसे छुटकारा पाएं?"
     he_translator = RunnableLambda(HE_TranslatorRunnable)
     eh_translator = RunnableLambda(EH_TranslatorRunnable)
     condition = RunnableLambda(ConditionalRunnable)
@@ -958,9 +796,6 @@ def get_query(userQuery: str):
     result = pipeline.invoke(input=query)
     
     pickle.dump(chat_history, open('data/pickle files/chat_history.pkl', 'wb'))
-    # pickle.dump(chat_history_simple_query, open('data/pickle files/chat_history_simple_query.pkl', 'wb'))
-    # print(chat_history_complex_query)
-    # print(chat_history_simple_query)
-    # print(result)
-    print(chat_history)
+
+    # print(chat_history)
     return result
