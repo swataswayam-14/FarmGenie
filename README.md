@@ -1,8 +1,13 @@
 # FarmGenie 
 
 ### Deployed Links
-**Our project only supports conversation (input/output) in Hindi for now**.
 #### [Deployed server](https://singular-muskox-certainly.ngrok-free.app/docs)
+
+--- 
+[NOTE] **Our project only supports conversation (input/output) in Hindi for now**. \
+[NOTE] Please refer to 'flowchart.pdf' for our proposed frameowrk
+---
+
 ### Vision
 
 In the ever-evolving agricultural landscape, farmers often face challenges in accessing up-to-date knowledge and resources to improve their farming practices. To address this, we have developed a comprehensive product that leverages the power of large language models (LLMs) and advanced conversational AI to create an interactive platform for farmers.
