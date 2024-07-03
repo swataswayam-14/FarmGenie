@@ -894,8 +894,29 @@ query = ""
 from fastapi import FastAPI
 from urllib.parse import quote, unquote
 import pickle
+from fastapi.middleware.cors import CORSMiddleware
+from pyngrok import ngrok
 
 api = FastAPI()
+
+######################### CORS Settings #######################################
+origins = ["*"]
+
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
+port = 8000
+# Open a ngrok tunnel to the dev server
+# public_url = ngrok.connect(port).public_url
+
+
 
 @api.get('/')
 def index():
