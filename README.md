@@ -1,5 +1,6 @@
 # FarmGenie 
 
+#### [Deployed server](https://singular-muskox-certainly.ngrok-free.app/docs)
 ### Vision
 
 In the ever-evolving agricultural landscape, farmers often face challenges in accessing up-to-date knowledge and resources to improve their farming practices. To address this, we have developed a comprehensive product that leverages the power of large language models (LLMs) and advanced conversational AI to create an interactive platform for farmers.
@@ -75,6 +76,11 @@ peft , bitsandbytes, huggingface_hub, transformers
 
 ## Requirements
 
+```bash
+docker
+unsloth
+GPU
+```
 
 #### Server
 
