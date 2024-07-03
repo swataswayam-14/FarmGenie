@@ -76,6 +76,11 @@ peft , bitsandbytes, huggingface_hub, transformers
 
 ## Requirements
 
+```bash
+docker
+unsloth
+GPU
+```
 
 #### Server
 
