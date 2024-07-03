@@ -1,8 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { signIn, useSession } from "next-auth/react";
 import { Button } from "@/app/components/ui/button";
+import { createChat, getAllChats } from "@/app/actions/chat";
+
+
 export default function ChatInterface({
     params:{chatId},
 }:{
@@ -12,11 +15,21 @@ export default function ChatInterface({
 }) {
     const [isLoading, setIsloading] = useState(false);
     const session = useSession();
+    const [chatHistory, setChatHistory] = useState([]);
+    const [question , setQuestion] = useState("");
+    const [response , setResponse] = useState("");
 
-    async function submit() {
-        console.log('button clicked');
-            
+    async function submit() { 
+      await createChat(question, response);
     }
+    useEffect(()=>{
+      async function storeChatHistory(){
+        const data = await getAllChats();
+        //@ts-ignore
+        setChatHistory(data)
+      }
+      storeChatHistory();
+    },[])
 
     return<div className="min-h-screen bg-gray-900 text-white font-sans flex">
     <div className="w-3/4 p-5">
@@ -31,6 +44,11 @@ export default function ChatInterface({
           <textarea
             className="w-full h-16 p-4 rounded-l-lg bg-gray-800 text-white text-lg resize-none shadow-lg"
             placeholder="Enter your question..."
+            onChange={(e)=>{
+              setQuestion(e.target.value);
+              setResponse("Demo response");
+            }}
+            value={question}
           />
           <Button
             type="submit"
@@ -38,7 +56,7 @@ export default function ChatInterface({
             onClick={session.data?.user ? submit : () => signIn()}
           >
             {session.data?.user
-              ? "Submitting"
+              ? "Submit"
               : session.data
                 ? "Submit"
                 : "Login to submit"}
@@ -50,7 +68,7 @@ export default function ChatInterface({
           </div>
         ) : (
           <div className="w-full md:w-3/4 lg:w-2/3 p-4 mb-5 mt-5 rounded-lg bg-gray-800 text-white shadow-lg">
-            Chatbot response will be displayed here
+             {response}
           </div>
         )}
         <p className="text-sm text-gray-500 mt-5">Hint: Click the Submit button to get the answer.</p>
@@ -58,13 +76,16 @@ export default function ChatInterface({
     </div>
     <div className="w-1/4 bg-gray-800 p-5 overflow-y-auto rounded-t-lg rounded-b-lg" style={{ maxHeight: '100vh' }}>
       <h2 className="text-2xl font-bold mb-4">Chat History</h2>
-      Previous chat messages will be displayed here
-      {/* {chatHistory.map((message, index) => (
-        <div key={index} className="bg-gray-700 p-3 rounded-lg mb-2">
-          <p className="font-bold">{message.user}</p>
-          <p>{message.content}</p>
-        </div>
-      ))} */}
+        {chatHistory.length === 0 ? (
+      <p>no chats yet</p>
+      ) : (
+      chatHistory.map((chat:any, index) => (
+      <div key={index} className="bg-gray-700 p-3 rounded-lg mb-2">
+        <p className="font-bold">{chat.question}</p>
+        <p>{chat.response}</p>
+      </div>
+      ))
+    )}
     </div>
   </div>
 }

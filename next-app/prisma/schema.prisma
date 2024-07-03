@@ -21,4 +21,14 @@ model Farmer {
   password           String
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
+  chats              Chat[]
+}
+
+model Chat {
+  id             String           @id @default(uuid())
+  question       String           
+  response       String
+  createdAt      DateTime         @default(now())
+  userId         String
+  farmer         Farmer           @relation(fields: [userId], references: [id])
 }
