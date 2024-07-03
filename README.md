@@ -1,5 +1,7 @@
 # FarmGenie 
 
+### Deployed Links
+**Our project only supports conversation (input/output) in Hindi for now**.
 #### [Deployed server](https://singular-muskox-certainly.ngrok-free.app/docs)
 ### Vision
 
@@ -8,7 +10,7 @@ In the ever-evolving agricultural landscape, farmers often face challenges in ac
 
 ### Goal
 
-The primary goal of this project is to design a product that helps farmers, especially those new to the field, gain up-to-date knowledge on various agricultural and farming practices from the Internet through a user-friendly interface with a AI-based conversation bot.
+The primary goal of this project is to design a product that helps farmers, especially those new to the field, gain up-to-date knowledge on various agricultural and farming practices from the Internet through a user-friendly interface with an AI-based conversation bot.
 
 
 ### Methodology
@@ -32,17 +34,17 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 
 
-- The website is built using a Turborepo, which is a high-performance build system that helps manage the complexity of a monorepo. 
-- The frontend is built using Next.js, a React framework that provides server-side rendering, static site generation, and other performance optimizations.The backend is built using an Express server that handles the communication between the frontend and the ML backend. 
+- The website is built using a Turborepo, which is a high-performance build system that helps manage the complexity of a mono repo. 
+- The front end is built using Next.js, a React framework that provides server-side rendering, static site generation, and other performance optimizations. The backend is built using an Express server that handles the communication between the front end and the ML backend. 
 
 The Express server is responsible for the following tasks:
 
 1.	**Request Handling**: The Express server receives all the requests from the frontend, such as user queries, and passes them to the Redis queue.
-2.	**Redis Queue**: A Redis queue is used to manage the incoming requests. This helps distribute the load across multiple Node.js processes, ensuring the ML backend does not get overwhelmed.
+2.	**Redis Queue**: A Redis queue is used to manage incoming requests. This helps distribute the load across multiple Node.js processes, ensuring the ML backend does not get overwhelmed.
 3.	**Node.js Processes**: Multiple Node.js processes are set up to consume the requests from the Redis queue. These processes then pass the requests to the ML backend for processing.
 4.	**ML Backend Integration**: The Node.js processes communicate with the ML backend, which is responsible for handling the various ML tasks, such as query classification, subproblem generation, and retrieval-augmented generation (RAG).
 5.	**Database Integration**: The website uses a single PostgreSQL database, provided by Neon DB, as the single source of truth. This database stores all the user, farmer, and retailer data, as well as the content for the website.
-6.	**User Management**: The Next.js frontend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon.tech).
+6.	**User Management**: The Next.js frontend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon tech).
 7.	**Scalability**: The use of a Redis queue and multiple Node.js processes ensures the application can scale to handle a large number of concurrent user requests without overloading the ML backend.
 8.	**Deployment**: The entire application, including the frontend, backend, and ML components, is packaged and deployed using Docker containers, ensuring consistent and reliable deployment across different environments.
 9.	Monitoring and Logging: The application includes comprehensive monitoring and logging solutions to track performance, errors, and user activity, enabling the team to quickly identify and resolve issues.
