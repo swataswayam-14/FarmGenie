@@ -69,7 +69,7 @@ peft , bitsandbytes, huggingface_hub, transformers
 **Dataset**: [Datasets Link (HuggingFace)](https://huggingface.co/YuvrajSingh9886?sort_datasets=likes#datasets) \
 **Steps**: 1000 \
 **Batch size**: 8 \
-**Alpha*8: 2e-5/2e-3 \
+**Alpha**: 2e-5/2e-3 \
 **Hardware**: NVIDIA RTX 4050 6GB VRAM (GPU), Inten CORE i7 16 GB RAM (CPU) 
 
 
