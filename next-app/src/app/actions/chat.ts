@@ -1,5 +1,5 @@
 "use server"
-
+import axios from 'axios';
 import { db } from "../db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/auth";
@@ -52,4 +52,21 @@ export async function getAllChats() {
         console.log(error);
         return []
     }
+}
+
+export async function makeRequest(question: string) {
+  try {
+    const options = {
+      method: 'GET',
+      url: 'https://singular-muskox-certainly.ngrok-free.app/searchQuery',
+      params: { userQuery: question },
+      headers: { Accept: '*/*', 'User-Agent': 'Thunder Client (https://www.thunderclient.com)' },
+    };
+
+    const response = await axios.request(options);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
