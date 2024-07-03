@@ -67,9 +67,9 @@ peft , bitsandbytes, huggingface_hub, transformers
 **Family**: Phi (Phi3-128k-instruct) \
 **Fine-tuned Models**: [Models Link (HuggingFace)](https://huggingface.co/YuvrajSingh9886) \
 **Dataset**: [Datasets Link (HuggingFace)](https://huggingface.co/YuvrajSingh9886?sort_datasets=likes#datasets) \
-**Epochs**: 6 \
-**Best Train Loss**: \
-**Best Val Loss**: \
+**Steps**: 1000 \
+**Batch size**: 8 \
+**Alpha*8: 2e-5/2e-3 \
 **Hardware**: NVIDIA RTX 4050 6GB VRAM (GPU), Inten CORE i7 16 GB RAM (CPU) 
 
 
@@ -87,22 +87,23 @@ GPU
 Pull the server image from DockerHub
 
 ```bash
-  docker pull 
+  docker pull yuvrajsingh9886/farmgenie-fastapi:v1.0
 ```
 
 #### Gemini Setup
 
-Create an environment variable 'GOOGLE_API_KEY' in the .env file for GeminiPro to work
+Create a file named env_file with the following content:
 
 ```bash
-  GOOGLE_API_KEY = "YOUR_SECRET_KEY"
+  GEMINI_API_KEY = "YOUR_SECRET_KEY"
+  hf_token = "YOU_HUGGINGFACE_TOKEN"
 ```
 
 
 Run the server image
 
 ```bash
-  docker container run -d -p 8080:8080  
+  docker container run --env-file env_file -d -p 8080:8080  
 ```
 ## Run Locally
 
