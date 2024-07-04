@@ -29,8 +29,8 @@ gemini_api_key = os.getenv("GEMINI_API_KEY")
 
 genai.configure(api_key=gemini_api_key)
 
-standalone_query_generation_llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", google_api_key=gemini_api_key, convert_system_message_to_human=True)
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", google_api_key=gemini_api_key, convert_system_message_to_human=True)
+standalone_query_generation_llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=gemini_api_key, convert_system_message_to_human=True)
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=gemini_api_key, convert_system_message_to_human=True)
 
 
 gemini_embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=gemini_api_key)
@@ -343,7 +343,7 @@ def EH_TranslatorRunnable(input):
     formatted_text = textwrap.fill(formatted_text, width=80)
     translated_text = translate(formatted_text, src, tgt)
     input['answer'] = formatted_text.replace('\n', ' ').replace('**', '').replace('*\n', '').replace(' *', '').replace('**\n\n*','').replace('**', '').replace('\n*', '')
-    input['eh_translated_query'] = translated_text.replace('\n', ' ').replace('**', '').replace('*\n', '').replace(' *', '').replace('**\n\n*','').replace('**', '').replace('\n*', '')
+    input['eh_translated_result'] = translated_text.replace('\n', ' ').replace('**', '').replace('*\n', '').replace(' *', '').replace('**\n\n*','').replace('**', '').replace('\n*', '')
     return input
 
 
@@ -791,6 +791,10 @@ def get_query(userQuery: str):
     output = RunnableLambda(OutputRunnable)
     translator = RunnableLambda(TranslatorRunnable)
 
+    #aDD SUPORT FOR MEMORY-SORAGE
+    #ADD SUPPORT FOR ENGLISH CONVO
+    
+    
     pipeline = he_translator | condition | output | eh_translator
 
     result = pipeline.invoke(input=query)
@@ -798,4 +802,4 @@ def get_query(userQuery: str):
     pickle.dump(chat_history, open('data/pickle files/chat_history.pkl', 'wb'))
 
     # print(chat_history)
-    return result
+    return result['eh_translated_result']
