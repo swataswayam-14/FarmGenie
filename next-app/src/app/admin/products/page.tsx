@@ -1,6 +1,9 @@
 import { Button } from "@/app/components/ui/button";
 import { PageHeader } from "../_components/PageHeader";
 import Link from "next/link";
+import { db } from "@/app/db";
+import { formatCurrency, formatNumber } from "@/app/lib/formatter";
+import { ActiveToggleDropdownItem, DeleteDropdownItem } from "./_components/ProductAction";
 
 
 export default function AdminProductPage(){
@@ -22,13 +25,20 @@ export default function AdminProductPage(){
 
 }
 
-function ProductsTable() {
-    const data = [
-      { available: true, name: 'Product 1', price: '$9.99', orders: 50 },
-      { available: false, name: 'Product 2', price: '$14.99', orders: 25 },
-      { available: true, name: 'Product 3', price: '$19.99', orders: 75 },
-      { available: true, name: 'Product 4', price: '$24.99', orders: 100 },
-    ];
+async function ProductsTable() {
+    const products = await db.product.findMany({
+      select:{
+        id:true,
+        name:true,
+        priceInCents:true,
+        isAvailableForPurchase:true,
+        _count:{select:{orders:true}}
+      },
+      orderBy:{
+        name:"asc"
+      }
+    })
+    if(products.length === 0) return <p>No products found</p>
   
     return (
       <div className="overflow-x-auto">
@@ -43,7 +53,7 @@ function ProductsTable() {
             </tr>
           </thead>
           <tbody>
-            {data.map((product, index) => (
+            {products.map((product, index) => (
               <tr
                 key={index}
                 className={`border-b ${
@@ -51,22 +61,30 @@ function ProductsTable() {
                 }`}
               >
                 <td className="px-4 py-2">
-                  {product.available ? (
+                  {product.isAvailableForPurchase ? (
                     <span className="text-green-500">Yes</span>
                   ) : (
                     <span className="text-red-500">No</span>
                   )}
                 </td>
                 <td className="px-4 py-2">{product.name}</td>
-                <td className="px-4 py-2">{product.price}</td>
-                <td className="px-4 py-2">{product.orders}</td>
+                <td className="px-4 py-2">{formatCurrency(product.priceInCents)}</td>
+                <td className="px-4 py-2">{formatNumber(product._count.orders)}</td>
                 <td className="px-4 py-2">
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Edit
+                  <button className="bg-gray-500 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded">
+                    <Link href={`/admin/products/${product.id}/edit`}>Edit</Link>
                   </button>
-                  <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">
-                    Delete
+                  <button className="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded ml-2">
+                    <a download href={`/admin/products/${product.id}/download`}>Download</a>
                   </button>
+                  <ActiveToggleDropdownItem
+                    id={product.id}
+                    isAvailableForPurchase={product.isAvailableForPurchase}
+                  />
+                  <DeleteDropdownItem
+                    id={product.id}
+                    disabled={product._count.orders > 0}
+                  />
                 </td>
               </tr>
             ))}
