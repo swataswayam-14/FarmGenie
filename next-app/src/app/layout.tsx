@@ -34,7 +34,7 @@ export default function RootLayout({
       <body className={chivo.variable + " " + rubik.variable}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <Providers>
-        {pathname === '/admin'? null : <Appbar />}
+        {pathname === '/admin' || '/admin/products'? null : <Appbar />}
             {children}
             <Footer />
         </Providers>
