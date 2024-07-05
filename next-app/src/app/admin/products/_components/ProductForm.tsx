@@ -2,12 +2,14 @@
 
 import { formatCurrency } from "@/app/lib/formatter";
 import { useState } from "react";
-import { addProduct } from "../../_actions/products";
+import { addProduct, updateProduct } from "../../_actions/products";
 import { useFormState, useFormStatus } from "react-dom";
+import { Product } from "@prisma/client";
+import Image from "next/image";
 
-export function ProductForm() {
-    const [error , action] = useFormState(addProduct, {})
-    const [priceInCents, setPriceInCents] = useState<number>();
+export function ProductForm({product}: {product?:Product | null}) {
+    const [error , action] = useFormState(product == null ? addProduct: updateProduct.bind(null, product.id), {})
+    const [priceInCents, setPriceInCents] = useState<number | undefined>(product?.priceInCents);
     return (
       <form action={action} className="bg-gray-800 p-8 rounded-lg shadow-lg space-y-8">
         <div className="space-y-4">
@@ -21,6 +23,7 @@ export function ProductForm() {
               name="name"
               required
               className="bg-gray-700 text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              value={product?.name}
             />
             {error?.name && <div className="text-destructive text-red-600">{error.name}</div>}
           </div>
@@ -54,6 +57,7 @@ export function ProductForm() {
               name="description"
               required
               className="bg-gray-700 text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              defaultValue={product?.description}
             />
             {error?.description && <div className="text-destructive text-red-600">{error.description}</div>}
           </div>
@@ -66,9 +70,10 @@ export function ProductForm() {
               type="file"
               id="file"
               name="file"
-              required
+              required = {product == null}
               className="bg-gray-700 text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             />
+            {product != null && (<div className="text-muted-foreground">{product.filePath}</div>)}
             {error?.file && <div className="text-destructive text-red-600">{error.file}</div>}
           </div>
 
@@ -80,9 +85,17 @@ export function ProductForm() {
               type="file"
               id="image"
               name="image"
-              required
+              required = {product == null}
               className="bg-gray-700 text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             />
+            {product != null && (
+              <Image
+                src={product.imagePath}
+                height="400"
+                width="400"
+                alt="Product Image"
+              />
+            )}
              {error?.image && <div className="text-destructive text-red-600">{error.image}</div>}
           </div>
         <SubmitButton/>
