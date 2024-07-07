@@ -1,35 +1,45 @@
 import { ProductCard, ProductCardSkeleton } from "@/app/components/ProductCard"
 import { db } from "@/app/db"
+import { cache } from "@/app/lib/cache"
 import { Product } from "@prisma/client"
 import Link from "next/link"
 import { Suspense } from "react"
 
-async function getMostPopularProducts(){
-    //await wait(2000)
-    return db.product.findMany({
-        where:{
-            isAvailableForPurchase:true
-        },
-        orderBy:{
-            orders:{
-                _count:"desc"
-            }
-        },
-        take:6
-    })
-}
-async function getNewestProducts(){
-    //await wait(1000)
-    return db.product.findMany({
-        where:{
-            isAvailableForPurchase:true 
-        },
-        orderBy:{
-            createdAt:"desc"
-        },
-        take:6
-    })
-}
+const getMostPopularProducts = cache(
+    () => {
+        return db.product.findMany({
+            where:{
+                isAvailableForPurchase:true
+            },
+            orderBy:{
+                orders:{
+                    _count:"desc"
+                }
+            },
+            take:6
+        })
+    },
+    ["/marketplace", "getMostPopularProducts"],{
+        revalidate: 60 * 60 * 24
+    } //revalidating the cache every 24 hours
+)
+
+const getNewestProducts = cache(
+    () => {
+        return db.product.findMany({
+            where:{
+                isAvailableForPurchase:true 
+            },
+            orderBy:{
+                createdAt:"desc"
+            },
+            take:6
+        })
+    },
+    ["/marketplace", "getNewestProducts"],{
+        revalidate: 60 * 60 * 24 * 5
+    }//revalidating the cache every 5 days
+)
 
 export default function HomePage(){
     return <main className="space-y-12">
