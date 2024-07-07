@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }): JSX.Element {
   const pathname = usePathname();
-  console.log(pathname);
+  //console.log(pathname);
   
   
   return (
