@@ -3,70 +3,39 @@ import {
     CardHeader,
     CardTitle,
     CardContent,
-    CardFooter, 
+    CardFooter,
+    CardDescription, 
 } from "./ui/card";
-  import Link from "next/link";
-  //import { parseFutureDate, parseOldDate } from "../app/lib/time";
-  import { PrimaryButton } from "./LinkButton";
-  
-  interface ContestCardParams {
-    title: string;
-    id: string;
-    endTime: Date;
-    startTime: Date;
-  }
-  
-  export function ContestCard({
-    title,
-    id,
-    startTime,
-    endTime,
-  }: ContestCardParams) {
-    const duration = `${(new Date(endTime).getTime() - new Date(startTime).getTime()) / (1000 * 60 * 60)} hours`;
-    const isActive =
-      startTime.getTime() < Date.now() && endTime.getTime() > Date.now();
-  
-    return (
-      <Card>
+import Link from "next/link";
+import Image from "next/image";
+import { formatCurrency } from "../lib/formatter";
+
+type ProductCardProps = {
+  id:string,
+  name:string,
+  priceInCents:number,
+  description: string,
+  imagePath:string
+}
+
+export function ProductCard({id, name , priceInCents, description, imagePath}:ProductCardProps){
+  return(
+    <Card className="flex overflow-hidden flex-col">
+        <div className="relative w-full h-auto aspect-video">
+            <Image src={imagePath} fill alt={name}/>
+        </div>
         <CardHeader>
-          <div className="flex justify-between">
-            <CardTitle>{title}</CardTitle>
-            <div>
-              {startTime.getTime() < Date.now() &&
-              endTime.getTime() < Date.now() ? (
-                <div className="text-red-500">Ended</div>
-              ) : null}
-              {isActive ? <div className="text-green-500">Active</div> : null}
-              {endTime.getTime() < Date.now() ? (
-                <div className="text-red-500">Ended</div>
-              ) : null}
-            </div>
-          </div>
+          <CardTitle>{name}</CardTitle>
+          <CardDescription>{formatCurrency(priceInCents / 100)}</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">
-                {startTime.getTime() < Date.now() ? "Started" : "Starts in"}
-              </p>
-              <p>
-                {/* {startTime.getTime() < Date.now()
-                  ? parseOldDate(new Date(startTime))
-                  : parseFutureDate(new Date(startTime))} */}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">Duration</p>
-              <p>{duration}</p>
-            </div>
-          </div>
+        <CardContent className="flex-grow">
+          <p className="line-clamp-4">{description}</p>
         </CardContent>
         <CardFooter>
-          <PrimaryButton href={`/contest/${id}`}>
-            {isActive ? "Participate" : "View Contest"}
-          </PrimaryButton>
+          <button className="w-full bg-gray-200 rounded-full p-2 text-black font-semibold">
+            <Link href={`/products/${id}/purchase`}>Purchase</Link>
+          </button>
         </CardFooter>
-      </Card>
-    );
-  }
-  
+    </Card>
+  )
+}
