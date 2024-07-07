@@ -39,3 +39,28 @@ export function ProductCard({id, name , priceInCents, description, imagePath}:Pr
     </Card>
   )
 }
+
+export function ProductCardSkeleton(){
+  return (
+    <Card className="flex overflow-hidden flex-col animate-pulse">
+        <div className="w-full aspect-video bg-gray-300"></div>
+        <CardHeader>
+          <CardTitle>
+            <div className="w-3/4 h-6 rounded-full bg-gray-300"></div>
+          </CardTitle>
+          <CardDescription>
+            <div className="w-1/2 h-4 rounded-full bg-gray-300"></div>
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <div className="w-full h-4 rounded-full bg-gray-300"></div>
+          <div className="w-full h-4 rounded-full bg-gray-300"></div>
+          <div className="w-3/4 h-4 rounded-full bg-gray-300"></div>
+        </CardContent>
+        <CardFooter>
+          <button className="w-full bg-gray-200 rounded-full p-2 text-black font-semibold">
+          </button>
+        </CardFooter>
+    </Card>
+  )
+}

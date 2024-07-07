@@ -1,9 +1,11 @@
-import { ProductCard } from "@/app/components/ProductCard"
+import { ProductCard, ProductCardSkeleton } from "@/app/components/ProductCard"
 import { db } from "@/app/db"
 import { Product } from "@prisma/client"
 import Link from "next/link"
+import { Suspense } from "react"
 
 async function getMostPopularProducts(){
+    //await wait(2000)
     return db.product.findMany({
         where:{
             isAvailableForPurchase:true
@@ -17,6 +19,7 @@ async function getMostPopularProducts(){
     })
 }
 async function getNewestProducts(){
+    //await wait(1000)
     return db.product.findMany({
         where:{
             isAvailableForPurchase:true 
@@ -40,7 +43,7 @@ type ProductGridSectionProps = {
     title:string
 }
 
-async function ProductGridSection({productFetcher, title}:ProductGridSectionProps){
+function ProductGridSection({productFetcher, title}:ProductGridSectionProps){
     return (
         <div className="space-y-4">
             <div className="flex gap-4">
@@ -48,10 +51,32 @@ async function ProductGridSection({productFetcher, title}:ProductGridSectionProp
                 <button><Link href="/products"><span>View All</span></Link></button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {(await productFetcher()).map(product => (
-                    <ProductCard key={product.id} {...product}/>
-                ))}
+                <Suspense
+                 fallback={
+                    <>
+                        <ProductCardSkeleton/>
+                        <ProductCardSkeleton/>
+                        <ProductCardSkeleton/>
+                    </>
+                 }
+                >
+                    <ProductSuspense productFetcher={productFetcher}/>
+                </Suspense>
             </div>
         </div>
     )
+}
+
+async function ProductSuspense({
+    productFetcher,
+}:{
+    productFetcher: () => Promise<Product[]>
+}) {
+    return (await productFetcher()).map(product => (
+        <ProductCard key={product.id} {...product}/>
+    ))
+}
+
+function wait(duration: number) {
+    return new Promise(resolve => setTimeout(resolve, duration))
 }
