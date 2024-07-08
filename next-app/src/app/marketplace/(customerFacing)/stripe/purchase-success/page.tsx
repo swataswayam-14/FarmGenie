@@ -37,8 +37,17 @@ export default async function SuccessPage({searchParams}:{searchParams:{payment_
             <div className="line-clamp-3 text-muted-foreground">
                 {product.description}
             </div>
-            <button className="mt-4 p-2 rounded-lg bg-gray-200 text-black">{isSuccess? (<a>Download</a>):(<Link href={`/marketplace/products/${product.id}/purchase`}>Try Again</Link>)}</button>
+            <button className="mt-4 p-2 rounded-lg bg-gray-200 text-black">{isSuccess? (<a href={`/marketplace/products/download/${await createDownloadVerification(product.id)}`}>Download</a>):(<Link href={`/marketplace/products/${product.id}/purchase`}>Try Again</Link>)}</button>
         </div>
     </div>
     </div>
+}
+
+async function createDownloadVerification(productId:string){
+    return (await db.downloadVerification.create({
+        data:{
+            productId,
+            expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24)
+        }
+    })).id
 }
