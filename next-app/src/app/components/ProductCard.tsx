@@ -33,7 +33,7 @@ export function ProductCard({id, name , priceInCents, description, imagePath}:Pr
         </CardContent>
         <CardFooter>
           <button className="w-full bg-gray-200 rounded-full p-2 text-black font-semibold">
-            <Link href={`/products/${id}/purchase`}>Purchase</Link>
+            <Link href={`/marketplace/products/${id}/purchase`}>Purchase</Link>
           </button>
         </CardFooter>
     </Card>
