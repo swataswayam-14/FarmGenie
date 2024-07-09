@@ -18,8 +18,8 @@ export default function MyOrdersPage(){
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <input type="email" required name="email" id="email" />
+                        <Label htmlFor="email" className="text-xl">Email</Label>
+                        <input type="email" className="p-2 rounded-md ml-2 bg-gray-700" required name="email" id="email" />
                         {data.error && <div className="text-red-400">{data.error}</div>}
                     </div>
                 </CardContent>

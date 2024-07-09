@@ -19,15 +19,15 @@ export const Footer = () => {
           <div className="flex flex-col justify-center my-8 md:my-0">
             <h3 className="font-semibold text-neutral-100 mb-4">Quick Links</h3>
             <Link
-              href={"https://app.100xdevs.com/"}
+              href={"http://localhost:3000"}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-500 text-neutral-200"
             >
-              100xdevs
+              FarmGenie
             </Link>
             <Link
-              href={"https://github.com/code100x/daily-code/"}
+              href={"https://github.com/swataswayam-14/FarmGenie"}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-500 text-neutral-200"
@@ -55,13 +55,13 @@ export const Footer = () => {
           <div>
             <h4 className="text-neutral-200 font-semibold mb-2">Follow us</h4>
             <div className="flex gap-x-2">
-              <Link target="_blank" rel="noopener noreferrer" href={"https://twitter.com/kirat_tw"}>
+              <Link target="_blank" rel="noopener noreferrer" href={"https://www.linkedin.com/in/swata-swayam-dash-051307269/"}>
                 <SiX className="text-white hover:text-blue-500" />
               </Link>
-              <Link target="_blank" rel="noopener noreferrer" href={"https://www.instagram.com/kirat_ins/"}>
+              <Link target="_blank" rel="noopener noreferrer" href={"https://www.linkedin.com/in/swata-swayam-dash-051307269/"}>
                 <SiInstagram className="text-white hover:text-blue-500" />
               </Link>
-              <Link target="_blank" rel="noopener noreferrer" href={"https://www.youtube.com/@harkirat1"}>
+              <Link target="_blank" rel="noopener noreferrer" href={"https://www.linkedin.com/in/swata-swayam-dash-051307269/"}>
                 <SiYoutube className="text-white hover:text-blue-500" />
               </Link>
             </div>

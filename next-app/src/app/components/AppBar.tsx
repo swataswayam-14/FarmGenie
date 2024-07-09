@@ -17,17 +17,20 @@ export function Appbar() {
         <span className="text-lg font-bold">FarmGenie</span>
       </Link>
       <nav className="hidden md:flex items-center gap-6">
-        <Link href="/contests" className="hover:underline" prefetch={false}>
+        <Link href="/" className="hover:underline" prefetch={false}>
           Home
         </Link>
-        <Link href="/problems" className="hover:underline" prefetch={false}>
+        <Link href="/chat/123/" className="hover:underline" prefetch={false}>
           Chatbot
         </Link>
-        <Link href="/standings" className="hover:underline" prefetch={false}>
+        <Link href="/community/" className="hover:underline" prefetch={false}>
         Community Forum
         </Link>
-        <Link href="/standings" className="hover:underline" prefetch={false}>
+        <Link href="/marketplace/" className="hover:underline" prefetch={false}>
         Marketplace
+        </Link>
+        <Link href="/admin/" className="hover:underline" prefetch={false}>
+        Admin Login
         </Link>
       </nav>
       {!isLoading && session?.user && (

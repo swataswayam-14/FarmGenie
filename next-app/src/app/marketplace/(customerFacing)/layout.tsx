@@ -9,8 +9,8 @@ export default function Layout ({
     return <div>
         <NavAdmin>
             <NavAdminLink href="/">Home</NavAdminLink>
-            <NavAdminLink href="/products">Products</NavAdminLink>
-            <NavAdminLink href="/orders">My Orders</NavAdminLink>
+            <NavAdminLink href="/marketplace/products">Products</NavAdminLink>
+            <NavAdminLink href="/marketplace/orders">My Orders</NavAdminLink>
         </NavAdmin>
         <div className="container my-6">{children}</div>
     </div>
