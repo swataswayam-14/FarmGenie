@@ -20,6 +20,8 @@ import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
+import { updateUser } from '@/lib/actions/user.action';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface Props {
     user:{
@@ -37,6 +39,8 @@ export default function AccountProfile({user, btnTitle}: Props | any) {
 
     const [file , setFile] = useState<File[]>([]);
     const {startUpload} = useUploadThing("media");
+    const pathname = usePathname();
+    const router = useRouter();
 
     const form = useForm({
         resolver: zodResolver(UserValidation),
@@ -50,19 +54,30 @@ export default function AccountProfile({user, btnTitle}: Props | any) {
 
 
     async function onSubmit(values: z.infer<typeof UserValidation>) {
-        const blob = values.profile_photo;
-        const hasImageChanged = isBase64Image(blob);
-        if(hasImageChanged) {
+      const blob = values.profile_photo;
+      const hasImageChanged = isBase64Image(blob);
+      if(hasImageChanged) {
+          const imgRes = await startUpload(file);
+          //@ts-ignore
+          if(imgRes && imgRes[0].fileUrl) {
             //@ts-ignore
-            const imgRes = await startUpload(files)
-            //@ts-ignore
-            if(imgRes && imgRes[0].fileUrl) {
-            //@ts-ignore
-                values.profile_photo = imgRes[0].fileUrl
-            }
-        }
-        //backend call to database
-    }
+              values.profile_photo = imgRes[0].fileUrl
+          }
+      }
+      await updateUser({
+          userId: user.id,
+          username: values.username,
+          name: values.name,
+          bio: values.bio,
+          image: values.profile_photo,
+          path: pathname
+      });
+      if(pathname === "/profile/edit") {
+          router.back();
+      } else {
+          router.push('/');
+      }
+  }
 
 
     const handleImage = (e: ChangeEvent<HTMLInputElement>, fieldChange: (value:string) => void) => {
