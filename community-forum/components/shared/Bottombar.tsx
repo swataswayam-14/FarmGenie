@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation"
 export default function Bottombar(){
     const pathname = usePathname();
     return (
-        <section>
+        <section className="bg-dark-1">
             <div className="bottombar_container">
                 {sidebarLinks.map((link) => {
                     const isActive = (pathname.includes(link.route) && link.route.length > 1) || pathname === link.route;
