@@ -30,3 +30,10 @@ export async function createThread({text, author,communityId, path}: Params) {
         throw new Error (`Error creating thread: ${error.message}`)
     }
 }
+
+// export async function fetchPosts(pageNumber = 1, pageSize = 20) {
+//     connectToDB();
+
+//     //calculating number of posts to skip
+//     const skipAmount = ()
+// }
