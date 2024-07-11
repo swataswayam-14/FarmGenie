@@ -42,7 +42,7 @@ export default function Comment({threadId, currentUserImg , currentUserId}: Prop
     })
 
     const onSubmit = async(values: z.infer<typeof CommentValidation>)=>{
-        await addCommentToThread(threadId, values.thread, currentUserId, pathname);
+        await addCommentToThread(threadId, values.thread, JSON.parse(currentUserId), pathname);
         form.reset();
     }
 
