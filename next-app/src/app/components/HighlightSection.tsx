@@ -23,7 +23,7 @@ const Highlights = () => {
           The community forum is a vital part of the agritech solution, providing a platform for farmers to connect with their peers, share local knowledge, seek advice, and learn from each other's experiences. It fosters a supportive environment where farmers, especially beginners, can collectively discuss challenges, advocate for their needs, and build a network to succeed in their agricultural endeavors, complementing the conversational AI chatbot by allowing them to tap into the collective wisdom of their community.
           </p>
           <button className="mt-6 mb-1 inline-flex items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-50 dark:hover:bg-gray-800 dark:focus:ring-gray-300">
-          <Link href="http://localhost:3000">Join Forum</Link>
+          <Link href="https://farmgenie-rho.vercel.app/">Join Forum</Link>
           </button>
         </div>
         <div className="bg-gray-200 p-4 rounded shadow">
