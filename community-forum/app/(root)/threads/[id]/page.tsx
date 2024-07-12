@@ -22,8 +22,8 @@ export default async function Page({params}:any) {
     <section>
         <div>
         <ThreadCard
-                key={thread._id}
-                id={thread._id}
+                key={JSON.stringify(thread._id)}
+                id={JSON.stringify(thread._id)}
                 currentUserId={user?.id}
                 parentId={thread.parentId}
                 content={thread.text}

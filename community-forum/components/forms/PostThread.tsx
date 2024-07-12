@@ -42,7 +42,7 @@ export default function PostThread({userId}:{userId:string}) {
         resolver: zodResolver(ThreadValidation),
         defaultValues:{
             thread: '',
-            accountId: userId
+            accountId: JSON.parse(userId)
         }
     })
 
@@ -50,7 +50,7 @@ export default function PostThread({userId}:{userId:string}) {
 
         await createThread({
             text: values.thread,
-            author: userId,
+            author: JSON.parse(userId),
             communityId: null,
             path: pathname
         })
