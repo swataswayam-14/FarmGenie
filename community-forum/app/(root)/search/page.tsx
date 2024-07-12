@@ -29,7 +29,7 @@ export default async function Page() {
         </h1>
 
         <div className="mt-14 flex flex-col gap-9">
-            {result.users.length === 0?(<p className="no-result">No users</p>):(<>{result.users.map((person)=>(
+            {result.users.length === 0?(<p className="no-result text-light-3">No users</p>):(<>{result.users.map((person)=>(
                 <UserCard
                     key={person.id}
                     id={person.id}
