@@ -96,7 +96,7 @@ export const ThreadCard = ({
                             />
                         </div>
                             {isComment && comments.length > 0 && (
-                                <Link href={`/threads/${id}`}>
+                                <Link href={`/threads/${JSON.parse(id)}`}>
                                     <p className="mt-1 text-subtle-medium text-gray-1">{comments.length} replies</p>
                                 </Link>
                             )}

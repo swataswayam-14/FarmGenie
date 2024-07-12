@@ -12,6 +12,6 @@ export default async function Page () {
 
     return <div>
         <h1 className="text-light-2 head-text">Create Thread</h1>
-        <PostThread userId={userInfo._id}/>
+        <PostThread userId={JSON.stringify(userInfo._id)}/>
     </div>
 }
