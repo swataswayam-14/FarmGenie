@@ -23,7 +23,7 @@ export function Appbar() {
         <Link href="/chat/123/" className="hover:underline" prefetch={false}>
           Chatbot
         </Link>
-        <Link href="http://localhost:3000" className="hover:underline" prefetch={false}>
+        <Link href="https://farmgenie-rho.vercel.app/" className="hover:underline" prefetch={false}>
         Community Forum
         </Link>
         <Link href="/marketplace/" className="hover:underline" prefetch={false}>

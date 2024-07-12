@@ -29,7 +29,7 @@ export function Hero() {
                 Visit the Marketplace
               </Link>
               <Link
-                href="http://localhost:3000"
+                href="https://farmgenie-rho.vercel.app/"
                 className="inline-flex items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-50 dark:hover:bg-gray-800 dark:focus:ring-gray-300"
                 prefetch={false}
               >
