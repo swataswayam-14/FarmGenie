@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Highlights from "./HighlightSection";
+import Image from "next/image";
 
 export function Hero() {
   return (
@@ -38,13 +39,11 @@ export function Hero() {
             </div>
           </div>
           <div className="hidden md:block">
-            <img
-              src="https://media.istockphoto.com/id/491267876/photo/cauliflower-plantation.jpg?s=612x612&w=0&k=20&c=yik3O4bFOUYvpgTw5BhpRsYPsC4KR0yXXMgRWg6Bqws="
-              width="600"
-              height="400"
-              alt="Code100x"
-              className="rounded-lg"
-            />
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="600" height="400" className="rounded-lg">
+            <path d="M19 19H5V9L12 2L19 9V19ZM12 4.5L7 9V17H10V11H14V17H17V9L12 4.5Z" fill="#333333"/>
+            <path d="M12 11V17H10V9L12 4.5V11Z" fill="#333333"/>
+            <path d="M14 11V17H17V9L12 4.5V11H14Z" fill="#333333"/>
+          </svg>
           </div>
         </div>
       </div>
