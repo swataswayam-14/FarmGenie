@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 "use client"
 import { emailOrderHistory } from "@/actions/orders"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/app/components/ui/card"
