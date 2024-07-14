@@ -123,6 +123,36 @@ Go to the project directory
   cd FarmGenie
 ```
 
+Go to the next-app directory
+
+```bash
+  cd next-app
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Generate prisma client
+
+```bash
+  npx prisma generate
+```
+
+Start the server
+
+```bash
+  npm run start
+```
+
+Go to the communtiy-forum directory
+
+```bash
+  cd community-forum
+```
+
 Install dependencies
 
 ```bash
