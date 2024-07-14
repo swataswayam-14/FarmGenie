@@ -5,25 +5,29 @@ services:
     build: .
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL="postgresql://swataswayamdash:Dcnhf1IajsW5@ep-gentle-math-a5z04t41.us-east-2.aws.neon.tech/farmgenie?sslmode=require"
+      - DATABASE_URL=${DATABASE_URL}
       - NODE_ENV="production"
-      - JWT_SECRET="the454sesc3rt@s"
-      - NEXTAUTH_SECRET="myYhY6Hikuh8887"
-      - ADMIN_USERNAME=admin
-      - HASHED_ADMIN_PASSWORD="7sAToqcgjFH9IPl1qtIxsuIefB2eIoskgOM8j1KsSC2CyFFMvrYDbX/HbLYmKuV4C7xiiwpvLfMuUlWiHUcy9A=="
-      - STRIPE_SECRET_KEY="sk_test_51Pa8kxRqJfvgwvnDoCum1VUmOs6BdX22BhMELcbsovUBg0NRNHY2TBpMQf2htYb1BJTLFnDHY5d0NZEvxx9BFy0Q00ZcP4IS2u"
-      - STRIPE_WEBHOOK_SECRET="dgdfdsgsgsdfsdfs"
-      - RESEND_API_KEY="gdgsfsdfsdfsdf"
-      - SENDER_EMAIL="onboarding@resend.dev"
-      - NEXT_PUBLIC_STRIPE_PUBLIC_KEY="pk_test_51Pa8kxRqJfvgwvnD2SZ6lHvsfKKpTHDeIPWQVgOZKyoFYc1vqDlm4q8rc5EzViVyX1NyKyVSxW3chVDmzUMbqQhS00DahbyDNe"
-      - NEXT_PUBLIC_SERVER_URL="http://localhost:3000/marketplace"
+      - JWT_SECRET=${JWT_SECRET}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - HASHED_ADMIN_PASSWORD=${HASHED_ADMIN_PASSWORD}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - SENDER_EMAIL=${SENDER_EMAIL}
+      - NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${NEXT_PUBLIC_STRIPE_PUBLIC_KEY}
+      - NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 
   db:
     image: neon/postgres
+    env_file:
+      - .env
     environment:
-      - POSTGRES_USER=swataswayamdash
-      - POSTGRES_PASSWORD=Dcnhf1IajsW5
-      - POSTGRES_DB=farmgenie
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
