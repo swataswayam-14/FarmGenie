@@ -25,7 +25,9 @@ export function ProductForm({product}: {product?:Product | null}) {
               className="bg-gray-700 text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               value={product?.name}
             />
-            {error?.name && <div className="text-destructive text-red-600">{error.name}</div>}
+            {
+            //@ts-ignore
+            error?.name && <div className="text-destructive text-red-600">{error.name}</div>}
           </div>
           <div>
             <label htmlFor="priceInCents" className="text-gray-200 font-medium block mb-2">
@@ -42,7 +44,9 @@ export function ProductForm({product}: {product?:Product | null}) {
                 setPriceInCents(Number(e.target.value) || undefined)
               }}
             />
-            {error?.priceInCents && <div className="text-destructive text-red-600">{error.priceInCents}</div>}
+            {
+            //@ts-ignore
+            error?.priceInCents && <div className="text-destructive text-red-600">{error.priceInCents}</div>}
           </div>
           <div className="text-muted-foreground">
               {formatCurrency((priceInCents || 0 )/ 100)}
@@ -59,7 +63,9 @@ export function ProductForm({product}: {product?:Product | null}) {
               className="bg-gray-700 text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               defaultValue={product?.description}
             />
-            {error?.description && <div className="text-destructive text-red-600">{error.description}</div>}
+            {
+              //@ts-ignore
+            error?.description && <div className="text-destructive text-red-600">{error.description}</div>}
           </div>
 
           <div>
@@ -74,7 +80,9 @@ export function ProductForm({product}: {product?:Product | null}) {
               className="bg-gray-700 text-gray-200 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             />
             {product != null && (<div className="text-muted-foreground">{product.filePath}</div>)}
-            {error?.file && <div className="text-destructive text-red-600">{error.file}</div>}
+            {
+              //@ts-ignore
+            error?.file && <div className="text-destructive text-red-600">{error.file}</div>}
           </div>
 
           <div>
@@ -96,7 +104,9 @@ export function ProductForm({product}: {product?:Product | null}) {
                 alt="Product Image"
               />
             )}
-             {error?.image && <div className="text-destructive text-red-600">{error.image}</div>}
+             {
+              //@ts-ignore
+             error?.image && <div className="text-destructive text-red-600">{error.image}</div>}
           </div>
         <SubmitButton/>
         </div>
