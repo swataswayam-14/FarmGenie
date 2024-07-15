@@ -8,6 +8,9 @@ const nextConfig = {
     experimental: {
       outputStandalone: true,
     },
+    api: {
+      bodyParser: false, // Disable body parsing for metrics route
+    },
   };
   
 export default nextConfig;
