@@ -5,6 +5,14 @@ import {z} from "zod";
 import fs from "fs/promises";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import client from "prom-client"
+import { NextRequest } from "next/server";
+
+export const requestCounter = new client.Counter({
+    name: 'http_requests_total',
+    help: 'Total number of HTTP requests',
+    labelNames: ['method', 'route', 'status_code']
+});
 
 const fileSchema = z.instanceof(File, {
     message:"Required"
@@ -21,7 +29,8 @@ const formSchema = z.object({
     image: imageSchema.refine(file => file.size > 0, "Required")
 })
 
-export async function addProduct(prevState: unknown, formData: FormData) {
+export async function addProduct(prevState: unknown, formData: FormData , req:NextRequest) {
+    const startTime = Date.now();
     const result = formSchema.safeParse(Object.fromEntries(formData.entries()))
     if(result.success === false){
         return result.error.formErrors.fieldErrors
@@ -48,10 +57,21 @@ export async function addProduct(prevState: unknown, formData: FormData) {
                 imagePath
             }
         })
+        const endTime = Date.now();
+        requestCounter.inc({
+            method: req.method,
+            route: req.nextUrl.pathname,
+            status_code: 200,
+        });
         revalidatePath("/marketplace")
         revalidatePath("/marketplace/products")
         redirect("/admin/products")
     } catch (error) {
+        requestCounter.inc({
+            method: req.method,
+            route: req.nextUrl.pathname,
+            status_code: 500,
+        });
         console.log(error);
     }
     
