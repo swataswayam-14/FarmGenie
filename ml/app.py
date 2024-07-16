@@ -1324,7 +1324,7 @@ def get_query(userQuery: str):
     output = RunnableLambda(OutputRunnable)
     translator = RunnableLambda(TranslatorRunnable)
 
-    #aDD SUPORT FOR MEMORY-SORAGE
+    #ADD SUPORT FOR MEMORY-SORAGE
     #ADD SUPPORT FOR ENGLISH CONVO
     
     
