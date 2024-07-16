@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Highlights from "./HighlightSection";
+import Image from "next/image";
 
 export function Hero() {
   return (
@@ -15,21 +16,21 @@ export function Hero() {
             </p>
             <div className="flex gap-4 pt-16">
               <Link
-                href="/contests"
+                href="/chat/123"
                 className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-900/90 focus:outline-none focus:ring-1 focus:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus:ring-gray-300"
                 prefetch={false}
               >
                 Ask Our chatbot
               </Link>
               <Link
-                href="/contests"
+                href="/marketplace"
                 className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-gray-900/90 focus:outline-none focus:ring-1 focus:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus:ring-gray-300"
                 prefetch={false}
               >
                 Visit the Marketplace
               </Link>
               <Link
-                href="/problems"
+                href="https://farmgenie-rho.vercel.app/"
                 className="inline-flex items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-50 dark:hover:bg-gray-800 dark:focus:ring-gray-300"
                 prefetch={false}
               >
@@ -38,13 +39,11 @@ export function Hero() {
             </div>
           </div>
           <div className="hidden md:block">
-            <img
-              src="https://media.istockphoto.com/id/491267876/photo/cauliflower-plantation.jpg?s=612x612&w=0&k=20&c=yik3O4bFOUYvpgTw5BhpRsYPsC4KR0yXXMgRWg6Bqws="
-              width="600"
-              height="400"
-              alt="Code100x"
-              className="rounded-lg"
-            />
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="600" height="400" className="rounded-lg">
+            <path d="M19 19H5V9L12 2L19 9V19ZM12 4.5L7 9V17H10V11H14V17H17V9L12 4.5Z" fill="#333333"/>
+            <path d="M12 11V17H10V9L12 4.5V11Z" fill="#333333"/>
+            <path d="M14 11V17H17V9L12 4.5V11H14Z" fill="#333333"/>
+          </svg>
           </div>
         </div>
       </div>
