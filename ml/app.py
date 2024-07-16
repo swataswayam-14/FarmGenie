@@ -18,14 +18,46 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import textwrap
 import gc
 
+import os
+from dotenv import load_dotenv
+import json
+from chromadb import Documents, EmbeddingFunction, Embeddings
+import os
+from dotenv import load_dotenv
+import json
+import pandas as pd
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+import chromadb
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain.vectorstores import FAISS
+from langchain_core.runnables import RunnableLambda, RunnablePassthrough
+from langchain_core.runnables import RunnablePassthrough
+from chromadb import Documents, EmbeddingFunction, Embeddings
+from langchain_core.output_parsers import StrOutputParser
+# from langchain_openai import OpenAIEmbeddings
+from langchain_chroma import Chroma
+from langchain.storage import InMemoryStore
+from langchain_chroma import Chroma
+# from langchain_community.document_loaders import TextLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain.retrievers import ParentDocumentRetriever
+from langchain_community.vectorstores import FAISS
+from langchain.retrievers import BM25Retriever, EnsembleRetriever
+import pickle
 
 
 
 ##################### Env variables and LLM setup #########################
-
 # Load environment variables from .env file
 load_dotenv()
+openai_api_key = os.getenv("OPENAI_API_KEY")
 gemini_api_key = os.getenv("GEMINI_API_KEY")
+cohere_api_key = os.getenv('COHERE_API_KEY')
+
+# Setting up Cohere API
+import cohere
+co = cohere.Client(os.environ["COHERE_API_KEY"])
 
 genai.configure(api_key=gemini_api_key)
 
@@ -507,19 +539,453 @@ def update_history_complex_queries(ai_msg):
         ]
     )
     
+def isRAGRequired(input_query):
+    prompt = f'''
+    
+    Can the following "User query" be solved using the "Chat history" provided as context?
+    Respond with a 'yes' or 'no' in the following format.
+    Remember to return the return the response in the following format  as a valid json object.
+    Format of response-
+    
+    {{
+        "RESPONSE": {{
+            "response" : <yes or no>
+        }}
+        
+    }}
+    
+    User query: {input_query}
+    Chat history: {chat_history_simple_query}
+    '''
+    
+    res = model.generate_content(
+        contents=prompt
+    ).text
+    
+    res = res.replace('```', '').replace("\n", '').replace('json','').strip()
+    # print(res)
+    json_res = json.loads(res)
+            
+    return json_res
+
+
+def NoRAG(input_query):
+    
+    prompt = f"""
+    
+    You are an assistant for question-answering tasks talking part in a conversation with a human. 
+    Answer the following question to the best of your knowledge and the provided chat history. 
+    If you don't know the answer, just say "I don't know. Thank you." 
+
+    User query: {input_query}
+    Chat history: {chat_history_simple_query}
+
+    """
+    res = model.generate_content(
+        contents=prompt
+    ).text
+    
+    # res = res.replace('```', '').replace("\n", '').replace('json','').strip()
+    # print(res)
+    # json_res = json.loads(res)
+            
+    return res
+
+
+def queryExpansion(query):
+        
+            prompt = f'''
+
+            Judge whether the user query needs to be re-phrased into different sub-queries according to the below criteria or not.
+            Make sure to only perform this process of conversion for the user query if the user query needs to be divided into various sub-queries maybe because of its ambiguity or not being a directive question. 
+            If not, rewrite the given user query in terms of three topics: "What," "Why," and "How." 
+            The generated queries should be formulated to answer these questions while keeping the overall context of the original user query the same. 
+            Do not change the original query. 
+            
+            If it does in the slightest, follow the eaxct format given below where  "None = True".
+            Your response should be formatted as a valid JSON object
+            Use the following format for the response:
+
+            {{  
+                "RESPONSE": {{  
+                    "What": <answer>,  
+                    "Why": <answer>,  
+                    "How": <answer>,  
+                    "None": <True or False>  
+                }}  
+            }}
+
+
+            Here are a few examples-
+                {{
+                    "query": "AI in healthcare",
+                    "RESPONSE": {{
+                        "What": "What is the role of AI in healthcare?",
+                        "Why": "Why is AI important in healthcare?",
+                        "How": "How is AI being used in healthcare?",
+                        "None": "False"
+                    }}
+                }},
+                {{
+                    "query": "Machine learning algorithms",
+                    "RESPONSE": {{
+                        "What": "What are machine learning algorithms?",
+                        "Why": "Why are machine learning algorithms useful?",
+                        "How": "How do machine learning algorithms work?",
+                        "None": "False"
+                    }}
+                }},
+                {{
+                    "query": "Benefits of cloud computing",
+                    "RESPONSE": {{
+                        "What": "What are the benefits of cloud computing?",
+                        "Why": "Why should businesses adopt cloud computing?",
+                        "How": "How can cloud computing improve business operations?",
+                        "None": "False"
+                    }}
+                }},
+                {{
+                    "query": "Python vs JavaScript",
+                    "RESPONSE": {{
+                        "What": "What are the key differences between Python and JavaScript?",
+                        "Why": "Why should one choose Python over JavaScript or vice versa?",
+                        "How": "How do Python and JavaScript compare in terms of performance and usability?",
+                        "None": "False"
+                    }}
+                }},
+                {{
+                    "query": "Data security measures",
+                    "RESPONSE": {{
+                        "What": "What are the essential data security measures?",
+                        "Why": "Why are data security measures important?",
+                        "How": "How can companies implement effective data security measures?",
+                        "None": "False"
+                    }}
+                }},
+                {{
+                    "query": "Explain the importance of photosynthesis in plants.",
+                    "RESPONSE": {{
+                        "What": "",
+                        "Why": "",
+                        "How": "",
+                        "None": "True"
+                    }}
+                }},
+                {{
+                    "query": "Steps to install Python on Windows",
+                    "RESPONSE": {{
+                        "What": "",
+                        "Why": "",
+                        "How": "",
+                        "None": "True"
+                    }}
+                }},
+                {{
+                    "query": "What are the advantages of using renewable energy?",
+                    "RESPONSE": {{
+                        "What": "",
+                        "Why": "",
+                        "How": "",
+                        "None": "True"
+                    }}
+                }},
+                {{
+                    "query": "Explain Newton's laws of motion",
+                    "RESPONSE": {{
+                        "What": "",
+                        "Why": "",
+                        "How": "",
+                        "None": "True"
+                    }}
+                }},
+                {{
+                    "query": "How does photosynthesis work in plants?",
+                    "RESPONSE": {{
+                        "What": "",
+                        "Why": "",
+                        "How": "",
+                        "None": "True"
+                    }}
+                }}
+            
+
+            User Query: {query}
+
+            '''
+            
+            res = model.generate_content(
+                contents=prompt
+            ).text
+            # print(res)
+            res = res.replace('```', '').replace("\n", '').replace('json','').strip()
+            # print(res)
+            json_res = json.loads(res)
+            
+            if(json_res['RESPONSE']['None'] == "True"):
+                return ([query], True)
+            else:
+                how = json_res['RESPONSE']['How']
+                what =  json_res['RESPONSE']['What']
+                why = json_res['RESPONSE']['Why']
+                
+            return ([how, what, why], False)
+        
+        
+# def RAGRunnable2(translated_input):
+    
+#     global chat_history
+    
+#     query = translated_input
+    
+#     vectorstore = Chroma(persist_directory="./RAG/vectorSearchForFarmGenie", embedding_function=gemini_embeddings, collection_name="embeddings_for_farm_book")
+#     retriever = vectorstore.as_retriever(k=2)
+
+#     contextualize_q_system_prompt = """
+
+#     Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language, that can be used to query a FAISS index. This query will be used to retrieve documents with additional context. 
+
+#     Let me share a couple examples that will be important. 
+
+#     If you do not see any chat history, you MUST return the "Follow Up Input" as is:
+
+#     ```
+#     Chat History:
+
+#     Follow Up Input: How is Lawrence doing?
+#     Standalone Question:
+#     How is Lawrence doing?
+#     ```
+
+#     If this is the second question onwards, you should properly rephrase the question like this:
+
+#     ```
+#     Chat History:
+#     Human: How is Lawrence doing?
+#     AI: 
+#     Lawrence is injured and out for the season.
+
+#     Follow Up Input: What was his injurt?
+#     Standalone Question:
+#     What was Lawrence's injury?
+#     ```
+#     """
+
+#     contextualize_q_prompt= ChatPromptTemplate.from_messages(
+#         [
+#             ("system", contextualize_q_system_prompt),
+#             MessagesPlaceholder(variable_name="chat_history"),
+#             ("human", "{query}"),
+#         ]
+#     )
+
+#     contextualize_q_chain = contextualize_q_prompt | standalone_query_generation_llm | StrOutputParser()
+
+#     qa_system_prompt = """You are an assistant for question-answering tasks talking part in a conversation with a human. \
+#     Use the following pieces of retrieved context to answer the question. Make the best use of the provided context so as to provide a descriptive and meaningful and comprehensible soltuion to the problem provided by the user.\
+#     If you don't know the answer, just say that you don't know. \
+
+#     {context}
+
+#     """
+#     qa_prompt = ChatPromptTemplate.from_messages(
+#         [
+#         ("system", qa_system_prompt),
+#         MessagesPlaceholder(variable_name='chat_history'),
+#         ("human", "{query}")
+#         ]
+#     )
+#     def contextualized_question(input: dict): ## Always a dictionary is passed- Yes
+#         if input.get("chat_history"):
+#             return contextualize_q_chain
+#         else:
+#             return input["query"]
+
+#     rag_chain = (
+#         RunnablePassthrough.assign(
+#             context = contextualized_question | retriever
+#         )
+#         | qa_prompt 
+#         | llm
+#     )
+
+
+
+#     ai_msg = rag_chain.invoke(
+#         {
+#             "query": query,
+#             "chat_history": chat_history
+#         }
+#     )
+
+#     update_history_simple_queries(ai_msg=ai_msg) #Update chat history everytime
+#     return ai_msg.content
 
 def RAGRunnable2(translated_input):
     
-    global chat_history
-    
     query = translated_input
+    # chunks = pickle.load(open('chunks_new.pkl', 'rb'))
+    # vectorstore = FAISS.load_local("faiss_index",  embeddings=OpenAIEmbeddings(api_key=openai_api_key), allow_dangerous_deserialization=True)
+    # retriever = vectorstore.as_retriever( search_type="mmr", search_kwargs={'k': 5, 'fetch_k': 50})
     
-    vectorstore = Chroma(persist_directory="./RAG/vectorSearchForFarmGenie", embedding_function=gemini_embeddings, collection_name="embeddings_for_farm_book")
-    retriever = vectorstore.as_retriever(k=2)
+    # parent_splitter  = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+    #     model_name="gpt-4",
+    #     chunk_size= 1000,
+    #     chunk_overlap=200,
+    # )
 
+    # child_splitter  = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+    #     model_name="gpt-4",
+    #     chunk_size= 500,
+    #     chunk_overlap=100,
+    # )
+
+    # vectorstore = Chroma(
+    #     collection_name="split_parents", embedding_function=OpenAIEmbeddings()
+    # )
+
+    # store = InMemoryStore()
+
+    # pretriever = ParentDocumentRetriever(
+    # vectorstore=vectorstore,
+    # parent_splitter=parent_splitter,
+    # child_splitter=child_splitter,
+    # docstore=store,
+    # search_kwargs={"k":5},
+    # search_type="mmr",
+    # )
+        
+    # pretriever.add_documents(chunks, ids=None)
+    
+    # bm25_retriever = BM25Retriever.from_documents(chunks)
+    # bm25_retriever.k =  5  # Retrieve top 5 results
+    # ensemble_retriever = EnsembleRetriever(retrievers=[bm25_retriever, retriever],
+    #                                         weights=[0.4, 0.6])
+            
+    
+    
+    def condition(input_data):
+        print("Conditions:", input_data)
+        if(input_data.get("input_query")):
+            context = result(query)
+            return context
+        
+        else:
+            #Is RAG required?
+            res = isRAGRequired(input_data['chat_history'])
+            print(res)
+            if(res['RESPONSE']['response'].lower() == 'yes'):
+                output_norag = NoRAG(input_data['chat_history'])
+                return output_norag
+            else:
+                context = result(input_data['chat_history'])
+                return context
+    
+    
+    def result(query):
+        
+        
+        def fetch_relavant_documents(query, vectorstore_k=5, bm25_k=5, top_n=10):
+            
+
+            # vectorstore = Chroma(persist_directory="./RAG/vectorSearchForFarmGenie", embedding_function=gemini_embeddings, collection_name="embeddings_for_farm_book")
+            # vectorstore =  FAISS.from_documents(docs, embedding=OpenAIEmbeddings(api_key=openai_api_key))
+            
+            # retriever.get_relevant_documents(query)
+            print(query)
+            # parent_splitter  = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+            #     model_name="gpt-4",
+            #     chunk_size= 1000,
+            #     chunk_overlap=200,
+            # )
+
+            # child_splitter  = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+            #     model_name="gpt-4",
+            #     chunk_size= 500,
+            #     chunk_overlap=100,
+            # )
+
+            # # vectorstore = Chroma(
+            # #     collection_name="split_parents", embedding_function=OpenAIEmbeddings()
+            # # )
+
+            # store = InMemoryStore()
+
+            # pretriever = ParentDocumentRetriever(
+            # vectorstore=vectorstore,
+            # parent_splitter=parent_splitter,
+            # child_splitter=child_splitter,
+            # docstore=store,
+            # search_kwargs={"k":vectorstore_k},
+            # search_type="mmr",
+            # )
+                
+            # pretriever.add_documents(chunks, ids=None)
+            retrieved_docs = pretriever.invoke("What the essential factors for good plant protection?") 
+            
+            # bm25_retriever = BM25Retriever.from_documents(chunks)
+            # bm25_retriever.k =  bm25_k  # Retrieve top 5 results
+            # ensemble_retriever = EnsembleRetriever(retrievers=[bm25_retriever, retriever],
+            #                                 weights=[0.4, 0.6])
+            
+            
+            retrieved_docs_ensemble = ensemble_retriever.get_relevant_documents(query)
+            
+            final_docs = []
+
+            for i in retrieved_docs:
+                final_docs.append(i.page_content)
+                
+            for i in retrieved_docs_ensemble:
+                final_docs.append(i.page_content)
+            
+            # print("Length of final docs: ", len(final_docs))
+            # print("Final docs :", final_docs)
+            #Re-ranking 
+            rerank_docs = co.rerank(
+                query=query, documents=final_docs, top_n=top_n, model="rerank-english-v3.0"
+            )
+            # print(rerank_docs.results)
+            actual_docs = []
+            
+            #Converting their rank to actual documents
+            
+            for i in rerank_docs.results:
+                actual_docs.append(final_docs[i.index])
+            print(actual_docs)
+            print(len(actual_docs))
+            
+            return actual_docs
+        
+        #Query Expansion (Retrieving the results)
+        list_of_queries_or_not, isTrue = queryExpansion(query)
+        print("List of queries: ", list_of_queries_or_not)
+        if(isTrue == True):
+            context_standalone = fetch_relavant_documents(list_of_queries_or_not[0])
+            return context_standalone
+            
+        else:
+            query_what = fetch_relavant_documents(list_of_queries_or_not[1], top_n=2)
+            query_how = fetch_relavant_documents(list_of_queries_or_not[0], top_n=2)
+            query_why = fetch_relavant_documents(list_of_queries_or_not[2], top_n=2)
+            
+            final_context = ""
+            for i in query_what:
+                final_context += i
+                final_context += " "
+            for i in query_how:
+                final_context += i
+                final_context += " "
+            for i in query_why:
+                final_context += i
+                final_context += " "   
+
+            return final_context
+    
+    #Get the recent message in rference to the history if applicable
     contextualize_q_system_prompt = """
 
-    Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language, that can be used to query a FAISS index. This query will be used to retrieve documents with additional context. 
+    Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language, that can be used to query a FAISS index. This query will be used to retrieve documents with additional context.
+    Do not answer the question. Just follow the above instrcuctions as it is. 
 
     Let me share a couple examples that will be important. 
 
@@ -538,12 +1004,20 @@ def RAGRunnable2(translated_input):
     ```
     Chat History:
     Human: How is Lawrence doing?
-    AI: 
-    Lawrence is injured and out for the season.
+    AI: Lawrence is injured and out for the season.
 
-    Follow Up Input: What was his injurt?
-    Standalone Question:
-    What was Lawrence's injury?
+    Follow Up Input: What was his injury?
+    Standalone Question: What was Lawrence's injury?
+    
+    Chat History:
+    Human: How is Lawrence doing?
+    AI: Lawrence is injured and out for the season.
+    Human: What was his injury?
+    AI: What was Lawrence's injury?
+    
+    Follow Up Input: What didI just asked?
+    Standalone Question: You asked about Lawrence's injury.
+    
     ```
     """
 
@@ -556,9 +1030,17 @@ def RAGRunnable2(translated_input):
     )
 
     contextualize_q_chain = contextualize_q_prompt | standalone_query_generation_llm | StrOutputParser()
-
+    # contextualize_q_chain.invoke(
+    #     {
+    #         "chat_history":[
+    #             HumanMessage(content="What does LLM stand for?"),
+    #             AIMessage(content="Large language model"),
+    #         ],
+    #         "question": "What is meant by large?",
+    #     }
+    # )
     qa_system_prompt = """You are an assistant for question-answering tasks talking part in a conversation with a human. \
-    Use the following pieces of retrieved context to answer the question. Make the best use of the provided context so as to provide a descriptive and meaningful and comprehensible soltuion to the problem provided by the user.\
+    Use the following pieces of retrieved context to answer the question. \
     If you don't know the answer, just say that you don't know. \
 
     {context}
@@ -573,14 +1055,26 @@ def RAGRunnable2(translated_input):
     )
     def contextualized_question(input: dict): ## Always a dictionary is passed- Yes
         if input.get("chat_history"):
-            return contextualize_q_chain
+            print("Inside 1")
+            res = contextualize_q_chain.invoke({
+                "query": query,
+                 "chat_history": chat_history
+            })
+            return {"chat_history": res}
         else:
-            return input["query"]
+            print("Inside 2")
+            return {"input_query": input["query"]}
 
     rag_chain = (
+        # {
         RunnablePassthrough.assign(
-            context = contextualized_question | retriever
+            # context = contextualized_question | retriever 
+            # "context":  RunnableLambda(contextualized_question) | RunnableLambda(condition),
+            # "chat_history": chat_history_simple_query,
+            # "query": query
+            context = RunnableLambda(contextualized_question) | RunnableLambda(condition)
         )
+        # }
         | qa_prompt 
         | llm
     )
@@ -594,6 +1088,7 @@ def RAGRunnable2(translated_input):
         }
     )
 
+    # print(ai_msg.content)
     update_history_simple_queries(ai_msg=ai_msg) #Update chat history everytime
     return ai_msg.content
 
@@ -763,9 +1258,47 @@ api.add_middleware(
     allow_headers=["*"],
 )
 
+chunks = pickle.load(open('chunks_new.pkl', 'rb'))
+vectorstore = FAISS.load_local("faiss_index",  embeddings=OpenAIEmbeddings(api_key=openai_api_key), allow_dangerous_deserialization=True)
+retriever = vectorstore.as_retriever( search_type="mmr", search_kwargs={'k': 5, 'fetch_k': 50})
 
+parent_splitter  = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+    model_name="gpt-4",
+    chunk_size= 1000,
+    chunk_overlap=200,
+)
 
-port = 8000
+child_splitter  = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+    model_name="gpt-4",
+    chunk_size= 500,
+    chunk_overlap=100,
+)
+
+# vectorstore = Chroma(
+#     collection_name="split_parents", embedding_function=OpenAIEmbeddings()
+# )
+
+store = InMemoryStore()
+
+pretriever = ParentDocumentRetriever(
+vectorstore=vectorstore,
+parent_splitter=parent_splitter,
+child_splitter=child_splitter,
+docstore=store,
+search_kwargs={"k":5},
+search_type="mmr",
+)
+    
+pretriever.add_documents(chunks, ids=None)
+
+bm25_retriever = BM25Retriever.from_documents(chunks)
+bm25_retriever.k =  5  # Retrieve top 5 results
+ensemble_retriever = EnsembleRetriever(retrievers=[bm25_retriever, retriever],
+                                        weights=[0.4, 0.6])
+        
+            
+
+# port = 8000
 
 
 
@@ -802,4 +1335,5 @@ def get_query(userQuery: str):
     pickle.dump(chat_history, open('data/pickle files/chat_history.pkl', 'wb'))
 
     # print(chat_history)
-    return result['eh_translated_result']
+    return result
+
