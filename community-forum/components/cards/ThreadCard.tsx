@@ -1,5 +1,7 @@
+import { translateText } from "./translate";
 import Image from "next/image";
 import Link from "next/link";
+import Popup from "./PopUpTextArea";
 
 interface Props {
     id: string;
@@ -77,7 +79,7 @@ export const ThreadCard = ({
                                     alt="reply"
                                     width={24}
                                     height={24}
-                                    className="cursor-pointer object-contain"
+                                    className="cursor-pointer object-contain mt-1.5"
                                 />
                             </Link>
                             <Image
@@ -94,6 +96,9 @@ export const ThreadCard = ({
                                 height={24}
                                 className="cursor-pointer object-contain"
                             />
+                            <div className="ml-2">
+                            <Popup typedText={content}/>
+                            </div>
                         </div>
                             {isComment && comments.length > 0 && (
                                 <Link href={`/threads/${JSON.parse(id)}`}>
