@@ -91,7 +91,7 @@ GPU
 Pull the server image from DockerHub
 
 ```bash
-  docker pull yuvrajsingh9886/farmgenie-fastapi:v1.0
+  docker pull yuvrajsingh9886/farmgenie-fastapi:v2.1
 ```
 
 #### Gemini Setup
@@ -101,14 +101,17 @@ Create a file named env_file with the following content:
 ```bash
   GEMINI_API_KEY = "YOUR_SECRET_KEY"
   hf_token = "YOU_HUGGINGFACE_TOKEN"
+  OPENAI_API_KEY = "YOUR_OPENAI_TOKEN"
+  COHERE_API_KEY = "YOUR_COHERE_API_TOKEN"
 ```
 
 
 Run the server image
 
 ```bash
-  docker container run --env-file env_file -d -p 8080:8080  
+  docker run --env-file .env -p 8000:8000 --name pytorch-container -it --gpus all yuvrajsingh9886/farmgenie-fastapi:v2.1
 ```
+You'll see it running on 127.0.0.0/docs url
 ## Run Locally
 
 Clone the project
