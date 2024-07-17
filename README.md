@@ -1,7 +1,7 @@
 # FarmGenie 
 
 --- 
-- **Our project only supports conversation (input/output) in Hindi for now**. 
+- **Our project only supports conversation (input/output) in English/Hindi for now**. 
 - Please refer to 'flowchart.pdf' for our proposed frameowrk
 ---
 
