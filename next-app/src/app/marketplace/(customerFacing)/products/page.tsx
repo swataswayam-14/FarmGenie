@@ -1,17 +1,23 @@
+import { getProductsMetrics } from "@/actions/metrics";
 import { ProductCard, ProductCardSkeleton } from "@/app/components/ProductCard";
 import { db } from "@/app/db";
 import { cache } from "@/app/lib/cache";
 import { Suspense } from "react";
 
-const getProducts = cache(()=> {
-    return db.product.findMany({
-        where: {
-          isAvailableForPurchase: true,
-        },
-        orderBy:{
-            name:"asc"
-        }
+const getProducts = cache(async()=> {
+    const startTime = Date.now();
+    const products = await db.product.findMany({
+      where: {
+        isAvailableForPurchase: true,
+      },
+      orderBy:{
+          name:"asc"
+      }
     });
+    const endTime = Date.now()
+    const duration = endTime - startTime
+    getProductsMetrics(duration)
+  return products
 },["/marketplace/products","getProducts"])
 
 export default function ProductsPage() {

@@ -2,6 +2,7 @@ import { db } from "@/app/db"
 import { notFound } from "next/navigation"
 import Stripe from "stripe"
 import { CheckoutForm } from "./_components/CheckoutForm"
+import { createPaymentMetrics } from "@/actions/metrics"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
@@ -10,6 +11,7 @@ export default async function PurchasePage({
 }:{
     params:{id:string}
 }) {
+   const startTime = Date.now();
    const product = await db.product.findUnique({
         where:{
             id 
@@ -26,7 +28,9 @@ export default async function PurchasePage({
             productId: product.id
         }
     })
-
+    const EndTime = Date.now()
+    const duration = EndTime - startTime
+    createPaymentMetrics(duration)
     if(paymentIntent.client_secret == null) {
         throw Error("Stripe failed to create payment intent")
     }

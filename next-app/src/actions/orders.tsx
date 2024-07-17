@@ -4,12 +4,13 @@ import { db } from "@/app/db";
 import OrderHistoryEmail from "@/email/OrderHistory";
 import { Resend } from "resend";
 import { z } from "zod"
+import { myorderMetrics } from "./metrics";
 
 const emailSchema = z.string().email()
 const resend = new Resend(process.env.RESEND_API_KEY as string)
 
 export async function emailOrderHistory(prevState: unknown, formData: FormData) : Promise<{ message?:string ; error?:string}> {
-
+    const startTime = Date.now()
     const result = emailSchema.safeParse(formData.get("email"))
 
     if(result.success === false) {
@@ -73,6 +74,9 @@ export async function emailOrderHistory(prevState: unknown, formData: FormData) 
         subject:"Order History",
         react: <OrderHistoryEmail orders={orders}/>
     })
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    myorderMetrics(duration);
     if(data.error) {
         return {
             error:"There was an error sending your email. Please try again later" 
