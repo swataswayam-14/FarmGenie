@@ -101,6 +101,8 @@ Create a file named env_file with the following content:
 ```bash
   GEMINI_API_KEY = "YOUR_SECRET_KEY"
   hf_token = "YOU_HUGGINGFACE_TOKEN"
+  OPENAI_API_KEY = "YOUR_OPENAI_TOKEN"
+  COHERE_API_KEY = "YOUR_COHERE_API_TOKEN"
 ```
 
 
