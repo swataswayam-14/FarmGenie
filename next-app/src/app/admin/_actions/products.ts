@@ -4,6 +4,7 @@ import {z} from "zod";
 import fs from "fs/promises";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { adminAddProductMetrics, adminDeleteProductMetrics, adminProductAvailableMetrics, adminUpdateProductMetrics } from "@/actions/metrics";
 
 const fileSchema = z.instanceof(File, {
     message:"Required"
@@ -21,6 +22,7 @@ const formSchema = z.object({
 })
 
 export async function addProduct(prevState: unknown, formData: FormData) {
+    const startTime = Date.now();
     const result = formSchema.safeParse(Object.fromEntries(formData.entries()))
     if(result.success === false){
         return result.error.formErrors.fieldErrors
@@ -47,10 +49,14 @@ export async function addProduct(prevState: unknown, formData: FormData) {
                 imagePath
             }
         })
+        const EndTime = Date.now();
+        const duration = EndTime - startTime;
+        adminAddProductMetrics(duration);
         revalidatePath("/marketplace")
         revalidatePath("/marketplace/products")
         redirect("/admin/products")
-    } catch (error) {
+    }
+    catch (error) {
         console.log(error);
     }
     
@@ -59,7 +65,8 @@ export async function addProduct(prevState: unknown, formData: FormData) {
 export async function toggleProductAvailability(
     id:string,
     isAvailableForPurchase:boolean
-){
+){  
+    const startTime = Date.now();
     await db.product.update({
         where:{
             id
@@ -68,11 +75,15 @@ export async function toggleProductAvailability(
             isAvailableForPurchase
         }
     })
+    const endTime = Date.now()
+    const duration = endTime - startTime;
+    adminProductAvailableMetrics(duration);
     revalidatePath("/marketplace")
     revalidatePath("/marketplace/products")
 }
 
 export async function deleteProduct(id:string) {
+    const startTime = Date.now();
     const product = await db.product.delete({
         where:{
             id
@@ -84,7 +95,9 @@ export async function deleteProduct(id:string) {
 
     await fs.unlink(product.filePath)
     await fs.unlink(`public${product.imagePath}`)
-    
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    adminDeleteProductMetrics(duration);
     revalidatePath("/marketplace")
     revalidatePath("/marketplace/products")
 }
@@ -95,6 +108,7 @@ const updateSchema = formSchema.extend({
 })
 
 export async function updateProduct(id:string, prevState: unknown, formData: FormData) {
+    const startTime = Date.now();
     const result = updateSchema.safeParse(Object.fromEntries(formData.entries()))
     if(result.success === false){
         return result.error.formErrors.fieldErrors
@@ -136,6 +150,9 @@ export async function updateProduct(id:string, prevState: unknown, formData: For
                 imagePath
             }
         })
+        const EndTime = Date.now();
+        const duration = EndTime - startTime;
+        adminUpdateProductMetrics(duration);
         revalidatePath("/marketplace")
         revalidatePath("/marketplace/products")
         redirect("/admin/products")

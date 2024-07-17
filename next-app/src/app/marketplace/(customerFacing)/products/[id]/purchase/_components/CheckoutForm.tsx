@@ -7,6 +7,7 @@ import { formatCurrency } from "@/app/lib/formatter"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/app/components/ui/card"
 import { FormEvent, useState } from "react"
 import { userOrderExists } from "@/app/actions/orders"
+import { checkoutMetrics } from "@/actions/metrics"
 
 type CheckoutFormProps = {
     product: {
@@ -85,7 +86,7 @@ function Form({priceInCents, productId}:{priceInCents: number, productId:string}
 
     async function handleSubmit(e:FormEvent) {
         e.preventDefault()
-    
+        const startTime = Date.now()
         if (stripe == null || elements == null || email == null) return
 
         const orderExists = await userOrderExists(email, productId)
@@ -107,6 +108,9 @@ function Form({priceInCents, productId}:{priceInCents: number, productId:string}
                 setErrorMessage("An Unexpected error occurred")
             }
         }).finally(()=>{
+            const endTime = Date.now()
+            const duration = endTime - startTime;
+            checkoutMetrics(duration)
             setIsLoading(false)
         })
     }
