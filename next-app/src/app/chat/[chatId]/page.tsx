@@ -18,16 +18,18 @@ export default function ChatInterface({
     const [chatHistory, setChatHistory] = useState([]);
     const [question , setQuestion] = useState("");
     const [response , setResponse] = useState("");
-
+    const [translate , setTranslate] = useState<boolean>(false);
     async function submit() {
       setIsloading(true);
     
       try {
         const responseData = await makeRequest(question);
-        console.log(responseData);
-    
+        if(translate){
+          setResponse(responseData.eh_translated_result);
+        }else{
+          setResponse(responseData.answer);
+        }
         setChatHistory(responseData.history);
-        setResponse(responseData.answer);
       } catch (error) {
         console.error(error);
       } finally {
@@ -54,6 +56,14 @@ export default function ChatInterface({
           <main className="flex flex-col items-center justify-center flex-1 px-4 md:px-0">
             <div className="w-full md:w-3/4 lg:w-2/3 bg-gray-800 rounded-lg shadow-lg p-4 mb-6 overflow-y-auto" style={{ maxHeight: '400px' }}>
               Chatbot messages will be displayed here
+            </div>
+            <div className="mr-20 mb-4">
+            <button className="p-1 rounded-lg ml-5 bg-white text-black font-semibold" onClick={()=>{
+                  setTranslate(true);
+                }}>Hindi</button>
+            <button className="p-1 rounded-lg ml-5 bg-white text-black font-semibold" onClick={()=>{
+                  setTranslate(false);
+            }}>English</button>
             </div>
             <div className="w-full md:w-3/4 lg:w-2/3 flex items-center">
               <textarea
