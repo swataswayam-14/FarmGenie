@@ -58,12 +58,12 @@ The Express server is responsible for the following tasks:
 
 **Client**: Tailwind CSS, TypeScript, Next.js
 
-**Backend**: Flask, Python, Langchain, GeminiPro API (Langchain),
+**Backend**: Flask, Python, Langchain, GeminiPro API,
 peft , bitsandbytes, transformers
 
-**Storage**: PostgreSQL, ChromaDB
+**Storage/VectoStore**: PostgreSQL, FAISS
 
-**Other Tools**: GCP, Docker, Vercel
+**Other Tools**: Unsloth, GCP, Docker, Vercel
 
 
 ## Fine Tuning
