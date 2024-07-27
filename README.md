@@ -43,7 +43,7 @@ The Next.js backend is responsible for the following tasks:
 
 1.	**Request Handling**: The Express server receives all the requests from the frontend, such as user queries, and passes them to the Redis queue.
 2.	**Redis Queue**: A Redis queue is used to manage incoming requests. This helps distribute the load across multiple worker node processes, ensuring the ML backend does not get overwhelmed.
-3.	**Node.js Processes**: Multiple worker nodes are set up to consume the requests from the Redis queue. These processes then pass the requests to the ML backend for processing.
+3.	**Worker node Processes**: Multiple worker nodes are set up to consume the requests from the Redis queue. These processes then pass the requests to the ML backend for processing.
 4.	**ML Backend Integration**: The Next.js backend communicate with the ML backend, which is responsible for handling the various ML tasks, such as query classification, subproblem generation, and retrieval-augmented generation (RAG).
 5.	**Database Integration**: The website uses a single PostgreSQL database, provided by Neon DB, as the single source of truth. This database stores all the user, farmer, and retailer data, as well as the content for the official farmgenie website.
 6.	**User Management**: The Next.js frontend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon tech).
