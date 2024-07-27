@@ -27,7 +27,7 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 
 #### Seamless Interface
-- The product is built as a web application using a Turborepo, a Next.js client, and an Express server, leveraging a Redis queue and multiple Node.js processes to ensure scalability and robustness. The knowledge base is curated from openly available PDF books and reports, covering a wide range of agricultural topics. 
+- The product is built as a web application using a Turborepo, a Next.js client, and a Next.js backend, leveraging a Redis queue and multiple worker nodes to ensure scalability and robustness. The knowledge base is curated from openly available PDF books and reports, covering a wide range of agricultural topics. 
 
 - Additionally, the product aims to create an interactive platform where farmers can connect with each other, share their knowledge, and learn from their peers, fostering a community-driven approach to agricultural knowledge dissemination.
 ## Features 
@@ -37,17 +37,17 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 
 - The website is built using a Turborepo, which is a high-performance build system that helps manage the complexity of a mono repo. 
-- The front end is built using Next.js, a React framework that provides server-side rendering, static site generation, and other performance optimizations. The backend is built using an Express server that handles the communication between the front end and the ML backend. 
+- The front end is built using Next.js, a React framework that provides server-side rendering, static site generation, and other performance optimizations. The backend is also built using Next.js that handles the communication between the front end and the ML backend. 
 
-The Express server is responsible for the following tasks:
+The Next.js backend is responsible for the following tasks:
 
 1.	**Request Handling**: The Express server receives all the requests from the frontend, such as user queries, and passes them to the Redis queue.
-2.	**Redis Queue**: A Redis queue is used to manage incoming requests. This helps distribute the load across multiple Node.js processes, ensuring the ML backend does not get overwhelmed.
-3.	**Node.js Processes**: Multiple Node.js processes are set up to consume the requests from the Redis queue. These processes then pass the requests to the ML backend for processing.
-4.	**ML Backend Integration**: The Node.js processes communicate with the ML backend, which is responsible for handling the various ML tasks, such as query classification, subproblem generation, and retrieval-augmented generation (RAG).
-5.	**Database Integration**: The website uses a single PostgreSQL database, provided by Neon DB, as the single source of truth. This database stores all the user, farmer, and retailer data, as well as the content for the website.
+2.	**Redis Queue**: A Redis queue is used to manage incoming requests. This helps distribute the load across multiple worker node processes, ensuring the ML backend does not get overwhelmed.
+3.	**Node.js Processes**: Multiple worker nodes are set up to consume the requests from the Redis queue. These processes then pass the requests to the ML backend for processing.
+4.	**ML Backend Integration**: The Next.js backend communicate with the ML backend, which is responsible for handling the various ML tasks, such as query classification, subproblem generation, and retrieval-augmented generation (RAG).
+5.	**Database Integration**: The website uses a single PostgreSQL database, provided by Neon DB, as the single source of truth. This database stores all the user, farmer, and retailer data, as well as the content for the official farmgenie website.
 6.	**User Management**: The Next.js frontend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon tech).
-7.	**Scalability**: The use of a Redis queue and multiple Node.js processes ensures the application can scale to handle a large number of concurrent user requests without overloading the ML backend.
+7.	**Scalability**: The use of a Redis queue and multiple worker node processes ensures the application can scale to handle a large number of concurrent user requests without overloading the ML backend.
 8.	**Deployment**: The entire application, including the frontend, backend, and ML components, is packaged and deployed using Docker containers, ensuring consistent and reliable deployment across different environments.
 9.	Monitoring and Logging: The application includes comprehensive monitoring and logging solutions to track performance, errors, and user activity, enabling the team to identify and resolve issues quickly.
 10.	Security: The website incorporates industry-standard security practices, such as SSL/TLS encryption, user authentication, and input validation, to protect user data and prevent unauthorized access.
