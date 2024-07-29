@@ -5,8 +5,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/auth";
 
 export async function createChat(question:string, response:string) {
-    console.log('create chat hit');
-    
     try {
         const session = await getServerSession(authOptions);
         if(!session?.user){
@@ -20,11 +18,8 @@ export async function createChat(question:string, response:string) {
                 response:response
             }
         })
-        console.log(chat);
-        
         return true;   
     } catch (error) {
-        console.log(error);
         return false;
     }
 }
@@ -54,7 +49,7 @@ export async function getAllChats() {
     }
 }
 
-export async function makeRequest(question: string) {
+export async function makeRequest(question: string, translate: boolean) {
   try {
     const options = {
       method: 'GET',
@@ -64,9 +59,34 @@ export async function makeRequest(question: string) {
     };
 
     const response = await axios.request(options);
+    if(response){
+        if(translate){
+            await createChat(question , response?.data?.eh_translated_result);
+        } else {
+            await createChat(question , response?.data?.answer);
+        }
+    }
     return response.data;
   } catch (error) {
     console.error(error);
     throw error;
   }
+}
+export async function chatMarketRequest(question: string) {
+    try {
+        const options = {
+            method: 'GET',
+            url: 'https://singular-muskox-certainly.ngrok-free.app/chatShop/searchQuery',
+            params: {userQuery: question},
+            headers: {Accept: '*/*', 'User-Agent': 'Thunder Client (https://www.thunderclient.com)'}
+        }
+        const response = await axios.request(options);
+        return response.data;
+    } catch (error) {
+        return {content: ""};
+    }
+}
+
+export async function logError(error: any){
+    console.log(error);
 }
