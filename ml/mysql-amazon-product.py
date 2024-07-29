@@ -18,11 +18,11 @@ from langchain.agents.format_scratchpad.openai_tools import (
     format_to_openai_tool_messages,
 )
 from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
-from langchain.agents import AgentExecutor
+from langchain.agents import AgentExecutor,  create_openai_functions_agent
 from langchain_core.prompts import MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_openai import ChatOpenAI
-
+from langchain import hub
 
 load_dotenv()
 MAPBOX_API = os.getenv('MAPBOX_API_KEY')
@@ -30,6 +30,8 @@ MYSQL_PASS_KEY = os.getenv('MYSQL_PASS')
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 PINECONE_API_KEY = os.getenv('PINCEOCNE-API-KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+GOOGLE_MAPS_API = os.getenv('GOOGLE_MAPS_API')
+
 genai.configure(api_key=gemini_api_key)
 
 llm = ChatOpenAI(model="gpt-4o", temperature=0, api_key=OPENAI_API_KEY)
@@ -90,7 +92,18 @@ def get_current_location():
 def get_shortest_route(query: str, coordinates: Optional[List[float]] = None, profile: str ='walking') -> List[float]:
     
     """
-    Use - Fetches the shortest route between the user's current location and the given set of coordinates. Useful for location-related tasks.
+    Use - Fetches the shortest route between the user's current location and the given set of coordinates. 
+    Useful for location-related tasks and regarding the availability of the product(s).
+    The current location is already calculated.
+    
+    Returns a list of tuples consisting of (duration, distance, asin, latitude, longitude, address)
+    Pls output the result it with the mentioned name tags- 
+    i) duration (in hr)
+    ii) distance (in km)
+    iii) asin
+    iv) latitude
+    v) longitude 
+    vi) address
     """
     # Ugaoo Organic Vermicompost Fertilizer Manure For Plants - 5 Kg
     
@@ -118,9 +131,11 @@ def get_shortest_route(query: str, coordinates: Optional[List[float]] = None, pr
     You are given a user query where the user indicates the notion of an item purchase and it has the name of the particular item that the user wishes to purchase and the same is alsways in the database provided above.
     
     
-    First extract the product name from the query.
-    Secondly, you are to write a SQL query where you to perform the task of retrieving the 'ASIN' of the said product from the table as discussed above and then retrieve its  'Latitude' and 'Longitude' details with the help of the retrieved ASIN from the same table and database.
+    i) extract the product name from the query.
+    ii) you are to write a SQL query where you to perform the task of retrieving the 'ASIN' of the said product from the table- 'product_details' as discussed above and then retrieve its  'Latitude' and 'Longitude' details with the help of the retrieved ASIN from the same table- 'product_details' and database.
+    Rememebr when performing the )ii) operation, reformulate the SQL Query to include LIKE instead of = when using the title to do the search.
     
+     
     User query: {query}
     
     You have to return the result in the following valid JSON format-
@@ -135,7 +150,7 @@ def get_shortest_route(query: str, coordinates: Optional[List[float]] = None, pr
     Remember to abide by the rules et above and only return a valid JSON object as the result described above.
     '''
     res = model.generate_content(contents=prompt).text
-    print(res)
+    # print(res)
     res = res.replace('```', '').replace("\n", '').replace('json','').strip()
     json_res = json.loads(res)
     sql = json_res['Response']['answer']
@@ -147,9 +162,11 @@ def get_shortest_route(query: str, coordinates: Optional[List[float]] = None, pr
     results = cursor.fetchall()
     concatenated_coordinates = ""
     mylocation = ""
-    print(len(results))
+    points = []
+    # print(len(results))
+    print(results)
     for row in results:
-        # print(row)
+        print(row)
         asin, latitude, longitude = row
         # print(latitude)
         # print(longitude)
@@ -161,7 +178,6 @@ def get_shortest_route(query: str, coordinates: Optional[List[float]] = None, pr
     #     # locations = []
     #     # # url = "https://api.mapbox.com/optimized-trips/v1/mapbox/{profile}/{locations}?access_token={MAPBOX_API}"
         # count = 0
-        points = []
     #     # for row in tqdm(results):
     #     #     latitude, longitude = row
         concatenated_coordinates += mylocation
@@ -174,14 +190,25 @@ def get_shortest_route(query: str, coordinates: Optional[List[float]] = None, pr
         distance = response.json()['routes'][0]['distance'] 
         duration /= 3600
         distance /= 1000
-        points.append((duration, distance, asin))
+        points.append((duration, distance, asin, latitude, longitude))
+        concatenated_coordinates = ""
         # count += 1
         # break
-    # print(points)
+    
+    final_points = []
+    for point in points:
+        lat = point[3]
+        lng = point[4]
+        url = F"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={GOOGLE_MAPS_API}"
+        res = requests.get(url)
+        address = res.json()['results'][0]['formatted_address']
+        final_points.append((point[0], point[1], point[2], point[3], point[4], address))
+
     
     #Sorting by duration
-    sorted_list = sorted(points, key=lambda x:x[0])
-    # print(sorted_list)
+    sorted_list = sorted(final_points, key=lambda x:x[0])
+    print(sorted_list)
+    
     return sorted_list
 
 
@@ -207,7 +234,7 @@ def create_index_and_upsert_data():
 def get_relavent_items(query: str) -> Optional[List[Tuple[str, float, float, str, float, float, str]]]:
     
     """
-    Use: Used for fetching relevant items to a given item which is given input as user query, especially when user want to buy an item. Useful for recommending similar items to a given item.
+    Use: Used for fetching relevant items to a given item, especially when user wants to search for an item which he/she wants to buy/purchase. Useful for recommending similar items to a given item.
     """
     vectorstore = create_index_and_upsert_data()
     similar_items = vectorstore.max_marginal_relevance_search(query, k=5, fetch_k=10)
@@ -285,8 +312,9 @@ def get_relavent_items(query: str) -> Optional[List[Tuple[str, float, float, str
 
         items_info.append(results)
     
-    print(items_info)
-    # return items_info
+    # print(items_info)
+    return items_info
+
 @tool
 def operation_on_reviews(query:str)->Optional[Tuple[str, str, str]]:
     
@@ -370,7 +398,7 @@ def operation_on_reviews(query:str)->Optional[Tuple[str, str, str]]:
 def get_product_info(product_name: str)-> Optional[List]:
     
     """
-    Use: Useful when the uer wants to get product-specific details
+    Use: Useful when the user wants to get details about a particular product(s)
     """
     prompt = f'''
     
@@ -400,8 +428,9 @@ def get_product_info(product_name: str)-> Optional[List]:
     Follow the given steps-
     i) Extract the product name from the query.
     ii) You are to write a SQL query where you to perform the task of retrieving the details mentioned by the below user query.
-    Use any of the columns from 'product_details' table to satisfy the user query based on what it wants to be done.
-    Rememeber to always include the 'ASIN' of each of the product(s) alongwith the output.
+        Use any of the columns from 'product_details' table to satisfy the user query based on what it wants to be done.
+    
+    Remember to reformulate the SQL query in such a way that it always include the 'ASIN' of each of the product(s) alongwith the output because it is an important element of the item(s).
     
     You have to return the result in the following valid JSON format-
     
@@ -437,7 +466,7 @@ def setup_tools(chat_history):
     [
         (
             "system",
-            "You are assistant for an e-commerce website, particularly an online retail shop website. You are provided with user-queries and perform the necessary actions for the fulfillment of the same.",
+            "You are assistant for an e-commerce website, particularly an online retail shop website. You are provided with user-queries and perform the necessary actions for the fulfillment of the same. Remember to make full use of the details given by the tools used and DO NOT miss out on any information. Everything is very important",
         ),
         MessagesPlaceholder(variable_name='chat_history'),
         ("user", "{input}"),
@@ -445,20 +474,21 @@ def setup_tools(chat_history):
     ]
 )
     llm_with_tools = llm.bind_tools(tools)
-    
-    agent = (
-    {
-        "input": lambda x: x["input"],
-        "agent_scratchpad": lambda x: format_to_openai_tool_messages(
-            x["intermediate_steps"]
-        ),
-        "chat_history": lambda x: x["chat_history"],
-    }
-    | prompt
-    | llm_with_tools
-    | OpenAIToolsAgentOutputParser()
-)
-    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+    # prompt = hub.pull("hwchase17/openai-functions-agent")
+#     agent = (
+#     {
+#         "input": lambda x: x["input"],
+#         "agent_scratchpad": lambda x: format_to_openai_tool_messages(
+#             x["intermediate_steps"]
+#         ),
+#         "chat_history": lambda x: x["chat_history"],
+#     }
+#     | prompt
+#     | llm_with_tools
+#     | OpenAIToolsAgentOutputParser()
+# )
+    agent = create_openai_functions_agent(llm, tools, prompt)
+    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, return_intermediate_steps=True)
     
     print("Agent setup complete!!!")
     return agent_executor
@@ -480,7 +510,15 @@ def convo(query, agent_executor):
     
 )
     return result, chat_history
+
+@tool
+def general_queries(query):
+    """
+    Use: Useful for having conversation about general queries by the user.
     
+    """
+    
+    pass
 
 ##################### FastAPI Setup#########################
 from fastapi import FastAPI
@@ -510,12 +548,12 @@ def index():
     
     return 'Running'
 
-@api.get('/searchQuery')
+@api.get('/chatShop/searchQuery')
 def get_query(userQuery: str):
     
     global chat_history
-    if os.path.exists('data/pickle_files/chat_history.pkl') and os.path.getsize('data/pickle_files/chat_history.pkl') > 0:
-        with open('data/pickle_files/chat_history.pkl', 'rb') as f:
+    if os.path.exists('data/pickle_files/chat_history_sql.pkl') and os.path.getsize('data/pickle_files/chat_history_sql.pkl') > 0:
+        with open('data/pickle_files/chat_history_sql.pkl', 'rb') as f:
             chat_history = pickle.load(f)
     else:
         chat_history = []
@@ -529,7 +567,7 @@ def get_query(userQuery: str):
     # #     "result": result,
     # #     "chat_history": chat_history
     # # }
-    pickle.dump(chat_history, open('data/pickle_files/chat_history.pkl', 'wb'))
+    pickle.dump(chat_history, open('data/pickle_files/chat_history_sql.pkl', 'wb'))
     return result, chat_history
 
 # def main():
