@@ -1,9 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { signIn, useSession } from "next-auth/react";
 import { Button } from "@/app/components/ui/button";
-import axios from "axios"
 import { makeRequest } from "@/app/actions/chat";
 
 export default function ChatInterface({
@@ -23,7 +22,7 @@ export default function ChatInterface({
       setIsloading(true);
     
       try {
-        const responseData = await makeRequest(question);
+        const responseData = await makeRequest(question, translate);
         if(translate){
           setResponse(responseData.eh_translated_result);
         }else{

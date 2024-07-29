@@ -6,6 +6,7 @@ import { Product } from "@prisma/client"
 import axios from "axios"
 import Link from "next/link"
 import { Suspense } from "react"
+import ChatPopup from "../__components/MarketChat"
 
 const getMostPopularProducts = cache(
     async () => {
@@ -54,9 +55,10 @@ const getNewestProducts = cache(
 )
 
 export default function HomePage(){
-    return <main className="space-y-12">
-        <ProductGridSection title="Most Popular" productFetcher = {getMostPopularProducts}/>
-        <ProductGridSection title="Newest" productFetcher = {getNewestProducts}/>
+    return  <main className="space-y-12">
+    <ProductGridSection title="Most Popular" productFetcher={getMostPopularProducts} />
+    <ProductGridSection title="Newest" productFetcher={getNewestProducts} />
+    <ChatPopup />
     </main>
 }
 
