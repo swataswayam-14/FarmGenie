@@ -3,6 +3,7 @@ import { ProductCard, ProductCardSkeleton } from "@/app/components/ProductCard";
 import { db } from "@/app/db";
 import { cache } from "@/app/lib/cache";
 import { Suspense } from "react";
+import ChatPopup from "../../__components/MarketChat";
 
 const getProducts = cache(async()=> {
     const startTime = Date.now();
@@ -49,6 +50,7 @@ const ProductsSuspense = async () => {
       {products.map((product) => (
         <ProductCard key={product.id} {...product} />
       ))}
+      <ChatPopup/>
     </>
   );
 };
