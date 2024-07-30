@@ -1,16 +1,15 @@
-"use client"
+"use client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/app/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-
 import { useState } from "react";
 
 interface Product {
   id: string;
   name: string;
   price: number;
-  rating: number;
-  reviews: number;
+  rating: number; 
+  reviews: number; 
   description: string;
   imagePath: string;
 }
@@ -60,7 +59,7 @@ export default function RecommendedProducts({ products }: RecommendedProductsPro
       )}
     </>
   );
-};
+}
 
 function RProductCard({
   id,
@@ -79,7 +78,7 @@ function RProductCard({
       <CardHeader className="p-2 bg-gray-100">
         <CardTitle className="text-sm sm:text-base font-bold text-green-600">{name}</CardTitle>
         <CardDescription className="text-xs sm:text-sm text-gray-900">
-          {price} | Rating: {rating} ({reviews} reviews)
+          {price} | Rating: {rating > 0 ? rating : 'N/A'} ({reviews > 0 ? reviews : 'N/A'} reviews)
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow p-2">

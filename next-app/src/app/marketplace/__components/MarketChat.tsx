@@ -17,19 +17,21 @@ const ChatPopup = () => {
 
     const extractProducts = (response: string) => {
         console.log(response);
-        const productRegex = /### \d+\.\s+\*\*(.*?)\*\*\s+-\s+\*\*Product Name:\*\*\s+(.*?)\s+-\s+\*\*Price:\*\*\s+₹(\d+.\d+)\s+-\s+\*\*Rating:\*\*\s+(\d+\.\d+)\s+-\s+\*\*Reviews:\*\*\s+(\d+)\s+-\s+!\[Image\]\((.*?)\)/g;
-
-        // Clear previous products
+        
+        const productRegex = /(\d+)\.\s+\*\*(.*?)\*\*\s+-\s+\*\*Product Name:\*\*\s+(.*?)\s+-\s+\*\*Price:\*\*\s+₹(\d+\.\d+)\s+-\s+\*\*Rating:\*\*\s+([\d.]+|Not available)\s+-\s+\*\*Reviews:\*\*\s+(Not available|\d+)\s+-\s+!\[Image\]\((.*?)\)/g;
+    
         setProducts([]);
-
+    
         let match: RegExpExecArray | null;
         while ((match = productRegex.exec(response)) !== null) {
             const newProduct = {
-                name: match[2],
-                price: parseFloat(match[3]),
-                rating: parseFloat(match[4]),
-                reviews: parseInt(match[5]),
-                imagePath: match[6],
+                id: `product-${match[1]}`, 
+                name: match[3], 
+                price: parseFloat(match[4]),
+                rating: match[5] === "Not available" ? 0 : parseFloat(match[5]), 
+                reviews: match[6] === "Not available" ? 0 : parseInt(match[6]), 
+                description: "No description available", 
+                imagePath: match[7],
             };
             console.log(newProduct);
             setProducts(prevProducts => [...prevProducts, newProduct]);
