@@ -1,9 +1,32 @@
 {
-    "version": 2,
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/"
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next",
+      "config": {
+        "dev": true
       }
-    ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "postgresql://swataswayamdash:Dcnhf1IajsW5@ep-gentle-math-a5z04t41.us-east-2.aws.neon.tech/farmgenie?sslmode=require",
+    "NODE_ENV": "development",
+    "JWT_SECRET": "the454sesc3rt@s",
+    "NEXTAUTH_SECRET": "myYhY6Hikuh8887",
+    "ADMIN_USERNAME": "admin",
+    "HASHED_ADMIN_PASSWORD": "7sAToqcgjFH9IPl1qtIxsuIefB2eIoskgOM8j1KsSC2CyFFMvrYDbX/HbLYmKuV4C7xiiwpvLfMuUlWiHUcy9A==",
+    "STRIPE_SECRET_KEY": "sk_test_51Pa8kxRqJfvgwvnDoCum1VUmOs6BdX22BhMELcbsovUBg0NRNHY2TBpMQf2htYb1BJTLFnDHY5d0NZEvxx9BFy0Q00ZcP4IS2u",
+    "STRIPE_WEBHOOK_SECRET": "dgdfdsgsgsdfs",
+    "RESEND_API_KEY": "gdgsfsdfsdfsdf",
+    "SENDER_EMAIL": "onboarding@resend.dev",
+    "NEXT_PUBLIC_STRIPE_PUBLIC_KEY": "pk_test_51Pa8kxRqJfvgwvnD2SZ6lHvsfKKpTHDeIPWQVgOZKyoFYc1vqDlm4q8rc5EzViVyX1NyKyVSxW3chVDmzUMbqQhS00DahbyDNe",
+    "NEXT_PUBLIC_SERVER_URL": "http://localhost:3000/marketplace"
+  }
 }
