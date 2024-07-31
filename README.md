@@ -172,6 +172,7 @@ Start the server
 ## 🔗 Links
 
 [HuggingFace Account](https://huggingface.co/YuvrajSingh9886)
+[Youtube Video - FarmGenie Overview](https://youtu.be/KXKhoLb8EfA)
 
 
 ## Authors
