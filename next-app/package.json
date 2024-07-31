@@ -10,6 +10,7 @@
     "email": "cp .env ./node_modules/react-email && email dev --dir src/email --port 3001"
   },
   "dependencies": {
+    "@cloudflare/next-on-pages": "^1.13.1",
     "@icons-pack/react-simple-icons": "^9.6.0",
     "@prisma/client": "^5.16.1",
     "@radix-ui/react-avatar": "^1.1.0",
@@ -39,6 +40,7 @@
     "react-email": "^2.1.5",
     "react-toastify": "^10.0.5",
     "resend": "^3.4.0",
+    "server-only": "^0.0.1",
     "sharp": "^0.33.4",
     "stripe": "^16.2.0",
     "tailwind-merge": "^2.3.0",
