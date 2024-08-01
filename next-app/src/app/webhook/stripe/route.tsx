@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import {Resend} from "resend"
 import PurchaseReceiptEmail from "@/email/PurchaseReceipt";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
-const resend = new Resend(process.env.RESEND_API_KEY as string)
+//new Stripe(process.env.STRIPE_SECRET_KEY as string)
+const stripe = new Stripe("kjgfjsfsadasd");
+const resend = new Resend("kjgsdfjfjfdsjdfs");
 
 export async function POST(req: NextRequest) {
     const event = stripe.webhooks.constructEvent(
