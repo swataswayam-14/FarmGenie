@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
-    "build": "next build",
-    "start": "next start -p 3001",
-    "lint": "next lint",
-    "email": "cp .env ./node_modules/react-email && email dev --dir src/email --port 3001"
+  "dev": "next dev -p 3001",
+  "build": "prisma generate && next build",
+  "start": "next start -p 3001",
+  "lint": "next lint",
+  "email": "cp .env ./node_modules/react-email && email dev --dir src/email --port 3001",
+  "postinstall": "prisma generate"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.1",
