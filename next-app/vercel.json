@@ -1,11 +1,5 @@
 {
     "version": 2,
-    "builds": [
-      {
-        "src": "Dockerfile",
-        "use": "@vercel/docker"
-      }
-    ],
     "env": {
       "DATABASE_URL": "postgresql://swataswayamdash:Dcnhf1IajsW5@ep-gentle-math-a5z04t41.us-east-2.aws.neon.tech/farmgenie?sslmode=require"
     },
