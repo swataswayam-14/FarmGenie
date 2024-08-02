@@ -9,7 +9,7 @@
   "lint": "next lint",
   "email": "cp .env ./node_modules/react-email && email dev --dir src/email --port 3001",
   "postinstall": "prisma generate"
-  },
+},
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.1",
     "@icons-pack/react-simple-icons": "^9.6.0",
