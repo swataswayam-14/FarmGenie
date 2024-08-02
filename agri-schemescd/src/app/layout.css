@@ -1,0 +1,12 @@
+/* Layout container to handle scrolling */
+.layout {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100vh; /* Full viewport height */
+}
+
+.content {
+    flex: 1; /* Allow content to grow and fill available space */
+    overflow-y: auto; /* Enable vertical scrolling for content */
+    padding: 20px; /* Padding for content area */
+}
