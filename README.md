@@ -29,14 +29,43 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 
 #### Seamless Interface
-- The product is built as a web application using a Turborepo, a Next.js client, and a Next.js backend, leveraging a Redis queue and multiple worker nodes to ensure scalability and robustness. The knowledge base is curated from openly available PDF books and reports, covering a wide range of agricultural topics. 
+
+##### FarmGenie Official Website 
+
+- http://64.227.135.219:3000/
+
+- The product is built as a web application using a Next.js client, and a Next.js backend, leveraging a Redis queue and multiple worker nodes to ensure scalability and robustness. The knowledge base is curated from openly available PDF books and reports, covering a wide range of agricultural topics. 
+- Dual Marketplace:
+  - Input Marketplace (for local sellers and dealers)
+  - Output Marketplace (for farmers)
+- AI-powered Knowledge Base
+
+
+##### FarmGenie Community-Forum
+
+- https://farmgenie-rho.vercel.app/
 
 - Additionally, the product aims to create an interactive platform where farmers can connect with each other, share their knowledge, and learn from their peers, fostering a community-driven approach to agricultural knowledge dissemination.
+
+###### Features
+  - Multilingual Support.
+  - Gamified help system.
+  - Communities.
+
+
+##### FarmGenie AgriculturalSchemes Website
+
+- Empowering Farmers: A dedicated platform designed to provide farmers with essential information on government schemes for agriculture and farming.
+- User-Friendly Interface: Intuitive navigation allows for easy access to a wealth of resources, ensuring a seamless experience for users.
+- Comprehensive Database: Explore a wide variety of initiatives, including subsidies, grants, and training programs tailored to support farmers.
+- Regular Updates: Stay informed with the latest changes and updates to government policies and schemes relevant to agriculture.
+- Helpful Guides: Access informative guides and tips to help farmers maximize the benefits of available programs and resources.
+
+
+
 ## Features 
 
 **Website**
-
-
 
 - The website is built using a Turborepo, which is a high-performance build system that helps manage the complexity of a mono repo. 
 - The front end is built using Next.js, a React framework that provides server-side rendering, static site generation, and other performance optimizations. The backend is also built using Next.js that handles the communication between the front end and the ML backend. 
