@@ -1,0 +1,87 @@
+/* Navbar styling */
+.nav {
+    height: 50px;
+    width: 100vw;
+    
+    background-color: green;
+    display: flex;
+    justify-content: space-between; /* Distribute space between logo and login/register */
+    align-items: center; /* Center items vertically */
+}
+
+.logo {
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background-image: url("farmlogo.png"); /* Ensure path is correct */
+    background-size: cover; /* Ensures the image covers the entire element */
+    background-position: center; /* Centers the image within the element */
+    margin-left: 20px;
+}
+
+.search {
+    display: flex;
+    
+    width: 380px; /* Adjusted width to fit search input and button */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+}
+
+input {
+    height: 40px; /* Adjusted height for better appearance */
+    width: 80%; /* Make input fill the container */
+    background-color: rgb(239, 232, 224);
+    border-radius: 20px 0 0 20px; /* Rounded left corners */
+    color: black;
+    padding: 0 12px; /* Added padding on left and right */
+    border: none; /* Removed border */
+}
+
+input::placeholder {
+    color: black; /* Placeholder text color */
+    opacity: 1; /* Ensure full opacity for placeholder text */
+}
+
+.searchBtn {
+    height: 40px; /* Match the height of the input */
+    width: 70px; /* Width of the button */
+    
+    background-color: rgb(4, 71, 4);
+    border-radius: 0 20px 20px 0; /* Rounded right corners */
+    display: flex;
+    justify-content: center; /* Center icon horizontally */
+    align-items: center; /* Center icon vertically */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.searchBtn::before {
+    content: '🔍'; /* Unicode search icon */
+    font-size: 30px; /* Size of the icon */
+    color: white; /* Icon color */
+}
+
+.LoginRegister {
+    display: flex;
+    
+    width: 160px;
+    justify-content: space-around; /* Distribute space around login and register */
+    align-items: center; /* Center items vertically */
+    font-weight: 300;
+}
+
+.login, .register {
+    text-align: center;
+    margin-left: -40px;
+    font-weight: 500;
+    color: #24384f; /* Added color to match button styling */
+    text-decoration: none; /* Remove underline */
+    padding: 8px 12px; /* Added padding for better click area */
+    border-radius: 5px; /* Added border-radius for rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+}
+
+.login:hover, .register:hover {
+    background-color: #f0f0f0; /* Light background on hover */
+    color: #005bb5; /* Darker text color on hover */
+}

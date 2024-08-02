@@ -1,0 +1,74 @@
+.mid {
+    height: 2600px;
+    width: 55vw;
+    
+    margin-left: 300px;
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
+    gap: 15px; /* Space between cards */
+    padding: 20px; /* Padding inside the container */
+    box-sizing: border-box; /* Ensure padding is included in container width */
+}
+
+.card {
+    height: 290px;
+    width: 318px;
+    border: 2px solid yellow;
+    border-radius: 5px;
+    flex: 0 1 auto; /* Prevent cards from growing but allow shrinking */
+    box-sizing: border-box; /* Ensure padding and border are included in width and height */
+    background-color: green;
+    overflow: hidden; /* Hide overflow */
+    position: relative; /* For positioning scrollbar */
+    padding: 10px; /* Add padding inside the card */
+    margin: 0; /* Remove margin to reduce vertical space */
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.6); /* White box shadow effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for effects */
+}
+
+/* Style for the card content */
+.card .heading {
+    margin: 0;
+    font-size: 18px;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card .text {
+    font-size: 14px;
+    color: white;
+    overflow-y: auto; /* Enable vertical scrollbar if content overflows */
+    max-height: 200px; /* Restrict height of text container */
+    padding-right: 15px;
+    margin-top: 10px; /* Space for scrollbar */
+}
+
+/* Custom scrollbar styles for WebKit browsers */
+.card .text::-webkit-scrollbar {
+    width: 8px;
+}
+
+.card .text::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.card .text::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.card .text::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.card:hover {
+    height: 293px;
+    width: 320px;
+    border-radius: 5px;
+    flex: 0 1 auto; /* Prevent cards from growing but allow shrinking */
+    box-sizing: border-box; /* Ensure padding and border are included in width and height */
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.8); /* Enhanced white box shadow on hover */
+    transform: scale(1.03); /* Slightly enlarge the card on hover */
+}
+

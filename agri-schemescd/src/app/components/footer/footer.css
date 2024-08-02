@@ -1,0 +1,55 @@
+.footer {
+    background-color: #000000; /* Black background */
+    color: #ffffff; /* White text color */
+    padding: 10px 20px; /* Reduced padding for height reduction */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    position: relative;
+    background-color: gray;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px; /* Space between contact info and social media */
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0; /* Vertical spacing between contact items */
+}
+
+.icon {
+    margin-right: 8px; /* Space between icon and text */
+    color: #ff4500; /* Icon color */
+}
+
+.contact-text {
+    font-size: 14px; /* Adjust font size */
+}
+
+.social-media {
+    display: flex;
+    gap: 10px; /* Space between social media icons */
+}
+
+.social-icon {
+    font-size: 20px; /* Adjust icon size */
+    color: #ffffff; /* Icon color */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.social-icon:hover {
+    color: #ff4500; /* Change color on hover */
+}
+

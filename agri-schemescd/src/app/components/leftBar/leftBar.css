@@ -1,0 +1,49 @@
+.leftBar {
+    height: 100vh; /* Full viewport height */
+    width: 290px; /* Adjust width as needed */
+    
+    background-color: #000000; /* Background color */
+    position: fixed; /* Fixed position */
+    top: 50px; /* Align at the top */
+    left: 0; /* Align to the left */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box; /* Ensure padding is included in width */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Optional: Add styles for scrollbar */
+.leftBar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.leftBar::-webkit-scrollbar-track {
+    background: #333;
+}
+
+.leftBar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.leftBar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Styling for scheme links */
+.scheme {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    background-color: #005bb5; /* Darker shade */
+    text-decoration: none;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.scheme:hover {
+    background-color: #003d7a; /* Even darker shade on hover */
+}

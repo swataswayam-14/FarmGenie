@@ -1,0 +1,89 @@
+/* rightBar.css */
+.rightBar {
+    height: 1900px; /* Adjust height to fit content */
+    width: 261px; /* Adjust width as needed */
+    position: absolute;
+    right: 0;
+    top: 55px; /* Adjust this value if needed */
+    background: #000000; /* Background color */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: flex-start; /* Align items to the top */
+    padding: 10px; /* Add padding for spacing */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* Styling for heading */
+.rightBar h2 {
+    font-size: 20px; /* Adjust font size as needed */
+    color: #ff4500; /* Vibrant color */
+    text-shadow: 0 0 5px rgba(255, 69, 0, 0.8); /* Glow effect */
+    animation: flicker 1.5s infinite; /* Flicker animation */
+    margin: 0; /* Remove default margin */
+    padding-bottom: 10px; /* Space between heading and boxes */
+}
+
+/* Keyframes for flickering effect */
+@keyframes flicker {
+    0% { opacity: 1; }
+    5% { opacity: 0.7; }
+    10% { opacity: 1; }
+    15% { opacity: 0.6; }
+    20% { opacity: 1; }
+    25% { opacity: 0.5; }
+    30% { opacity: 1; }
+    35% { opacity: 0.4; }
+    40% { opacity: 1; }
+    45% { opacity: 0.3; }
+    50% { opacity: 1; }
+    55% { opacity: 0.2; }
+    60% { opacity: 1; }
+    65% { opacity: 0.6; }
+    70% { opacity: 1; }
+    75% { opacity: 0.7; }
+    80% { opacity: 1; }
+    85% { opacity: 0.5; }
+    90% { opacity: 1; }
+    95% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+/* Style for each box */
+.box {
+    background: #333333; /* Slightly lighter dark background for contrast */
+    color: #ffffff; /* Text color */
+    border: 1px solid #ff4500; /* Border color */
+    padding: 15px; /* Padding inside each box */
+    margin: 10px 0; /* Reduced margin between boxes */
+    border-radius: 8px; /* Rounded corners */
+    width: 100%; /* Full width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
+}
+
+/* Hover effect for boxes */
+.box:hover {
+    background: #444444; /* Darker background on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+/* Styling for headings inside boxes */
+.box h3 {
+    font-size: 16px; /* Font size for headings */
+    color: #ff4500; /* Heading color */
+    margin: 0 0 5px 0; /* Margin for spacing */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Hover effect for headings inside boxes */
+.box:hover h3 {
+    color: #ff6700; /* Change heading color on hover */
+}
+
+/* Styling for paragraphs inside boxes */
+.box p {
+    font-size: 14px; /* Font size for paragraphs */
+    margin: 0; /* Remove default margin */
+}
