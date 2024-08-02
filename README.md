@@ -2,7 +2,7 @@
 
 --- 
 - **Our project only supports conversation (input/output) in Hindi/English for now**. 
-- Please refer to 'flowchart.pdf' for our proposed framework
+- Please refer to 'MoE-Framework.png' for our proposed framework
 ---
 
 ### Vision
