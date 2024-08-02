@@ -5,7 +5,7 @@
 - FarmGenie Official Website: http://64.227.135.219:3000/
 - FarmGenie Community Forum: https://farmgenie-rho.vercel.app/
 - FarmGenie Agri-Schemes Website: https://farmgenie-agrischemes.vercel.app/
-- Please refer to 'flowchart.pdf' for our proposed framework
+- Please refer to 'MoE-Framework.png' for our proposed framework
 ---
 
 ### Vision
