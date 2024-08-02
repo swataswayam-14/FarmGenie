@@ -1,7 +1,9 @@
 # FarmGenie 
 
 --- 
-- **Our project only supports conversation (input/output) in Hindi/English for now**. 
+- **Our project only supports conversation (input/output) in Hindi/English for now**.
+- FarmGenie Official Website: http://64.227.135.219:3000/
+- FarmGenie Community Forum: https://farmgenie-rho.vercel.app/
 - Please refer to 'flowchart.pdf' for our proposed framework
 ---
 
