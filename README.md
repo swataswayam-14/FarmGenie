@@ -4,6 +4,7 @@
 - **Our project only supports conversation (input/output) in Hindi/English for now**.
 - FarmGenie Official Website: http://64.227.135.219:3000/
 - FarmGenie Community Forum: https://farmgenie-rho.vercel.app/
+- FarmGenie Agri-Schemes Website: https://farmgenie-agrischemes.vercel.app/
 - Please refer to 'flowchart.pdf' for our proposed framework
 ---
 
@@ -55,11 +56,14 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 ##### FarmGenie AgriculturalSchemes Website
 
-- Empowering Farmers: A dedicated platform designed to provide farmers with essential information on government schemes for agriculture and farming.
-- User-Friendly Interface: Intuitive navigation allows for easy access to a wealth of resources, ensuring a seamless experience for users.
-- Comprehensive Database: Explore a wide variety of initiatives, including subsidies, grants, and training programs tailored to support farmers.
-- Regular Updates: Stay informed with the latest changes and updates to government policies and schemes relevant to agriculture.
-- Helpful Guides: Access informative guides and tips to help farmers maximize the benefits of available programs and resources.
+- https://farmgenie-agrischemes.vercel.app/
+
+###### Features
+  - Empowering Farmers: A dedicated platform designed to provide farmers with essential information on government schemes for agriculture and farming.
+  - User-Friendly Interface: Intuitive navigation allows for easy access to a wealth of resources, ensuring a seamless experience for users.
+  - Comprehensive Database: Explore a wide variety of initiatives, including subsidies, grants, and training programs tailored to support farmers.
+  - Regular Updates: Stay informed with the latest changes and updates to government policies and schemes relevant to agriculture.
+  - Helpful Guides: Access informative guides and tips to help farmers maximize the benefits of available programs and resources.
 
 
 
