@@ -84,8 +84,8 @@ The Next.js backend is responsible for the following tasks:
 6.	**User Management**: The Next.js frontend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon tech).
 7.	**Scalability**: The use of a Redis queue and multiple worker node processes ensures the application can scale to handle a large number of concurrent user requests without overloading the ML backend.
 8.	**Deployment**: The entire application, including the frontend, backend, and ML components, is packaged and deployed using Docker containers, ensuring consistent and reliable deployment across different environments.
-9.	Monitoring and Logging: The application includes comprehensive monitoring and logging solutions to track performance, errors, and user activity, enabling the team to identify and resolve issues quickly.
-10.	Security: The website incorporates industry-standard security practices, such as SSL/TLS encryption, user authentication, and input validation, to protect user data and prevent unauthorized access.
+9.	**Monitoring and Logging**: The application includes comprehensive monitoring and logging solutions to track performance, errors, and user activity, enabling the team to identify and resolve issues quickly.
+10.	**Security**: The website incorporates industry-standard security practices, such as SSL/TLS encryption, user authentication, and input validation, to protect user data and prevent unauthorized access.
 
 
 
@@ -96,7 +96,7 @@ The Next.js backend is responsible for the following tasks:
 **Backend**: Flask, Python, Langchain, GeminiPro API,
 peft , bitsandbytes, transformers
 
-**Storage/VectoStore**: PostgreSQL, FAISS
+**Storage/VectoStore**: PostgreSQL, FAISS, Pinecone, MySQL
 
 **Other Tools**: Unsloth, GCP, Docker, Vercel
 
@@ -147,6 +147,7 @@ Run the server image
   docker run --env-file .env -p 8000:8000 --name pytorch-container -it --gpus all yuvrajsingh9886/farmgenie-fastapi:v2.1
 ```
 You'll see it running on 127.0.0.0/docs url
+
 ## Run Locally
 
 Using Docker
