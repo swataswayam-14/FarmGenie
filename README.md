@@ -119,7 +119,7 @@ Using Docker
 To run the FarmGenie official website Docker image locally, start by pulling the image from Docker Hub using the command:
 
 ```bash
-  docker pull swayam14/farmwebapp2
+  docker pull swayam14/farmwebapp2:v1.0
 ```
 
 
