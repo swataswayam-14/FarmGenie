@@ -128,7 +128,7 @@ This command downloads the specified image to your local machine, allowing you t
 ```bash
   docker run -p 3000:3001 swayam14/farmwebapp2
 ```
-This setup enables you to access the FarmWebApp2 application locally via http://localhost:3001, allowing for easy testing and development of the application as if it were running on a remote server.
+This setup enables you to access the FarmWebApp2 application locally via http://localhost:3000, allowing for easy testing and development of the application as if it were running on a remote server.
 
 
 Clone the project
