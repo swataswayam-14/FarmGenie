@@ -116,9 +116,9 @@ peft , bitsandbytes, transformers
 ## Requirements
 
 ```bash
-docker
+docker (Docker Desktop preferred since it comes with docker-compose inbuilt)
 unsloth
-GPU
+GPU (must have- unsloth requirement)
 ```
 
 #### Server
@@ -126,27 +126,26 @@ GPU
 Pull the server image from DockerHub
 
 ```bash
-  docker pull yuvrajsingh9886/farmgenie-fastapi:v2.1
+  docker pull yuvrajsingh9886/ml-api:v1.0
 ```
-
-#### Gemini Setup
-
-Create a file named env_file with the following content:
-
-```bash
-  GEMINI_API_KEY = "YOUR_SECRET_KEY"
-  hf_token = "YOU_HUGGINGFACE_TOKEN"
-  OPENAI_API_KEY = "YOUR_OPENAI_TOKEN"
-  COHERE_API_KEY = "YOUR_COHERE_API_TOKEN"
-```
-
 
 Run the server image
 
 ```bash
-  docker run --env-file .env -p 8000:8000 --name pytorch-container -it --gpus all yuvrajsingh9886/farmgenie-fastapi:v2.1
+GEMINI_API_KEY=<YOUR_API_KEY_HERE> \
+OPENAI_API_KEY=<YOUR_API_KEY_HERE> \
+hf_token=<YOUR_API_KEY_HERE> \
+COHERE_API_KEY=<YOUR_API_KEY_HERE> \
+MAPBOX_API_KEY=<YOUR_API_KEY_HERE> \
+PINECONE_API_KEY=<YOUR_API_KEY_HERE> \
+GOOGLE_MAPS_API=<YOUR_API_KEY_HERE> \
+docker-compose up
+
 ```
-You'll see it running on 127.0.0.0/docs url
+
+```bash
+You'll see it running on localhost:8000/docs
+```
 
 ## Run Locally
 
