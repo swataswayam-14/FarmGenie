@@ -76,12 +76,12 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 The Next.js backend is responsible for the following tasks:
 
-1.	**Request Handling**: The Express server receives all the requests from the frontend, such as user queries, and passes them to the Redis queue.
+1.	**Request Handling**: The Next.js server receives all the requests from the frontend, such as user queries, and passes them to the Redis queue.
 2.	**Redis Queue**: A Redis queue is used to manage incoming requests. This helps distribute the load across multiple worker node processes, ensuring the ML backend does not get overwhelmed.
 3.	**Worker node Processes**: Multiple worker nodes are set up to consume the requests from the Redis queue. These processes then pass the requests to the ML backend for processing.
 4.	**ML Backend Integration**: The Next.js backend communicate with the ML backend, which is responsible for handling the various ML tasks, such as query classification, subproblem generation, and retrieval-augmented generation (RAG).
 5.	**Database Integration**: The website uses a single PostgreSQL database, provided by Neon DB, as the single source of truth. This database stores all the user, farmer, and retailer data, as well as the content for the official farmgenie website.
-6.	**User Management**: The Next.js frontend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon tech).
+6.	**User Management**: The Next.js backend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon tech).
 7.	**Scalability**: The use of a Redis queue and multiple worker node processes ensures the application can scale to handle a large number of concurrent user requests without overloading the ML backend.
 8.	**Deployment**: The entire application, including the frontend, backend, and ML components, is packaged and deployed using Docker containers, ensuring consistent and reliable deployment across different environments.
 9.	**Monitoring and Logging**: The application includes comprehensive monitoring and logging solutions to track performance, errors, and user activity, enabling the team to identify and resolve issues quickly.
@@ -98,7 +98,7 @@ peft , bitsandbytes, transformers
 
 **Storage/VectoStore**: PostgreSQL, FAISS, Pinecone, MySQL
 
-**Other Tools**: Unsloth, GCP, Docker, Vercel
+**Other Tools**: Unsloth, GCP, Docker, Vercel, DigitalOcean
 
 
 ## Fine Tuning
