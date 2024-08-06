@@ -17,36 +17,38 @@ In the ever-evolving agricultural landscape, farmers often face challenges in ac
 
 The primary goal of this project is to design a product that helps farmers, especially those new to the field, gain up-to-date knowledge on various agricultural and farming practices from the Internet through a user-friendly interface with an AI-based conversation bot.
 
+---
 
-### Methodology
-
-#### Framework
-
-- The core of the product is a sophisticated conversational AI framework that combines a Mixture of Experts (MoE) approach, Retrieval-Augmented Generation (RAG), and language translation capabilities. 
-
-- The MoE component consists of three fine-tuned small language models (SLMs) that have become specialized experts in the domains of soil management, plant disease identification, and irrigation techniques, allowing them to handle complex queries by breaking them down into subproblems.
-
-- The "conversation managing" LLMs classify the user's queries, manage the flow of the conversation, and facilitate the translation between the user's preferred language and English, ensuring seamless interaction for farmers. 
-
-
-#### Seamless Interface
+### Seamless Interface
 
 ##### FarmGenie Official Website 
 
 - http://64.227.135.219:3000/
 
-- The product is built as a web application using a Next.js client, and a Next.js backend, leveraging a Redis queue and multiple worker nodes to ensure scalability and robustness. The knowledge base is curated from openly available PDF books and reports, covering a wide range of agricultural topics. 
+- The product is built as a web application using a Next.js client, and a Next.js backend, leveraging a Redis queue and multiple worker nodes to ensure scalability and robustness. The knowledge base is curated from openly available PDF books and reports covering various agricultural topics.
+
+
 - Dual Marketplace:
   - Input Marketplace (for local sellers and dealers)
   - Output Marketplace (for farmers)
-- AI-powered Knowledge Base
+
+
+##### FarmGenie Conversational-AI
+
+###### Framework
+
+- The product's core is a sophisticated conversational AI framework combining a Mixture of Experts (MoE) approach, Retrieval-Augmented Generation (RAG), and language translation capabilities. 
+
+- The MoE component consists of three fine-tuned small language models (SLMs) that have become specialized experts in soil management, plant disease identification, and irrigation techniques, allowing them to handle complex queries by breaking them down into subproblems.
+
+- The "conversation managing" LLMs classify the user's queries, manage the flow of the conversation, and facilitate the translation between the user's preferred language and English, ensuring seamless interaction for farmers. 
 
 
 ##### FarmGenie Community-Forum
 
 - https://farmgenie-rho.vercel.app/
 
-- Additionally, the product aims to create an interactive platform where farmers can connect with each other, share their knowledge, and learn from their peers, fostering a community-driven approach to agricultural knowledge dissemination.
+- Additionally, the product aims to create an interactive platform where farmers can connect, share their knowledge, and learn from their peers, fostering a community-driven approach to agricultural knowledge dissemination.
 
 ###### Features
   - Multilingual Support.
@@ -54,6 +56,22 @@ The primary goal of this project is to design a product that helps farmers, espe
   - Communities.
 
 
+##### FarmGenie Marketplace-Chatbot
+
+###### Framework
+
+- This is developed to redefine the way customers interact with online retail shops by replacing the traditional "search and find" method with Natural Language-based instructions which gives a sense of control and connectivity with ease of information retrieval for products, just like in a real shop with LLM Agents as shopkeepers.
+  
+- The product's core is a sophisticated conversational AI framework that leverages the power of LLM as Agents with the combination of Gemini and OpenAI GPT-4o.
+
+- The main motivation is to motivate and allow local retail shops to increase their sales through the formation of a shared local network of shop owners who can increase their reach to local people. This is also advantageous for small-scale farmers who don't have many means to get cheap and nearby products by making them aware that the items they are searching for could very well be nearby.  
+
+- The "conversation managing" LLMs classify the user's queries, manage the flow of the conversation, and facilitate the translation between the user's preferred language and English, ensuring seamless interaction for farmers.
+
+###### Features
+  - Many! since it depends on the user's language of query, major areas being Reviews, Nearby Location Access,  Product-Search and its respective Product Information on which any queries could be performed.
+    
+  
 ##### FarmGenie AgriculturalSchemes Website
 
 - https://farmgenie-agrischemes.vercel.app/
@@ -66,21 +84,18 @@ The primary goal of this project is to design a product that helps farmers, espe
   - Helpful Guides: Access informative guides and tips to help farmers maximize the benefits of available programs and resources.
 
 
-
-## Features 
-
-**Website**
+##### Website
 
 - The website is built using a Turborepo, which is a high-performance build system that helps manage the complexity of a mono repo. 
-- The front end is built using Next.js, a React framework that provides server-side rendering, static site generation, and other performance optimizations. The backend is also built using Next.js that handles the communication between the front end and the ML backend. 
+- The front end is built using Next.js, a React framework that provides server-side rendering, static site generation, and other performance optimizations. The backend is also built using Next.js which handles the communication between the front end and the ML backend. 
 
 The Next.js backend is responsible for the following tasks:
 
-1.	**Request Handling**: The Next.js server receives all the requests from the frontend, such as user queries, and passes them to the Redis queue.
+1.	**Request Handling**: The Next.js server receives all the requests from the front end, such as user queries, and passes them to the Redis queue.
 2.	**Redis Queue**: A Redis queue is used to manage incoming requests. This helps distribute the load across multiple worker node processes, ensuring the ML backend does not get overwhelmed.
 3.	**Worker node Processes**: Multiple worker nodes are set up to consume the requests from the Redis queue. These processes then pass the requests to the ML backend for processing.
-4.	**ML Backend Integration**: The Next.js backend communicate with the ML backend, which is responsible for handling the various ML tasks, such as query classification, subproblem generation, and retrieval-augmented generation (RAG).
-5.	**Database Integration**: The website uses a single PostgreSQL database, provided by Neon DB, as the single source of truth. This database stores all the user, farmer, and retailer data, as well as the content for the official farmgenie website.
+4.	**ML Backend Integration**: The Next.js backend communicates with the ML backend, which is responsible for handling the various ML tasks, such as query classification, subproblem generation, and retrieval-augmented generation (RAG).
+5.	**Database Integration**: The website uses a single PostgreSQL database, provided by Neon DB, as the single source of truth. This database stores all the user, farmer, and retailer data, as well as the content for the official Farmgenie website.
 6.	**User Management**: The Next.js backend handles user management, including authentication, authorization, and user data storage in the PostgreSQL database (neon tech).
 7.	**Scalability**: The use of a Redis queue and multiple worker node processes ensures the application can scale to handle a large number of concurrent user requests without overloading the ML backend.
 8.	**Deployment**: The entire application, including the frontend, backend, and ML components, is packaged and deployed using Docker containers, ensuring consistent and reliable deployment across different environments.
