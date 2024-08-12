@@ -27,7 +27,6 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 - The product is built as a web application using a Next.js client, and a Next.js backend, leveraging a Redis queue and multiple worker nodes to ensure scalability and robustness. The knowledge base is curated from openly available PDF books and reports covering various agricultural topics.
 
-
 - Dual Marketplace:
   - Input Marketplace (for local sellers and dealers)
   - Output Marketplace (for farmers)
