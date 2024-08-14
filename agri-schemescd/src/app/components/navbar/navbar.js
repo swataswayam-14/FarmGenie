@@ -8,17 +8,20 @@ export default function Navbar() {
         <div className="nav">
             <div className="logo"></div>
             <div className="search">
-                <input palceholder="Search the schemes...">
-                </input>
-                <div className="searchBtn">
-                    
-                </div>
+                <input placeholder="Search the schemes..." />
+                <div className="searchBtn"></div>
             </div>
-            <div className="LoginRegister">
-                <Link href="/login" className="login">Login</Link>
-                <Link href="/login" className="register">Register</Link>
+            <div className="navLinks">
+                <Link href="/login" className="loginn">Login</Link>
+                <Link href="/Register" className="registerr">Register</Link>
+                <Link href="/faqs" className="faqqs">FAQs</Link>
+                <Link href="/tools" className="toolss">Tools</Link> {/* Add this line */}
+            </div>
+            <div className="profile">
+                <Link href="/Profile">
+                    <div className="profileIcon"></div>
+                </Link>
             </div>
         </div>
     );
 }
-

@@ -1,0 +1,55 @@
+.enter {
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f9;
+  }
+  
+  .navbar {
+    width: 100%;
+    background-color: #2e7d32;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .navbarList {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbarList li {
+    margin: 0 1rem;
+  }
+  
+  .navButton {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #1b5e20;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .navButton:hover {
+    background-color: #145214;
+  }
+  
+  .enterContent {
+    margin-top: 2rem;
+    text-align: center;
+    color: #333;
+  }
+  
+  .enterContent h2 {
+    font-size: 2rem;
+    margin: 0;
+  }
+  

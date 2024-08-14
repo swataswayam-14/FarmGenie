@@ -1,0 +1,79 @@
+.tools-container {
+    height: 100vh;
+    width: 100%;
+    padding: 40px;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.tools-title {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.tool-items {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.tool-item {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 300px;
+}
+
+.tool-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tool-image {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.tool-info {
+    padding: 20px;
+    text-align: left;
+}
+
+.tool-info h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #005bb5;
+}
+
+.tool-info p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.tool-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background-color: #005bb5;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.tool-link:hover {
+    background-color: #004494;
+}
+
+.soil .tool-image {
+    background-image: url("soil.webp"); /* Ensure path is correct */
+    background-size: contain; /* Ensure the image is contained within the div */
+    background-repeat: no-repeat;
+    background-position: center; /* Center the image */
+}

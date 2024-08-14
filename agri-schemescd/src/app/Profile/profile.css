@@ -1,0 +1,94 @@
+.profileContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #0b6719, #0caf58);
+    padding: 1rem;
+    position: relative; /* Make sure profileCard is positioned relative to the container */
+}
+
+.profileCard {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    position: relative; /* Ensure profileCard is positioned for absolute children */
+}
+
+.profileHeader {
+    margin-bottom: 1.5rem;
+}
+
+.profilePicture {
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
+    background-image: url("farmer1.jpg"); /* Ensure this path is correct */
+    background-size: cover; /* Ensure the image covers the entire element */
+    background-position: center; /* Center the image within the element */
+    background-repeat: no-repeat;
+    border: 1px solid green;
+    margin: 0 auto; /* Center horizontally */
+}
+
+.profileHeader h1 {
+    color: #2e7d32;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.profileDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profileDetail {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.detailLabel {
+    font-weight: bold;
+    color: #333;
+}
+
+.detailValue {
+    color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profileCard {
+        padding: 1rem;
+    }
+}
+
+.back {
+    position: absolute;
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+    height: 40px;
+    width: 90px;
+    border: 2px solid black;
+    background-color: white;
+    color: black;
+    font-size: 16px; /* Adjusted font size for better appearance */
+    text-align: center;
+    line-height: 40px; /* Vertically center text */
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+}
+
+.back:hover {
+    background-color: black;
+    color: white;
+}
