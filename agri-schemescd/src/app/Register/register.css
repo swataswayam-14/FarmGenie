@@ -1,0 +1,133 @@
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #c1d9b3, #9db98b);
+  font-family: 'Arial', sans-serif;
+  background-image: url("loginLogo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: darken;
+}
+
+.registerWrapper {
+  display: flex;
+  width: 75%;
+  max-width: 1000px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  padding: 3rem;
+  backdrop-filter: blur(12px);
+  height: auto; /* Adjust to content height */
+}
+
+.registerLeft, .registerRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.registerLogoImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+  background-image: url("farmlogo.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.registerLogo {
+  font-size: 3rem;
+  color: #1b5e20;
+  margin-bottom: 1rem;
+  font-family: 'Georgia', serif;
+}
+
+.registerDesc {
+  font-size: 1.0rem;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.registerBox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 450px;
+}
+
+.registerInput, .registerTextarea {
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #80cbc4;
+  border-radius: 8px;
+  background-color: #dcedc8;
+  color: #000;
+  width: 100%;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.registerTextarea {
+  resize: none;
+}
+
+.registerInput::placeholder, .registerTextarea::placeholder {
+  color: #666;
+  font-size: 1rem;
+}
+
+.registerInput:focus, .registerTextarea:focus {
+  border-color: #2e7d32;
+  background-color: #a5d6a7;
+  outline: none;
+}
+
+.registerButton {
+  padding: 1rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #2e7d32;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.registerButton:hover {
+  background-color: #1b5e20;
+}
+
+.registerLogin {
+  display: block;
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 1rem;
+  color: #2e7d32;
+}
+
+.registerLoginLink {
+  color: #2e7d32;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.registerLoginLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .registerWrapper {
+    width: 95%;
+    padding: 2rem;
+  }
+}

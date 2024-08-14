@@ -1,0 +1,132 @@
+body {
+  background-image: url("/assets/loginLogo.jpg"); /* Ensure the path is correct */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  font-family: 'Arial', sans-serif;
+  color: #fff;
+  height: 100vh; /* Ensures the background covers the full height */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+}
+
+html {
+  height: 100%; /* Ensure the html element also covers full height */
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(46, 125, 50, 0.9); /* Slightly transparent green background */
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Softer shadow for depth */
+  font-family: 'Arial', sans-serif;
+  border-radius: 8px; /* Rounded corners for a smoother look */
+  backdrop-filter: blur(8px); /* Adds a subtle blur effect for a glassy look */
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); /* Adds a slight shadow to the text */
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  margin: 0 1rem;
+}
+
+.search input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px; /* Rounded left side only */
+  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+  color: #333;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.search input:focus {
+  border-color: #1b5e20;
+  background-color: rgba(255, 255, 255, 0.9); /* Slightly darker on focus */
+  outline: none;
+}
+
+.searchBtn {
+  padding: 0.5rem 1rem;
+  background-color: #1b5e20;
+  border: none;
+  border-radius: 0 4px 4px 0; /* Rounded right side only */
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.searchBtn:hover {
+  background-color: #145214;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.navLinks a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: bold;
+}
+
+.navLinks a:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px); /* Adds a slight lift on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow on hover */
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.profileIcon {
+  width: 40px;
+  height: 40px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  background-image: url(''); /* Replace with actual profile icon */
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.profileIcon:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.backButton {
+  margin-left: 1rem;
+}
+
+.backBtn {
+  padding: 0.5rem 1rem;
+  background-color: #1b5e20;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.backBtn:hover {
+  background-color: #145214;
+  transform: translateY(-2px); /* Slight lift on hover */
+}

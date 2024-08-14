@@ -2,10 +2,16 @@
 .nav {
     height: 50px;
     width: 100vw;
+<<<<<<< HEAD
+    background-color: green;
+    display: flex;
+    justify-content: space-between; /* Distribute space between logo and other items */
+=======
     
     background-color: green;
     display: flex;
     justify-content: space-between; /* Distribute space between logo and login/register */
+>>>>>>> 31321a7f6224e7d61b76d54baedbfcfbb28db89b
     align-items: center; /* Center items vertically */
 }
 
@@ -22,7 +28,10 @@
 
 .search {
     display: flex;
+<<<<<<< HEAD
+=======
     
+>>>>>>> 31321a7f6224e7d61b76d54baedbfcfbb28db89b
     width: 380px; /* Adjusted width to fit search input and button */
     justify-content: center; /* Center items horizontally */
     align-items: center; /* Center items vertically */
@@ -46,7 +55,10 @@ input::placeholder {
 .searchBtn {
     height: 40px; /* Match the height of the input */
     width: 70px; /* Width of the button */
+<<<<<<< HEAD
+=======
     
+>>>>>>> 31321a7f6224e7d61b76d54baedbfcfbb28db89b
     background-color: rgb(4, 71, 4);
     border-radius: 0 20px 20px 0; /* Rounded right corners */
     display: flex;
@@ -61,6 +73,18 @@ input::placeholder {
     color: white; /* Icon color */
 }
 
+<<<<<<< HEAD
+.navLinks {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Add spacing between the links */
+}
+
+.loginn, .registerr, .faqqs, .toolss .enter { /* Added .toolss */
+    text-align: center;
+    font-weight: 500;
+    color: #ffffff; /* White text color for better visibility */
+=======
 .LoginRegister {
     display: flex;
     
@@ -75,13 +99,37 @@ input::placeholder {
     margin-left: -40px;
     font-weight: 500;
     color: #24384f; /* Added color to match button styling */
+>>>>>>> 31321a7f6224e7d61b76d54baedbfcfbb28db89b
     text-decoration: none; /* Remove underline */
     padding: 8px 12px; /* Added padding for better click area */
     border-radius: 5px; /* Added border-radius for rounded corners */
     transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
 }
 
+<<<<<<< HEAD
+.loginn:hover, .registerr:hover, .faqqs:hover, .toolss:hover ,.enter:hover{ /* Added .toolss:hover */
+    background-color: #f0f0f0; /* Light background on hover */
+    color: #005bb5; /* Darker text color on hover */
+}
+
+.profile {
+    margin-right: 20px; /* Space from the right edge */
+}
+
+.profileIcon {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background-image: url("farmer1.jpg"); /* Ensure this path is correct */
+    background-size: cover; /* Ensures the image covers the entire element */
+    background-position: center; /* Centers the image within the element */
+    cursor: pointer;
+    margin-right: 10px;
+}
+=======
 .login:hover, .register:hover {
     background-color: #f0f0f0; /* Light background on hover */
     color: #005bb5; /* Darker text color on hover */
 }
+>>>>>>> 31321a7f6224e7d61b76d54baedbfcfbb28db89b

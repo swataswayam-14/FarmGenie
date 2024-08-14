@@ -1,0 +1,119 @@
+.faqs {
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(135deg, rgb(1, 94, 1), rgb(2, 79, 44)); /* Gradient from one green to another */
+    padding: 25px 0; /* Vertical padding for spacing */
+}
+
+
+.faqs-content {
+    color: #333; /* Dark text color for readability */
+    width: 80%;
+    max-width: 1000px; /* Max width to ensure content doesn't stretch too much */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.faqs-content h1 {
+    margin: 40px 0;
+    font-size: 3rem; /* Large font size */
+    font-weight: bold; /* Bold text */
+    background: linear-gradient(45deg, #ff0081, #ff8c00); /* Vibrant gradient color */
+    -webkit-background-clip: text; /* Text gradient effect */
+    -webkit-text-fill-color: transparent; /* Hide text fill to show gradient */
+    text-align: center; /* Center the heading */
+    padding: 0 20px; /* Horizontal padding for better appearance */
+}
+
+.faqs-box {
+    width: 100%;
+    max-width: 800px; /* Max width for each FAQ box */
+    margin: 10px 0; /* Margin between boxes */
+    background-color: #d2cece; /* White background for boxes */
+    border-radius: 8px; /* Rounded corners for a softer look */
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease; /* Smooth transition */
+    border: 1px solid #ddd; /* Light border for definition */
+}
+
+.faqs-box p {
+    margin: 0;
+    padding: 15px; /* Padding inside the boxes */
+}
+
+.faqs-box .question {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333; /* Dark color for questions */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.faqs-box .answer {
+    font-size: 18px;
+    color: #555; /* Lighter color for answers */
+    display: none; /* Hide answers by default */
+    line-height: 1.6; /* Line height for better readability */
+}
+
+.faqs-box:hover .answer {
+    display: block; /* Show answer on hover */
+}
+
+.faqs-box:hover {
+    max-height: 300px; /* Increase height to accommodate answer */
+    padding: 20px; /* Add padding for spacing */
+}
+
+.faqs button {
+    background-color: rgb(232, 28, 28);
+    width: 200px;
+    height: 45px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    margin-top: 20px; /* Space above button */
+}
+
+.faqs button:hover {
+    background-color: rgb(167, 12, 12);
+}
+.youtube-link {
+    display: flex; /* To center the icon */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 50px; /* Increased height */
+    width: 50px; /* Increased width */
+    color: red; /* Red color for the icon */
+    font-size: 40px; /* Increased font size */
+    margin: 10px auto; /* Center the icon horizontally and add margin for spacing */
+}
+
+.youtube-link svg {
+    font-size: inherit; /* Inherit the font size from the parent */
+    color: inherit; /* Inherit the color from the parent */
+}
+
+
+.article-link {
+    display: flex; /* To center the icon */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 50px; /* Increased height */
+    width: 50px; /* Increased width */
+    color: rgb(0, 0, 0); /* Red color for the icon */
+    font-size: 40px; /* Increased font size */
+    margin: 10px auto; /* Center the icon horizontally and add margin for spacing */
+}
+
+.article-link svg {
+    font-size: inherit; /* Inherit the font size from the parent */
+    color: inherit; /* Inherit the color from the parent */
+}
+
+.faqs-icons{
+    display: flex;
+    margin-top: -25px;
+}
