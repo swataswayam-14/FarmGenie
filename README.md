@@ -84,8 +84,7 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 
 ##### Website
-
-- The website is built using a Turborepo, which is a high-performance build system that helps manage the complexity of a mono repo. 
+ 
 - The front end is built using Next.js, a React framework that provides server-side rendering, static site generation, and other performance optimizations. The backend is also built using Next.js which handles the communication between the front end and the ML backend. 
 
 The Next.js backend is responsible for the following tasks:
