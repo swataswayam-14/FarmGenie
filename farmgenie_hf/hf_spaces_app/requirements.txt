@@ -1,0 +1,4 @@
+gradio
+Requests
+streamlit
+streamlit-chat
