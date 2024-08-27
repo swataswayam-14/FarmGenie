@@ -37,6 +37,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   mobx: ^2.3.3+2
   flutter_mobx: ^2.2.1+1
+  json_serializable: ^6.8.0
+  provider: ^6.1.2
+
 
 dev_dependencies:
   flutter_test:

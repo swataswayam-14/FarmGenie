@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const Color primaryColor = Color(0xFF1E2630);
+  static const Color primaryColor = Colors.black;
   static const Color accentColor = Color(0xFF4FD1C5);
   static const Color backgroundColor = Color(0xFF0F1419);
   static const Color textColor = Color(0xFFFFFFFF);
@@ -15,6 +15,10 @@ class AppTheme {
         primary: primaryColor,
         secondary: accentColor,
         surface: backgroundColor,
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: Colors.blue,
+        foregroundColor: textColor,
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: primaryColor,
