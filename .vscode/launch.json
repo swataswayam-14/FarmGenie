@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "farm_genie",
+            "cwd": "Flutter-App\\farm_genie",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "farm_genie (profile mode)",
+            "cwd": "Flutter-App\\farm_genie",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "farm_genie (release mode)",
+            "cwd": "Flutter-App\\farm_genie",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
