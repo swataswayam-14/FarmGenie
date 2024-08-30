@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class CommunityScreen extends StatelessWidget {
@@ -6,6 +5,6 @@ class CommunityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Community Screen'));
+    return const Center(child: Text('Coming Soon...'));
   }
 }
