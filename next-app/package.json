@@ -45,6 +45,7 @@
     "server-only": "^0.0.1",
     "sharp": "^0.33.4",
     "stripe": "^16.2.0",
+    "swagger-ui-react": "^5.17.14",
     "tailwind-merge": "^2.3.0",
     "zod": "^3.23.8"
   },
