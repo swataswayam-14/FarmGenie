@@ -1,6 +1,9 @@
-import SwaggerComponent from '../components/SwaggerUI';
+"use client";
+import dynamic from 'next/dynamic';
 
-const SwaggerPage: React.FC = () => {
+const SwaggerComponent = dynamic(() => import('../components/SwaggerUI'), { ssr: false });
+
+export default function SwaggerPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="container mx-auto max-w-6xl bg-white shadow-md rounded-lg p-6">
@@ -14,6 +17,4 @@ const SwaggerPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default SwaggerPage;
+}

@@ -5,13 +5,13 @@ import { IncomingForm } from 'formidable';
 import { adminAddProductMetrics } from '@/actions/metrics';
 import { db } from '@/app/db';
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-const fileSchema = z.instanceof(File, { message: 'Required' });
+// Define a schema for validating file uploads
+const fileSchema = z.object({
+  name: z.string(),
+  size: z.number(),
+  type: z.string(),
+  path: z.string(),
+});
 
 const imageSchema = fileSchema.refine(
   (file) => file.size === 0 || file.type.startsWith('image/'),
@@ -25,30 +25,44 @@ const formSchema = z.object({
   image: imageSchema.refine((file) => file.size > 0, 'Required'),
 });
 
-async function parseFormData(req: Request): Promise<FormData> {
+// Parse form data using formidable
+async function parseFormData(req: Request): Promise<Record<string, any>> {
   const form = new IncomingForm({ keepExtensions: true });
 
   return new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
       if (err) return reject(err);
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(fields)) {
-        formData.append(key, value as string);
-      }
-      for (const [key, file] of Object.entries(files)) {
-        formData.append(key, file as File);
-      }
-      resolve(formData);
+      resolve({
+        fields,
+        files: files as Record<string, any>,
+      });
     });
   });
 }
 
+// Handle POST request
 export async function POST(req: Request) {
   try {
-    const formData = await parseFormData(req);
+    const { fields, files } = await parseFormData(req);
     const startTime = Date.now();
 
-    const result = formSchema.safeParse(Object.fromEntries(formData.entries()));
+    const result = formSchema.safeParse({
+      name: fields.name as string,
+      description: fields.description as string,
+      priceInCents: parseInt(fields.priceInCents as string, 10),
+      file: {
+        name: (files.file as any).name,
+        size: (files.file as any).size,
+        type: (files.file as any).type,
+        path: (files.file as any).filepath,
+      },
+      image: {
+        name: (files.image as any).name,
+        size: (files.image as any).size,
+        type: (files.image as any).type,
+        path: (files.image as any).filepath,
+      },
+    });
 
     if (!result.success) {
       return NextResponse.json({ errors: result.error.formErrors.fieldErrors }, { status: 400 });
@@ -58,11 +72,11 @@ export async function POST(req: Request) {
 
     await fs.mkdir('products', { recursive: true });
     const filePath = `products/${crypto.randomUUID()}-${data.file.name}`;
-    await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
+    await fs.copyFile(data.file.path, filePath);
 
     await fs.mkdir('public/products', { recursive: true });
     const imagePath = `/products/${crypto.randomUUID()}-${data.image.name}`;
-    await fs.writeFile(`public${imagePath}`, Buffer.from(await data.image.arrayBuffer()));
+    await fs.copyFile(data.image.path, `public${imagePath}`);
 
     await db.product.create({
       data: {
@@ -86,6 +100,7 @@ export async function POST(req: Request) {
   }
 }
 
+// Handle OPTIONS request
 export async function OPTIONS() {
   return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }
