@@ -1,35 +1,37 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { adminDeleteProductMetrics } from '@/actions/metrics';
+import { NextResponse } from 'next/server';
 import { db } from '@/app/db';
+import { adminDeleteProductMetrics } from '@/actions/metrics';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'DELETE') {
-        const { id } = req.query;
+export async function DELETE(req: Request) {
+  const url = new URL(req.url);
+  const id = url.searchParams.get('id');
 
-        if (typeof id !== 'string') {
-            return res.status(400).json({ error: 'Invalid ID' });
-        }
+  if (typeof id !== 'string') {
+    return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
+  }
 
-        const startTime = Date.now();
-        try {
-            const order = await db.order.delete({
-                where: { id },
-            });
+  const startTime = Date.now();
+  
+  try {
+    const order = await db.order.delete({
+      where: { id },
+    });
 
-            const endTime = Date.now();
-            const duration = endTime - startTime;
-            adminDeleteProductMetrics(duration);
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    adminDeleteProductMetrics(duration);
 
-            if (!order) {
-                return res.status(404).json({ error: 'Order not found' });
-            }
-
-            return res.status(200).json(order);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Failed to delete order' });
-        }
-    } else {
-        return res.status(405).json({ error: 'Method not allowed' });
+    if (!order) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
+
+    return NextResponse.json(order);
+  } catch (error) {
+    console.error('Failed to delete order:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function OPTIONS() {
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }

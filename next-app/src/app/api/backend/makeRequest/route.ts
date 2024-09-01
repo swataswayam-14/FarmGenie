@@ -1,40 +1,44 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 async function createChat(question: string, answer: string) {
     console.log(`Creating chat for question: "${question}" with answer: "${answer}"`);
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'GET') {
-        const { question, translate } = req.query;
+export async function GET(req: Request) {
+    const url = new URL(req.url);
+    const question = url.searchParams.get('question');
+    const translate = url.searchParams.get('translate');
 
-        if (typeof question === 'string' && (typeof translate === 'string' || typeof translate === 'undefined')) {
-            try {
-                const options = {
-                    method: 'GET',
-                    url: 'https://singular-muskox-certainly.ngrok-free.app/searchQuery',
-                    params: { userQuery: question },
-                    headers: { Accept: '*/*', 'User-Agent': 'Thunder Client (https://www.thunderclient.com)' },
-                };
+    if (typeof question === 'string' && (typeof translate === 'string' || translate === null)) {
+        try {
+            const options = {
+                method: 'GET',
+                url: 'https://singular-muskox-certainly.ngrok-free.app/searchQuery',
+                params: { userQuery: question },
+                headers: { Accept: '*/*', 'User-Agent': 'Thunder Client (https://www.thunderclient.com)' },
+            };
 
-                const response = await axios.request(options);
+            const response = await axios.request(options);
 
-                if (response) {
-                    const isTranslate = translate === 'true';
-                    const answer = isTranslate ? response.data.eh_translated_result : response.data.answer;
-                    await createChat(question, answer);
-                }
+            if (response) {
+                const isTranslate = translate === 'true';
+                const answer = isTranslate ? response.data.eh_translated_result : response.data.answer;
+                await createChat(question, answer);
 
-                res.status(200).json(response.data);
-            } catch (error) {
-                console.error(error);
-                res.status(500).json({ error: 'Failed to make the request.' });
+                return NextResponse.json(response.data);
             }
-        } else {
-            res.status(400).json({ error: 'Invalid input.' });
+
+            return NextResponse.json({ error: 'No response from external service' }, { status: 500 });
+        } catch (error) {
+            console.error('Failed to make the request:', error);
+            return NextResponse.json({ error: 'Failed to make the request.' }, { status: 500 });
         }
     } else {
-        res.status(405).json({ error: 'Method not allowed.' });
+        return NextResponse.json({ error: 'Invalid input.' }, { status: 400 });
     }
+}
+
+export async function OPTIONS() {
+    return NextResponse.json({ error: 'Method not allowed.' }, { status: 405 });
 }

@@ -1,15 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import { db } from '@/app/db';
 import fs from 'fs/promises';
 import { IncomingForm } from 'formidable';
 import { z } from 'zod';
 import { adminUpdateProductMetrics } from '@/actions/metrics';
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+import { NextRequest } from 'next/server';
 
 const fileSchema = z.instanceof(File, { message: 'Required' }).refine(file => file.size > 0, 'Required');
 const imageSchema = fileSchema.refine(file => file.type.startsWith('image/'), 'Must be an image');
@@ -22,7 +17,7 @@ const updateSchema = z.object({
   image: imageSchema.optional(),
 });
 
-async function parseFormData(req: NextApiRequest): Promise<FormData> {
+async function parseFormData(req: Request): Promise<FormData> {
   const form = new IncomingForm({ keepExtensions: true });
 
   return new Promise((resolve, reject) => {
@@ -40,72 +35,66 @@ async function parseFormData(req: NextApiRequest): Promise<FormData> {
   });
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const { id } = req.query;
+export async function POST(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get('id');
 
-    if (typeof id !== 'string') {
-      return res.status(400).json({ error: 'Invalid ID' });
+  if (!id || typeof id !== 'string') {
+    return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
+  }
+
+  const startTime = Date.now();
+
+  try {
+    const formData = await parseFormData(req);
+    const result = updateSchema.safeParse(Object.fromEntries(formData.entries()));
+
+    if (!result.success) {
+      return NextResponse.json({ errors: result.error.formErrors.fieldErrors }, { status: 400 });
     }
 
-    const startTime = Date.now();
+    const data = result.data;
 
-    try {
-      const formData = await parseFormData(req);
-      const result = updateSchema.safeParse(Object.fromEntries(formData.entries()));
+    const product = await db.product.findUnique({
+      where: { id },
+    });
 
-      if (!result.success) {
-        return res.status(400).json({ errors: result.error.formErrors.fieldErrors });
-      }
-
-      const data = result.data;
-
-      const product = await db.product.findUnique({
-        where: { id },
-      });
-
-      if (!product) {
-        return res.status(404).json({ error: 'Product not found' });
-      }
-
-      let filePath = product.filePath;
-      if (data.file) {
-        await fs.unlink(product.filePath);
-        filePath = `products/${crypto.randomUUID()}-${data.file.name}`;
-        await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
-      }
-
-      let imagePath = product.imagePath;
-      if (data.image) {
-        await fs.unlink(`public${product.imagePath}`);
-        imagePath = `/products/${crypto.randomUUID()}-${data.image.name}`;
-        await fs.writeFile(`public${imagePath}`, Buffer.from(await data.image.arrayBuffer()));
-      }
-      await db.product.update({
-        where: { id },
-        data: {
-          isAvailableForPurchase: false,
-          name: data.name,
-          description: data.description,
-          priceInCents: data.priceInCents,
-          filePath,
-          imagePath,
-        },
-      });
-
-      const endTime = Date.now();
-      const duration = endTime - startTime;
-      adminUpdateProductMetrics(duration);
-      await res.revalidate('/marketplace');
-      await res.revalidate('/marketplace/products');
-
-      res.writeHead(302, { Location: '/admin/products' });
-      res.end();
-    } catch (error) {
-      console.error('Failed to update product:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+    if (!product) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
-  } else {
-    return res.status(405).json({ error: 'Method not allowed' });
+
+    let filePath = product.filePath;
+    if (data.file) {
+      await fs.unlink(product.filePath);
+      filePath = `products/${crypto.randomUUID()}-${data.file.name}`;
+      await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
+    }
+
+    let imagePath = product.imagePath;
+    if (data.image) {
+      await fs.unlink(`public${product.imagePath}`);
+      imagePath = `/products/${crypto.randomUUID()}-${data.image.name}`;
+      await fs.writeFile(`public${imagePath}`, Buffer.from(await data.image.arrayBuffer()));
+    }
+
+    await db.product.update({
+      where: { id },
+      data: {
+        isAvailableForPurchase: false,
+        name: data.name,
+        description: data.description,
+        priceInCents: data.priceInCents,
+        filePath,
+        imagePath,
+      },
+    });
+
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    adminUpdateProductMetrics(duration);
+    return NextResponse.redirect('/admin/products');
+  } catch (error) {
+    console.error('Failed to update product:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

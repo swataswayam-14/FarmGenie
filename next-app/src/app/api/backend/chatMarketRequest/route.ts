@@ -1,28 +1,29 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import axios from 'axios';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'GET') {
-        const { question } = req.query;
+export async function GET(req: Request) {
+    const url = new URL(req.url);
+    const question = url.searchParams.get('question');
 
-        if (typeof question === 'string') {
-            try {
-                const options = {
-                    method: 'GET',
-                    url: 'https://singular-muskox-certainly.ngrok-free.app/chatShop/searchQuery',
-                    params: { userQuery: question },
-                    headers: { Accept: '*/*', 'User-Agent': 'Thunder Client (https://www.thunderclient.com)' }
-                };
-                const response = await axios.request(options);
-                res.status(200).json(response.data);
-            } catch (error) {
-                console.error(error);
-                res.status(500).json({ content: "" });
-            }
-        } else {
-            res.status(400).json({ error: 'Invalid input' });
+    if (typeof question === 'string') {
+        try {
+            const options = {
+                method: 'GET',
+                url: 'https://singular-muskox-certainly.ngrok-free.app/chatShop/searchQuery',
+                params: { userQuery: question },
+                headers: { Accept: '*/*', 'User-Agent': 'Thunder Client (https://www.thunderclient.com)' },
+            };
+            const response = await axios.request(options);
+            return NextResponse.json(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return NextResponse.json({ content: "" }, { status: 500 });
         }
     } else {
-        res.status(405).json({ error: 'Method not allowed' });
+        return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
     }
+}
+
+export async function OPTIONS() {
+    return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }
