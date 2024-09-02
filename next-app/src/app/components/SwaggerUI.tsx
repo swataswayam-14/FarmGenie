@@ -83,20 +83,6 @@ paths:
                   error:
                     type: string
                     example: Failed to add product
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForProducts
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
 
   /api/backend/chatMarketRequest:
     get:
@@ -137,23 +123,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  content:
-                    type: string
-                    example: ""
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForChatMarketRequest
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
                   error:
                     type: string
-                    example: Method not allowed
+                    example: Internal server error
 
   /api/backend/deleteOrder:
     delete:
@@ -207,20 +179,6 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForDeleteOrder
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
 
   /api/backend/deleteProduct:
     delete:
@@ -274,20 +232,6 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForDeleteProduct
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
 
   /api/backend/deleteUser:
     delete:
@@ -347,20 +291,6 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForDeleteUser
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
 
   /api/backend/getProductData:
     get:
@@ -390,20 +320,6 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForGetProduct
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
 
   /api/backend/getSalesData:
     get:
@@ -434,40 +350,39 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForGetSalesData
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
 
-  /api/backend/getUserData:
+  /api/backend/getMostPopularProducts:
     get:
-      summary: Retrieve user and order data
-      operationId: getUserData
+      summary: Get the top 6 most popular products
+      operationId: getMostPopularProducts
       responses:
         '200':
-          description: User and order data fetched successfully
+          description: A list of the most popular products
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  userCount:
-                    type: integer
-                    description: Total number of users
-                  averageValuePerUser:
-                    type: number
-                    format: float
-                    description: Average value of orders per user in dollars
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID of the product
+                    name:
+                      type: string
+                      description: Name of the product
+                    description:
+                      type: string
+                      description: Description of the product
+                    priceInCents:
+                      type: integer
+                      description: Price of the product in cents
+                    isAvailableForPurchase:
+                      type: boolean
+                      description: Whether the product is available for purchase
+                    ordersCount:
+                      type: integer
+                      description: Number of orders for the product
         '500':
           description: Internal server error
           content:
@@ -478,62 +393,40 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForGetUserData
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
 
-  /api/backend/toggleProductAvailability:
-    post:
-      summary: Toggle product availability
-      operationId: toggleProductAvailability
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  description: ID of the product
-                isAvailableForPurchase:
-                  type: boolean
-                  description: Product availability status
-              required:
-                - id
-                - isAvailableForPurchase
+  /api/backend/getNewestProducts:
+    get:
+      summary: Get the 6 newest products
+      operationId: getNewestProducts
       responses:
         '200':
-          description: Product availability toggled successfully
+          description: A list of the newest products
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-        '400':
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Invalid input
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID of the product
+                    name:
+                      type: string
+                      description: Name of the product
+                    description:
+                      type: string
+                      description: Description of the product
+                    priceInCents:
+                      type: integer
+                      description: Price of the product in cents
+                    isAvailableForPurchase:
+                      type: boolean
+                      description: Whether the product is available for purchase
+                    creationDate:
+                      type: string
+                      format: date-time
+                      description: Date when the product was created
         '500':
           description: Internal server error
           content:
@@ -544,120 +437,7 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForToggleProductAvailability
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
-
-  /api/backend/updateProduct:
-    post:
-      summary: Update an existing product
-      operationId: updateProduct
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  description: ID of the product
-                name:
-                  type: string
-                  description: Name of the product
-                  minLength: 1
-                description:
-                  type: string
-                  description: Description of the product
-                  minLength: 1
-                priceInCents:
-                  type: integer
-                  description: Price of the product in cents
-                  minimum: 1
-                file:
-                  type: string
-                  format: binary
-                  description: The file associated with the product (optional)
-                image:
-                  type: string
-                  format: binary
-                  description: The image associated with the product (optional)
-              required:
-                - id
-                - name
-                - description
-                - priceInCents
-      responses:
-        '200':
-          description: Product updated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-        '400':
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: object
-                    description: Details of the validation errors
-                    additionalProperties:
-                      type: array
-                      items:
-                        type: string
-        '404':
-          description: Product not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Product not found
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
-    options:
-      summary: Handle OPTIONS method
-      operationId: handleOptionsForUpdateProduct
-      responses:
-        '405':
-          description: Method not allowed
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Method not allowed
-`;
+  `;
 
   return <SwaggerUI spec={spec} />;
 };
