@@ -1,0 +1,12 @@
+name: unsloth_env
+channels:
+  - pytorch
+  - nvidia
+  - xformers
+dependencies:
+  - python=3.10
+  - pytorch-cuda=12.1
+  - pytorch=2.3.0
+  - cudatoolkit
+  - xformers
+  - git
