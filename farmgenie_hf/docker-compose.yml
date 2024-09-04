@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+
+  mysql:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    # image: mysql:8.1
+    container_name: mysql-container-hf
+    restart: always
+    # hostname: db
+    environment:
+      MYSQL_ROOT_PASSWORD: mist786%
+      MYSQL_DATABASE: amazon_agricultural_products
+      # MYSQL_USER: root
+      MYSQL_PASSWORD: mist786%
+      # MYSQL_TCP_PORT: 33061
+    
+    ports:
+      - "33061:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./mysql/Dump20240805.sql:/docker-entrypoint-initdb.d/init.sql
+
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api-container-hf
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    # links:
+    #   - mysql
+    environment:
+
+      GEMINI_API_KEY:  ${GEMINI_API_KEY}
+  
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      hf_token: ${hf_token}
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+      COHERE_API_KEY: ${COHERE_API_KEY}
+      MAPBOX_API_KEY: ${MAPBOX_API_KEY}
+      MYSQL_PASS: ${MYSQL_PASS}
+      PINECONE_API_KEY: ${PINECONE_API_KEY}
+      GOOGLE_MAPS_API: ${GOOGLE_MAPS_API}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - ./api:/code
+
+
+
+  hf_spaces_app:
+    build:
+      context: ./hf_spaces_app
+      dockerfile: Dockerfile
+    container_name: hf_spaces_app-container
+    ports:
+      - "7860:7860"
+    depends_on:
+      - mysql
+      - api
+    volumes:
+      - ./hf_spaces_app:/code
+
+
+
+
+volumes:
+  mysql:
+    driver: local
