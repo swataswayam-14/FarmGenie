@@ -135,41 +135,14 @@ unsloth
 GPU (must have- unsloth requirement)
 ```
 
-#### Server
-
-Pull the server image from DockerHub
+### Run only Chatbots (FarmGenie (main) and Marketplace - Streamlit version)
 
 ```bash
-  docker pull yuvrajsingh9886/ml-api:v1.0
+git clone https://github.com/YuvrajSingh-mist/FarmGenie.git
+cd FarmGenie/farmgenie_hf/api
 ```
 
-Run the server image
-
-```bash
-GEMINI_API_KEY=<YOUR_API_KEY_HERE> \
-OPENAI_API_KEY=<YOUR_API_KEY_HERE> \
-hf_token=<YOUR_API_KEY_HERE> \
-COHERE_API_KEY=<YOUR_API_KEY_HERE> \
-MAPBOX_API_KEY=<YOUR_API_KEY_HERE> \
-PINECONE_API_KEY=<YOUR_API_KEY_HERE> \
-GOOGLE_MAPS_API=<YOUR_API_KEY_HERE> \
-docker-compose up
-
-```
-
-```bash
-You'll see it running on localhost:8000/docs
-```
-
-#### Run only Chatbots (FarmGenie (main) and Marketplace - Streamlit version)
-
-Pull the server image from DockerHub
-
-```bash
-  docker pull yuvrajsingh9886/farmgenie_hf-api
-```
-
-Run the server image
+Create a .env file and make sure to input the following api keys in the current directory
 
 ```bash
 GEMINI_API_KEY=<YOUR_API_KEY_HERE> \
@@ -179,13 +152,19 @@ COHERE_API_KEY=<YOUR_API_KEY_HERE> \
 MAPBOX_API_KEY=<YOUR_API_KEY_HERE> \
 PINECONE_API_KEY=<YOUR_API_KEY_HERE> \
 GOOGLE_MAPS_API=<YOUR_API_KEY_HERE> \
-docker-compose up
 
+
+```
+Open a terminal within the same directory and execute the following command
+```bash
+cd ..
+docker-compose up --build
 ```
 
 ```bash
 You'll see it running on localhost:8000/docs
 ```
+
 
 ## Run Locally
 
