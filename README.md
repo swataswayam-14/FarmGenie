@@ -173,16 +173,16 @@ Using Docker
 To run the FarmGenie official website Docker image locally, start by pulling the image from Docker Hub using the command:
 
 ```bash
-  docker pull swayam14/farmwebapp2:v1.0
+  docker pull swayam14/farmwebappsecret:v6.0
 ```
 
 
-This command downloads the specified image to your local machine, allowing you to run it without needing to build it from scratch. Once the image is successfully pulled, you can start the container using the following command, which maps port 3000 on your local machine to port 3001 in the container:
+This command downloads the specified image to your local machine, allowing you to run it without needing to build it from scratch. Once the image is successfully pulled, you can start the container using the following command, which maps port 3001 on your local machine to port 3001 in the container:
 
 ```bash
-  docker run -p 3000:3001 swayam14/farmwebapp2
+  docker run -p 3001:3001 swayam14/farmwebappsecret:v6.0 
 ```
-This setup enables you to access the FarmWebApp2 application locally via http://localhost:3000, allowing for easy testing and development of the application as if it were running on a remote server.
+This setup enables you to access the FarmGenie application locally via http://localhost:3001, allowing for easy testing and development of the application as if it were running on a remote server.
 
 
 Clone the project
