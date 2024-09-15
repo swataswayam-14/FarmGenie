@@ -132,9 +132,9 @@ peft , bitsandbytes, transformers
 ```bash
 docker (Docker Desktop preferred since it comes with docker-compose inbuilt)
 
-
 GPU with NVIDIA CUDA Drivers==12.2
 
+GPU with NVIDIA CUDA Drivers==12.2
 
 Make sure NVIDIA Container Toolkit-
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/index.html
