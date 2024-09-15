@@ -131,8 +131,11 @@ peft , bitsandbytes, transformers
 
 ```bash
 docker (Docker Desktop preferred since it comes with docker-compose inbuilt)
-unsloth
+
 GPU with NVIDIA CUDA Drivers==12.2 (must have- unsloth requirement)
+
+Make sure NVIDIA Container Toolkit-
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/index.html
 ```
 
 ### Run only Chatbots (FarmGenie (main) and Marketplace - Streamlit version)
