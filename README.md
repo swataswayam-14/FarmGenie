@@ -133,7 +133,7 @@ peft , bitsandbytes, transformers
 docker (Docker Desktop preferred since it comes with docker-compose inbuilt)
 
 
-GPU with NVIDIA CUDA Drivers==12.2 (must have- unsloth requirement)
+GPU with NVIDIA CUDA Drivers==12.2
 
 
 Make sure NVIDIA Container Toolkit-
