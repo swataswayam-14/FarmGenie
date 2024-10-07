@@ -1,4 +1,13 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+// next.config.mjs
+export default {
+    async redirects() {
+      return [
+        {
+          source: '/',          // Matches the root URL
+          destination: '/Enter', // Redirects to /Enter
+          permanent: true,       // Permanent redirect
+        },
+      ];
+    },
+  };
+  

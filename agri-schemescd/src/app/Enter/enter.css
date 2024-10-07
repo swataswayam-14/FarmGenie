@@ -1,55 +1,278 @@
-.enter {
-    font-family: 'Arial', sans-serif;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #f4f4f9;
-  }
+/* Navbar Styling */
+.nav {
+  height: 60px;
+  width: 100vw;
+  background-color: green;
+  display: flex;
+  justify-content: space-between; /* Space between logo, search bar, and links */
+  align-items: center; /* Center items vertically */
+  padding: 0 20px;
+  box-sizing: border-box;
+  color: white;
+}
+
+/* Logo Styling */
+.logo {
+  font-size: 1.5rem; /* Larger text for logo */
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+/* Search Bar */
+.search {
+  display: flex;
+  align-items: center;
+  width: 40%; /* Adjust width of search area */
+}
+
+.search input {
+  height: 40px;
+  width: 100%;
+  padding: 0 10px;
+  border-radius: 20px 0 0 20px;
+  border: none;
+  background-color: #f5f5f5;
+  color: black;
+}
+
+.searchBtn {
+  height: 40px;
+  padding: 0 20px;
+  background-color: #004400;
+  border-radius: 0 20px 20px 0;
+  color: white;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Navigation Links */
+.navLinks {
+  display: flex;
+  gap: 20px;
+}
+
+.navLinks a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.navLinks a:hover {
+  background-color: #f0f0f0;
+  color: #005bb5;
+}
+
+/* Profile Icon */
+.profileIcon {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  background-image: url("farmer1.jpg"); /* Path to image */
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  border: 3px solid white;
+}
+
+/* Back Button */
+.backButton .backBtn {
+  background-color: #ffffff;
+  color: #005bb5;
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.backButton .backBtn:hover {
+  background-color: #005bb5;
+  color: white;
+}
+
+/* Welcome Section */
+.welcomeSection {
+  padding: 100px 50px;
+  height: 80vh;
+  display: flex;
+  justify-content: space-between; /* Aligns text and image horizontally */
+  align-items: center;
+  background: linear-gradient(135deg, #e9f9e9 0%, #b0eac4 100%); /* Gradient background */
+}
+
+.welcomeSection h1 {
+  font-size: 3rem;
+  color: darkgreen;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  position: relative;
+  animation: typingEffect 5s steps(40, end), blinkCursor 0.8s infinite;
+}
+
+@keyframes typingEffect {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blinkCursor {
+  50% { border-right: 3px solid darkgreen; }
+}
+
+.welcomeSection p {
+  font-size: 1.5rem;
+  color: #333;
+  margin-top: 10px;
+  max-width: 600px;
+}
+
+/* Circular Image beside the text in the Welcome Section */
+.circularImage1 {
+  height: 350px;
+  width: 350px;
+  border-radius: 50%;
+  background-image: url('main.jpg'); /* Ensure this is the correct path */
+  background-size: cover;
+  background-position: center;
+  border: 4px solid darkgreen;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Boundary Styling */
+.boundary {
+  height: 4px;
+  width: 100%;
+  background-color: #cccccc;
+  margin-top: 40px;
+}
+
+/* Features Section */
+.featuresSection {
+  padding: 50px;
+  height: 80vh;
+  background-color: #2d2d2d; /* Darker background */
+  color: white; /* Light text color */
+  display: flex; /* Flexbox for alignment */
+  justify-content: space-between; /* Align items horizontally */
+  align-items: center; /* Center items vertically */
+}
+
+.featuresSection h2 {
+  position: absolute;
+  color: #66bb6a; /* Green color for headers */
+  font-size: 2rem;
+  margin-bottom: 260px;
+  left:690px;
+
+  text-align: center; /* Centering the heading */
+}
+
+.featuresSection ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.featuresSection li {
+  margin-bottom: 10px;
+  font-size: 1.1rem; /* Adjusted font size */
+}
+
+/* Circular Image for Features Section */
+.circularImage2 {
+  height: 350px;
+  position: relative;
+  width: 350px;
+  border-radius: 50%;
+  background-image: url('scheme.jpg'); /* Ensure this is the correct path */
+  background-size: cover;
+  background-position: center;
+  border: 4px solid darkgreen;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* How It Works Section */
+.howItWorksSection {
+  padding: 50px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  height: 90vh;
+  background-color: #2d2d2d; /* Darker background */
+  color: white; /* Light text color */
   
-  .navbar {
-    width: 100%;
-    background-color: #2e7d32;
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .navbarList {
-    display: flex;
-    justify-content: center;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .navbarList li {
-    margin: 0 1rem;
-  }
-  
-  .navButton {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #1b5e20;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .navButton:hover {
-    background-color: #145214;
-  }
-  
-  .enterContent {
-    margin-top: 2rem;
-    text-align: center;
-    color: #333;
-  }
-  
-  .enterContent h2 {
-    font-size: 2rem;
-    margin: 0;
-  }
-  
+}
+
+.howItWorksSection h2 {
+  color: #66bb6a; /* Green color for headers */
+  font-size: 2rem;
+  margin-bottom: 20px;
+  margin-left: 410px;
+}
+
+.howItWorksSection ol {
+  padding-left: 20px;
+  margin-left: 100px;
+}
+
+.howItWorksSection li {
+  margin-bottom: 10px;
+  font-size: 1.1rem; /* Adjusted font size */
+  margin-left: 100px;
+}
+
+/* Call to Action Section */
+.callToActionSection {
+  text-align: center;
+  padding: 50px;
+  background-color: #3c3c3c; /* Darker background */
+  color: white; /* Light text color */
+}
+
+.callToActionSection h2 {
+  font-size: 2rem;
+  color: #66bb6a; /* Green color for headers */
+}
+
+.callToActionSection p {
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+.callToActionSection .ctaButton {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.callToActionSection .ctaButton:hover {
+  background-color: darkgreen;
+}
+
+/* Additional Styling for Sections */
+.featuresSection,
+.howItWorksSection {
+  height: auto; /* Adjust height to fit content */
+  margin: 2px;
+}
+
+.callToActionSection {
+  height: auto; /* Adjust height to fit content */
+}
+
+/* Adjusted Boundary */
+.boundary {
+  height: 5px;
+  width: 100vw;
+  background-color: grey;
+}

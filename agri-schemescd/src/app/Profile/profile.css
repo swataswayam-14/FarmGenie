@@ -1,94 +1,122 @@
+/* Apply farm.png as the full-page background */
+body {
+    background-image: url("./farm.png");
+    background-size: cover; /* Ensures the image covers the entire page */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents tiling */
+    height: 100vh; /* Ensures the body takes the full viewport height */
+    margin: 0; /* Removes default margin */
+    font-family: 'Arial', sans-serif; /* Optional: set a font */
+}
+
+/* Profile Container */
 .profileContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background: linear-gradient(135deg, #0b6719, #0caf58);
+    height: 100vh; /* Full viewport height */
     padding: 1rem;
-    position: relative; /* Make sure profileCard is positioned relative to the container */
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.5); /* Adds a transparent black overlay */
+    backdrop-filter: blur(3px); /* Optional: subtle blur to make content stand out */
 }
 
+/* Profile Card */
 .profileCard {
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 2rem;
+    background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Adds depth */
+    padding: 2.5rem;
     width: 100%;
     max-width: 500px;
     text-align: center;
-    position: relative; /* Ensure profileCard is positioned for absolute children */
+    position: relative;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.profileHeader {
-    margin-bottom: 1.5rem;
+.profileCard:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
 }
 
+/* Profile Picture */
 .profilePicture {
-    height: 90px;
-    width: 90px;
+    height: 120px;
+    width: 120px;
     border-radius: 50%;
-    background-image: url("farmer1.jpg"); /* Ensure this path is correct */
-    background-size: cover; /* Ensure the image covers the entire element */
-    background-position: center; /* Center the image within the element */
-    background-repeat: no-repeat;
-    border: 1px solid green;
-    margin: 0 auto; /* Center horizontally */
+    background-image: url("farmer1.jpg");
+    background-size: cover;
+    background-position: center;
+    border: 3px solid #0caf58;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Profile Header */
 .profileHeader h1 {
     color: #2e7d32;
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 2.4rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
+/* Profile Details */
 .profileDetails {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 1.5rem;
 }
 
 .profileDetail {
     display: flex;
     justify-content: space-between;
-    margin: 1rem 0;
+    margin: 0.8rem 0;
     width: 100%;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 }
 
 .detailLabel {
     font-weight: bold;
     color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .detailValue {
     color: #555;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .profileCard {
-        padding: 1rem;
-    }
-}
-
+/* Back Button Styling */
 .back {
     position: absolute;
-    top: 20px; /* Distance from the top */
-    left: 20px; /* Distance from the left */
-    height: 40px;
-    width: 90px;
-    border: 2px solid black;
-    background-color: white;
-    color: black;
-    font-size: 16px; /* Adjusted font size for better appearance */
+    top: 20px;
+    left: 20px;
+    height: 50px;
+    width: 100px;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #333;
+    border-radius: 8px;
     text-align: center;
-    line-height: 40px; /* Vertically center text */
+    line-height: 50px;
     cursor: pointer;
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .back:hover {
-    background-color: black;
-    color: white;
+    background-color: #333;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profileCard {
+        padding: 1.5rem;
+    }
 }

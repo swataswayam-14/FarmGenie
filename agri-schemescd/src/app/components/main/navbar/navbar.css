@@ -9,11 +9,12 @@
 }
 
 .logo {
-    height: 44px;
-    width: 44px;
+    height: 49px;
+    width: 49px;
     border-radius: 50%;
     border: 2px solid white;
-    background-image: url("farmlogo.png"); /* Ensure path is correct */
+    background-image: url("./farmlogo.png");
+    /* Ensure path is correct */
     background-size: cover; /* Ensures the image covers the entire element */
     background-position: center; /* Centers the image within the element */
     margin-left: 20px;
@@ -64,7 +65,7 @@ input::placeholder {
     gap: 15px; /* Add spacing between the links */
 }
 
-.loginn, .registerr, .faqqs, .toolss { /* Added .toolss */
+.loginn, .registerr, .faqqs, .toolss .enter { /* Added .toolss */
     text-align: center;
     font-weight: 500;
     color: #ffffff; /* White text color for better visibility */
@@ -74,7 +75,7 @@ input::placeholder {
     transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
 }
 
-.loginn:hover, .registerr:hover, .faqqs:hover, .toolss:hover { /* Added .toolss:hover */
+.loginn:hover, .registerr:hover, .faqqs:hover, .toolss:hover ,.enter:hover{ /* Added .toolss:hover */
     background-color: #f0f0f0; /* Light background on hover */
     color: #005bb5; /* Darker text color on hover */
 }
@@ -84,10 +85,10 @@ input::placeholder {
 }
 
 .profileIcon {
-    height: 45px;
-    width: 45px;
+    height: 42px;
+    width: 42px;
     border-radius: 50%;
-    border: 2px solid white;
+    border: 4px solid white;
     background-image: url("farmer1.jpg"); /* Ensure this path is correct */
     background-size: cover; /* Ensures the image covers the entire element */
     background-position: center; /* Centers the image within the element */

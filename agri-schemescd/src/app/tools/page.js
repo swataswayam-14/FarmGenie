@@ -1,37 +1,44 @@
-import './tools.css';
+"use client"; // Add this line to make it a client component
 
-export default function Tools() {
-    return (
-        <div className="tools-container">
-            <h2 className="tools-title">Useful Tools for Farmers</h2>
-            <div className="tool-items">
-                <div className="tool-item">
-                    <div className="tool-image" ></div>
-                    <div className="tool-info soil">
-                        <h3>Soil Testing</h3>
-                        <p>Get accurate soil analysis to optimize crop production.</p>
-                        <a href="/soil-testing" className="tool-link">Learn More</a>
-                    </div>
-                </div>
+import React from 'react';
+import './tools.css'; // Import the CSS file
 
-                <div className="tool-item">
-                    <div className="tool-image" style={{ backgroundImage: "url('/images/tool2.jpg')" }}></div>
-                    <div className="tool-info">
-                        <h3>Weather Forecast</h3>
-                        <p>Stay ahead with precise weather forecasts for your farm.</p>
-                        <a href="/weather-forecast" className="tool-link">Check Now</a>
-                    </div>
-                </div>
+const Tools = () => {
+  const handleRedirect = (url) => {
+    window.location.href = url; // Redirect to the specified URL
+  };
 
-                <div className="tool-item">
-                    <div className="tool-image" style={{ backgroundImage: "url('/images/tool3.jpg')" }}></div>
-                    <div className="tool-info">
-                        <h3>Crop Planner</h3>
-                        <p>Plan your crop cycle effectively to maximize yield.</p>
-                        <a href="/crop-planner" className="tool-link">Get Started</a>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="tools-container">
+      <h1 className="tools-title">Our Tools</h1>
+      <div className="tool-items">
+        <div className="tool-item" onClick={() => handleRedirect('https://soiltestpro.com/')}>
+          <div className="tool-image soil"></div>
+          <div className="tool-info">
+            <h3>Soil Testing</h3>
+            <p>Get accurate soil analysis for better crop yield.</p>
+            <a className="tool-link">Learn More</a>
+          </div>
         </div>
-    );
-}
+        <div className="tool-item" onClick={() => handleRedirect('https://openweathermap.org/')}>
+          <div className="tool-image weather"></div>
+          <div className="tool-info">
+            <h3>Weather Forecast</h3>
+            <p>Stay updated with the latest weather information.</p>
+            <a className="tool-link">Learn More</a>
+          </div>
+        </div>
+        <div className="tool-item" onClick={() => handleRedirect('https://agrixp.com/')}>
+          <div className="tool-image crop-planning"></div>
+          <div className="tool-info">
+            <h3>Crop Planning</h3>
+            <p>Plan your crops effectively for maximum yield.</p>
+            <a className="tool-link">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Tools;

@@ -12,8 +12,8 @@ export default function Navbar() {
                 <div className="searchBtn"></div>
             </div>
             <div className="navLinks">
-                <Link href="/login" className="loginn">Login</Link>
-                <Link href="/Register" className="registerr">Register</Link>
+            <Link href="/Enter" className="enter">Back</Link>
+               
                 <Link href="/faqs" className="faqqs">FAQs</Link>
                 <Link href="/tools" className="toolss">Tools</Link> {/* Add this line */}
             </div>

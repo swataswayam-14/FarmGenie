@@ -8,20 +8,20 @@
   background-image: url("loginLogo.jpg");
   background-size: cover;
   background-position: center;
-  background-blend-mode: darken;
+  background-blend-mode: overlay; /* Changed from darken for better contrast */
+  overflow: hidden; /* Ensures no scrollbars */
 }
 
 .registerWrapper {
   display: flex;
-  width: 75%;
+  width: 80%; /* Slightly wider for better utilization of space */
   max-width: 1000px;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 15px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  padding: 3rem;
-  backdrop-filter: blur(12px);
-  height: auto; /* Adjust to content height */
+  background: rgba(255, 255, 255, 0.9); /* Slightly more opaque for better readability */
+  border-radius: 12px; /* Slightly rounded corners */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Softer shadow */
+  padding: 2rem;
+  backdrop-filter: blur(8px); /* Slightly less blur for readability */
+  height: auto;
 }
 
 .registerLeft, .registerRight {
@@ -30,12 +30,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem; /* Increased padding for better spacing */
 }
 
 .registerLogoImage {
-  width: 120px;
-  height: 120px;
+  width: 100px; /* Reduced for balance */
+  height: 100px; /* Reduced for balance */
   border-radius: 50%;
   margin-bottom: 1.5rem;
   background-image: url("farmlogo.png");
@@ -44,15 +44,15 @@
 }
 
 .registerLogo {
-  font-size: 3rem;
+  font-size: 2.5rem; /* Slightly smaller for a cleaner look */
   color: #1b5e20;
   margin-bottom: 1rem;
   font-family: 'Georgia', serif;
 }
 
 .registerDesc {
-  font-size: 1.0rem;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 1.1rem; /* Slightly larger for better readability */
+  font-family: 'Cambria', serif;
   color: #333;
   text-align: center;
   margin-bottom: 1.5rem;
@@ -62,28 +62,28 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 450px;
+  max-width: 400px; /* Adjusted width for better fit */
 }
 
 .registerInput, .registerTextarea {
   margin-bottom: 1.2rem;
-  padding: 1rem;
+  padding: 0.8rem; /* Reduced padding for more compact form */
   font-size: 1rem;
   border: 1px solid #80cbc4;
-  border-radius: 8px;
+  border-radius: 6px; /* Slightly less rounded */
   background-color: #dcedc8;
   color: #000;
   width: 100%;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition: border-color 0.3s, background-color 0.3s;
 }
 
 .registerTextarea {
-  resize: none;
+  resize: vertical; /* Allow vertical resizing */
 }
 
 .registerInput::placeholder, .registerTextarea::placeholder {
   color: #666;
-  font-size: 1rem;
+  font-size: 0.9rem; /* Slightly smaller placeholder text */
 }
 
 .registerInput:focus, .registerTextarea:focus {
@@ -93,14 +93,14 @@
 }
 
 .registerButton {
-  padding: 1rem;
-  font-size: 1.2rem;
+  padding: 0.8rem;
+  font-size: 1.1rem;
   color: #fff;
   background-color: #2e7d32;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px; /* Matching input border radius */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 .registerButton:hover {
@@ -127,7 +127,19 @@
 
 @media (max-width: 768px) {
   .registerWrapper {
-    width: 95%;
-    padding: 2rem;
+    width: 90%;
+    padding: 1.5rem; /* Reduced padding on smaller screens */
+  }
+
+  .registerLogo {
+    font-size: 2rem; /* Adjusted for smaller screens */
+  }
+  
+  .registerInput, .registerTextarea {
+    font-size: 0.9rem; /* Slightly smaller font for mobile */
+  }
+
+  .registerButton {
+    font-size: 1rem; /* Adjust button font size */
   }
 }

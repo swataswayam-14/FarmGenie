@@ -26,6 +26,7 @@
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: 300px;
+    cursor: pointer; /* Changes the cursor to pointer for clickable items */
 }
 
 .tool-item:hover {
@@ -72,8 +73,12 @@
 }
 
 .soil .tool-image {
-    background-image: url("soil.webp"); /* Ensure path is correct */
+    background-image: url("soil.avif"); /* Ensure path is correct */
     background-size: contain; /* Ensure the image is contained within the div */
     background-repeat: no-repeat;
     background-position: center; /* Center the image */
 }
+
+/* Add similar styles for the other tool images */
+
+

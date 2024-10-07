@@ -1,0 +1,84 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@600&display=swap');
+
+/* General styling for About section */
+.about-section-container {
+    padding: 30px;
+    background-color: #f9fafb;
+    font-family: 'Roboto', sans-serif; /* Using Roboto for better readability */
+    max-width: 900px;
+    margin: 20px auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.about-section-h1 {
+    color: #2f855a;
+    text-align: center;
+    font-size: 2.5rem; /* Slightly smaller */
+    margin-bottom: 25px;
+    font-family: 'Montserrat', sans-serif; /* Bold font for main heading */
+    font-weight: 700; /* Bold */
+    animation: slideDown 1s ease-in-out;
+}
+
+/* Subheading */
+.about-section-h2 {
+    color: #276749;
+    font-size: 1.8rem; /* Slightly smaller */
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-family: 'Montserrat', sans-serif; /* Bold font for subheadings */
+    font-weight: 600; /* Bold */
+    transition: color 0.3s ease;
+}
+
+.about-section-h2:hover {
+    color: #38a169; /* Change color on hover */
+}
+
+/* List */
+.about-section-ul {
+    list-style-type: square;
+    padding-left: 30px;
+    margin-bottom: 20px;
+}
+
+.about-section-li {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: black; /* Black text for this part */
+    line-height: 1.6;
+    animation: fadeInList 0.8s ease-in-out forwards;
+    animation-delay: calc(0.2s * var(--i));
+}
+
+.about-section-li strong {
+    font-size: 1.2rem;
+    color: black; /* Strong black color for emphasis */
+}
+
+/* Paragraph */
+.about-section-p {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    margin-top: 25px;
+    background: #edf2f7;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    color: #4a5568;
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.about-section-p:hover {
+    transform: scale(1.02);
+}
