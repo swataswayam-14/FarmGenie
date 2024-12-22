@@ -20,6 +20,7 @@ The primary goal of this project is to design a product that helps farmers, espe
 
 ---
 
+
 ### Seamless Interface
 
 ##### FarmGenie Official Website 
