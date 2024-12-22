@@ -46,4 +46,4 @@ jobs:
 
       # Step 6: Run build
       - name: Run Build
-        run: npm run build
+        run: cd next-app && npm run build
