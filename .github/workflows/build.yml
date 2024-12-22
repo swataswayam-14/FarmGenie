@@ -11,14 +11,41 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout the repository
       - uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-      
+
+      # Step 3: Create the `.env` file in `next-app`
+      - name: Create .env file
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > next-app/.env
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> next-app/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> next-app/.env
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> next-app/.env
+          echo "ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }}" >> next-app/.env
+          echo "HASHED_ADMIN_PASSWORD=${{ secrets.HASHED_ADMIN_PASSWORD }}" >> next-app/.env
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> next-app/.env
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> next-app/.env
+          echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> next-app/.env
+          echo "SENDER_EMAIL=${{ secrets.SENDER_EMAIL }}" >> next-app/.env
+          echo "NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}" >> next-app/.env
+          echo "NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}" >> next-app/.env
+
+      # Step 4: Move `.env` to the project root
+      - name: Move .env to root
+        run: mv next-app/.env .env
+
+      # Step 5: Install dependencies
       - name: Install Dependencies
         run: cd next-app && npm install
-        
+
+      # Step 6: Run build
       - name: Run Build
-        run: npm run build
+        run: |
+          cd next-app
+          npm run build
